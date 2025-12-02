@@ -1,0 +1,15 @@
+analyzer:
+  exclude:
+    - 'bricks/**'
+    - 'build/**'
+    - '**/*.g.dart'
+    - '**/*.freezed.dart'
+    - '**/*.gr.dart'
+include: package:flutter_lints/flutter.yaml
+linter:
+  rules:
+
+
+formatter:
+trailing_commas: preserve
+

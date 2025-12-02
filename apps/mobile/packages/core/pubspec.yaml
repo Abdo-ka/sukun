@@ -1,0 +1,56 @@
+name: core
+description: A new Flutter project.
+version: 0.0.2
+
+
+environment:
+  sdk: ^3.10.0-290.4.beta
+  flutter: ">=3.38.0"
+
+dependencies:
+  flutter_svg: ^2.0.14
+  responsive_builder: ^0.7.1
+  flutter_screenutil: ^5.9.3
+  auto_size_text: ^3.0.0
+  either_dart: ^1.0.0
+  file_picker: ^10.3.6
+  dio: ^5.7.0
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^9.1.1
+  intl: ^0.20.0
+  marquee: ^2.2.3
+  text_scroll: ^0.2.0
+  uuid: ^4.5.1
+  infinite_scroll_pagination: ^5.1.1
+  json_serializable: ^6.8.0
+  freezed_annotation: ^3.1.0
+  flutter_form_builder: ^10.0.1
+  flutter_gen: ^5.7.0
+  dropdown_button2: ^2.3.9
+  just_the_tooltip: ^0.0.12
+
+  #?################# Image handling
+  flutter_image_compress: ^2.3.0
+  image_cropper: ^11.0.0
+  image_picker: ^1.1.2
+  mime: ^2.0.0 # for file type lookup
+  path_provider: ^2.1.5
+  logger: ^2.4.0
+  flutter_launcher_icons: ^0.14.1
+  flutter_blurhash: ^0.9.1
+  cached_network_image: ^3.4.1
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  build_runner: ^2.4.13
+  flutter_gen_runner: ^5.7.0
+
+flutter:
+  uses-material-design: true
+  generate: true # Add this line
+
+  assets:
+    - assets/icons/
+    - assets/flags/
