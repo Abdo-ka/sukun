@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\Sukun.Api.props" />
-</Project>

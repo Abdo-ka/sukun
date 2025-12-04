@@ -1,4 +1,7 @@
 
+using Microsoft.EntityFrameworkCore;
+using Sukun.Infrastructure.Context;
+
 namespace Sukun.Api
 {
     public class Program
@@ -13,6 +16,7 @@ namespace Sukun.Api
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddDbContext<ApplicationDbContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             var app = builder.Build();
 
