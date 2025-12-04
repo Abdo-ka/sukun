@@ -1,0 +1,12 @@
+C:\Users\moner\source\repos\sukun\apps\backEnd\Sukun\Sukun.Domin\bin\Debug\net8.0\Sukun.Domin.deps.json
+C:\Users\moner\source\repos\sukun\apps\backEnd\Sukun\Sukun.Domin\bin\Debug\net8.0\Sukun.Domin.dll
+C:\Users\moner\source\repos\sukun\apps\backEnd\Sukun\Sukun.Domin\bin\Debug\net8.0\Sukun.Domin.pdb
+C:\Users\moner\source\repos\sukun\apps\backEnd\Sukun\Sukun.Domin\obj\Debug\net8.0\Sukun.Domin.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\moner\source\repos\sukun\apps\backEnd\Sukun\Sukun.Domin\obj\Debug\net8.0\Sukun.Domin.AssemblyInfoInputs.cache
+C:\Users\moner\source\repos\sukun\apps\backEnd\Sukun\Sukun.Domin\obj\Debug\net8.0\Sukun.Domin.AssemblyInfo.cs
+C:\Users\moner\source\repos\sukun\apps\backEnd\Sukun\Sukun.Domin\obj\Debug\net8.0\Sukun.Domin.csproj.CoreCompileInputs.cache
+C:\Users\moner\source\repos\sukun\apps\backEnd\Sukun\Sukun.Domin\obj\Debug\net8.0\Sukun.Domin.sourcelink.json
+C:\Users\moner\source\repos\sukun\apps\backEnd\Sukun\Sukun.Domin\obj\Debug\net8.0\Sukun.Domin.dll
+C:\Users\moner\source\repos\sukun\apps\backEnd\Sukun\Sukun.Domin\obj\Debug\net8.0\refint\Sukun.Domin.dll
+C:\Users\moner\source\repos\sukun\apps\backEnd\Sukun\Sukun.Domin\obj\Debug\net8.0\Sukun.Domin.pdb
+C:\Users\moner\source\repos\sukun\apps\backEnd\Sukun\Sukun.Domin\obj\Debug\net8.0\ref\Sukun.Domin.dll
