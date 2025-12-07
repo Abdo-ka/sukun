@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1042759939212",
+    "project_id": "sukun-c7dfc",
+    "storage_bucket": "sukun-c7dfc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1042759939212:android:0d50197bb0fc89888b77a9",
+        "android_client_info": {
+          "package_name": "com.example.mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsM0rC4pSHhv_09sr6q0wuIFp9QMBuOss"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

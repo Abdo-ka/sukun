@@ -1,5 +1,5 @@
-// dart format width=80
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// dart format width=80
 
 // **************************************************************************
 // InjectableConfigGenerator
@@ -12,10 +12,11 @@
 import 'package:core/core.dart' as _i494;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
-import 'package:mobile/core/di/di_container.dart' as _i145;
-import 'package:mobile/core/repositories/local_storage.dart' as _i558;
-import 'package:mobile/core/repositories/token_repository.dart' as _i378;
-import 'package:mobile/services/router/router.dart' as _i590;
+import 'package:mobile/core/di/di_container.dart' as _i304;
+import 'package:mobile/core/repositories/local_storage.dart' as _i1029;
+import 'package:mobile/core/repositories/token_repository.dart' as _i591;
+import 'package:mobile/services/hive_service.dart' as _i775;
+import 'package:mobile/services/router/router.dart' as _i426;
 import 'package:shared_preferences/shared_preferences.dart' as _i460;
 
 extension GetItInjectableX on _i174.GetIt {
@@ -29,14 +30,16 @@ extension GetItInjectableX on _i174.GetIt {
     gh.singletonAsync<_i460.SharedPreferences>(
       () => appModule.sharedPreferences,
     );
-    gh.singleton<_i590.AppRouter>(() => appModule.router);
+    gh.singleton<_i426.AppRouter>(() => appModule.router);
     gh.lazySingleton<_i494.DioClient>(() => appModule.client);
-    gh.factory<_i378.TokenRepository>(() => _i378.TokenRepositoryImp());
-    gh.singletonAsync<_i558.LocalStorage>(
-      () async => _i558.LocalStorage(await getAsync<_i460.SharedPreferences>()),
+    gh.lazySingleton<_i775.HiveService>(() => _i775.HiveService());
+    gh.factory<_i591.TokenRepository>(() => _i591.TokenRepositoryImp());
+    gh.singletonAsync<_i1029.LocalStorage>(
+      () async =>
+          _i1029.LocalStorage(await getAsync<_i460.SharedPreferences>()),
     );
     return this;
   }
 }
 
-class _$AppModule extends _i145.AppModule {}
+class _$AppModule extends _i304.AppModule {}
