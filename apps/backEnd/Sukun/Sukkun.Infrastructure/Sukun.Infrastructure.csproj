@@ -19,8 +19,4 @@
     <ProjectReference Include="..\Sukun.Domin\Sukun.Domin.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Abstracts\" />
-  </ItemGroup>
-
 </Project>

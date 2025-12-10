@@ -5,22 +5,6 @@ namespace Sukun.Domin.Helping
 {
     public static class QueryableExtensions
     {
-        public static async Task<PaginatedResult<T>> ToPaginatedListAsync<T>(this IQueryable<T> query, int pageNumber, int pageSize)
-            where T : class
-        {
-            if (query == null)
-            {
-                throw new Exception("Empty");
-            }
-
-            pageNumber = pageNumber <= 0 ? 1 : pageNumber;
-            pageSize = pageSize <= 0 ? 10 : pageSize;
-            int count = await query.AsNoTracking().CountAsync();
-            if (count == 0)
-                return PaginatedResult<T>.Success(new List<T>(), count, pageNumber, pageSize);
-            var items = await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
-            return PaginatedResult<T>.Success(items, count, pageNumber, pageSize);
-        }
         public static IQueryable<T> ApplyFilter<T>(this IQueryable<T> query, Dictionary<string, string> filters, string[] allowedFilterProperties = null)
                 where T : class
         {
