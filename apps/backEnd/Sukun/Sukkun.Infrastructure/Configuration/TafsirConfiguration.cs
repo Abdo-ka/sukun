@@ -15,9 +15,10 @@ namespace Sukun.Infrastructure.Configuration
 
             builder.Property(t => t.Source)
                 .IsRequired()
-                .HasConversion<int>()
+                .HasConversion<string>()
+                .HasMaxLength(50)
                 .HasDefaultValue(TafsirSource.IbnKathir);
-
+            
             builder.Property(t => t.Author)
                 .HasMaxLength(200)
                 .IsUnicode(true)

@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 using Sukun.Domin.Entities;
 using Sukun.Infrastructure.Abstracts;
 using Sukun.Infrastructure.Context;
+using Sukun.Infrastructure.Repositories;
 
 namespace Sukun.Infrastructure.InfrastructureBases
 {
@@ -16,6 +18,7 @@ namespace Sukun.Infrastructure.InfrastructureBases
 
         // Specific Repositories
         public IUserRepository Users { get; }
+        public IAdminRepository Admins { get; }
         public ICityRepository Cities { get; }
         public IQuranRepository Quran { get; }
         public IUserDeviceRepository UserDevices { get; }
@@ -29,6 +32,7 @@ namespace Sukun.Infrastructure.InfrastructureBases
             IQuranRepository quranRepository,
             IUserDeviceRepository userDeviceRepository,
             IFCMTokenRepository fcmTokenRepository,
+            IAdminRepository adminRepository,
             IUserBookmarkRepository userBookmarkRepository)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -37,6 +41,7 @@ namespace Sukun.Infrastructure.InfrastructureBases
 
             // Initialize specific repositories
             Users = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
+            Admins = adminRepository ?? throw new ArgumentNullException(nameof(adminRepository));
             Cities = cityRepository ?? throw new ArgumentNullException(nameof(cityRepository));
             Quran = quranRepository ?? throw new ArgumentNullException(nameof(quranRepository));
             UserDevices = userDeviceRepository ?? throw new ArgumentNullException(nameof(userDeviceRepository));
@@ -49,9 +54,13 @@ namespace Sukun.Infrastructure.InfrastructureBases
 
             if (!_repositories.ContainsKey(type))
             {
+                // جلب ILogger<Repository<T>> من DI (يجب أن يكون UnitOfWork مسجل كـ Scoped)
                 var repositoryType = typeof(Repository<>);
+
+                var logger = (ILogger<Repository<T>>)_context.GetService(typeof(ILogger<Repository<T>>))
+                         ?? throw new InvalidOperationException($"Logger for Repository<{type.Name}> not found.");
                 var repositoryInstance = Activator.CreateInstance(
-                    repositoryType.MakeGenericType(typeof(T)), _context);
+                             repositoryType.MakeGenericType(typeof(T)), _context, logger);
 
                 _repositories[type] = repositoryInstance!;
             }

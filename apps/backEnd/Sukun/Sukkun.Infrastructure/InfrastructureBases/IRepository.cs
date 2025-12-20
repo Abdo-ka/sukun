@@ -24,13 +24,7 @@ namespace Sukun.Infrastructure.InfrastructureBases
         Task<bool> ExistsAsync(Expression<Func<T, bool>> predicate);
         Task<int> CountAsync(Expression<Func<T, bool>> predicate = null);
         Task<T?> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate);
-        Task<Result<bool>> DeleteAsync(Guid id, bool softDelete = true);
-        public Task<PaginatedResult<T>> GetPaginatedAsync(
-        int pageNumber,
-        int pageSize,
-        Expression<Func<T, bool>>? predicate = null,
-        Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
-        CancellationToken cancellationToken = default);
+        Task<Result<bool>> DeleteAsync(T entity, bool softDelete = true);
         Task<Result<int>> DeleteRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default);
         Task<Result<int>> DeleteRangeAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
     }

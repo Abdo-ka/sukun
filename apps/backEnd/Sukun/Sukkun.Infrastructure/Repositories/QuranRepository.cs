@@ -314,6 +314,30 @@ namespace Sukun.Infrastructure.Repositories
                 throw;
             }
         }
+        public async Task<int> GetTotalSurahCountAsync()
+        {
+            try
+            {
+                return await _surahRepository.CountAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting total verses count");
+                throw;
+            }
+        }
+        public async Task<int> GetTafsirCountBySourceAsync(TafsirSource source)
+        {
+            try
+            {
+                return await _tafsirRepository.CountAsync(x=>x.Source ==source);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error getting total Tafsir {source} count");
+                throw;
+            }
+        }
 
         public async Task<int> GetVersesCountBySurahAsync(int surahNumber)
         {

@@ -13,8 +13,6 @@ namespace Sukun.Infrastructure.Configuration
             // Table name
             builder.ToTable("UserDevices");
 
-            // Properties Configuration
-
             builder.Property(d => d.DeviceId)
                 .HasMaxLength(255)
                 .IsRequired(false);

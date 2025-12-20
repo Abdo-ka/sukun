@@ -10,7 +10,7 @@ namespace Sukun.Domin.Common
     {
         public bool IsSuccess { get; }
         public T? Value { get; }
-        public string Message { get; } = string.Empty;
+        public string Message { get; set; } = string.Empty;
         public List<string> Errors { get; } = new List<string>();
         public ResultFailureType FailureType { get; }
 

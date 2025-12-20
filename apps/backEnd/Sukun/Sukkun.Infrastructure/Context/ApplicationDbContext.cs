@@ -12,6 +12,7 @@ namespace Sukun.Infrastructure.Context
 
         }
         public DbSet<User> Users { get; set; }
+        public DbSet<Admin> Admins { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<UserDevice> UserDevices { get; set; }
         public DbSet<FCMToken> FCMTokens { get; set; }

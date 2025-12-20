@@ -19,7 +19,8 @@ namespace Sukun.Infrastructure.Configuration
 
             builder.Property(b => b.Type)
                 .IsRequired()
-                .HasConversion<int>()
+                .HasConversion<string>()
+                .HasMaxLength(50)
                 .HasDefaultValue(BookmarkType.Favorite);
         }
     }

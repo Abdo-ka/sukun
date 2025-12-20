@@ -1,11 +1,32 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Sukun.Application.Implemantation;
+using Sukun.Application.Interfaces;
+using Sukun.Application.Seeder.Quran;
+using Sukun.Application.Seeder.Tafsir_entity;
+
 namespace Sukun.Application
 {
     public static class ModuleApiServicesDependencies
     {
         public static IServiceCollection AddServicesDependencies(this IServiceCollection services, IConfiguration configuration)
-        {      
+        {
+            // Services
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ICityService, CityService>();
+            services.AddScoped<IQuranService, QuranService>();
+            services.AddScoped<IQuranSeederService, QuranSeederService>();
+            services.AddScoped<ITafsirSeederService, TafsirSeederService>();
+            services.AddScoped<IUserDeviceService, UserDeviceService>();
+            services.AddScoped<IFCMTokenService, FCMTokenService>();
+            services.AddScoped<IUserBookmarkService, UserBookmarkService>();
+
+            // Supporting services
+            services.AddScoped<IPasswordHasher, BCryptPasswordHasher>();
+            services.AddScoped<IJwtService, JwtService>();
+            // services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IPasswordHasher, PasswordHasher>();
+            services.AddScoped<IAdminService, AdminService>();
             return services;
         }
     }

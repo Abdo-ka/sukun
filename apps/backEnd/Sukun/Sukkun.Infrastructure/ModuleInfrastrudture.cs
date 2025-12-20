@@ -22,6 +22,7 @@ namespace Sukun.Infrastructure
             services.AddScoped<IUserDeviceRepository, UserDeviceRepository>();
             services.AddScoped<IFCMTokenRepository, FCMTokenRepository>();
             services.AddScoped<IUserBookmarkRepository, UserBookmarkRepository>();
+            services.AddScoped<IAdminRepository, AdminRepository>();
             return services;
         }
             

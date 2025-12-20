@@ -27,9 +27,11 @@ namespace Sukun.Infrastructure.Abstracts
         Task<IEnumerable<Tafsir>> GetTafsirsByVerseAsync(Guid verseId);
         Task<Tafsir?> GetTafsirByVerseAndSourceAsync(Guid verseId, TafsirSource source);
         Task<IEnumerable<Tafsir>> GetTafsirsBySourceAsync(TafsirSource source);
+        Task<int> GetTafsirCountBySourceAsync(TafsirSource source);
 
         // Statistics
         Task<int> GetTotalVersesCountAsync();
+        Task<int> GetTotalSurahCountAsync();
         Task<int> GetVersesCountBySurahAsync(int surahNumber);
         Task<Dictionary<int, int>> GetVersesCountByJuzAsync();
     }

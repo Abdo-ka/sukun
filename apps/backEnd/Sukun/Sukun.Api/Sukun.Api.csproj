@@ -20,8 +20,4 @@
     <ProjectReference Include="..\Sukun.Application\Sukun.Application.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
 </Project>

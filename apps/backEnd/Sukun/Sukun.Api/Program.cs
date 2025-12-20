@@ -1,4 +1,4 @@
-
+﻿
 using Microsoft.EntityFrameworkCore;
 using Sukun.Infrastructure.Context;
 using Sukun.Infrastructure;
@@ -10,6 +10,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Sukun.Middleware;
 using Microsoft.IdentityModel.Tokens;
+using Sukun.Domin.Enums;
+using Sukun.Application.Seeder.Quran;
+using Sukun.Application.Seeder.Tafsir_entity;
 
 namespace Sukun.Api
 {
@@ -31,7 +34,7 @@ namespace Sukun.Api
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddDbContext<ApplicationDbContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-           
+            builder.Services.AddHttpClient();
             builder.Services.AddServicesDependencies(builder.Configuration)
                             .AddInfrastructureDependencies()
                             .AddApiServices(builder.Configuration);
@@ -66,13 +69,35 @@ namespace Sukun.Api
             #region Update-Database
 
             using var Scope = app.Services.CreateScope();
-            var Services = Scope.ServiceProvider;
-            var LoggerFactory = Services.GetRequiredService<ILoggerFactory>();
+            var services = Scope.ServiceProvider;
+            var LoggerFactory = services.GetRequiredService<ILoggerFactory>();
 
             try
             {
-                var DbContext = Services.GetRequiredService <ApplicationDbContext>();
-                await DbContext.Database.MigrateAsync();
+                var dbContext = services.GetRequiredService <ApplicationDbContext>();
+                await dbContext.Database.MigrateAsync();
+                var quranSeeder = services.GetRequiredService<IQuranSeederService>();
+                var surahsCount = await dbContext.QuranSurahs.CountAsync();
+                if (surahsCount == 0) // أو < 114
+                {
+                    await quranSeeder.SeedQuranAsync();
+                }
+                else
+                {
+                    var logger = services.GetRequiredService<ILogger<Program>>();
+                    logger.LogInformation("Quran already seeded, skipping...");
+                }
+                var tafsirsCount = await dbContext.Tafsirs.CountAsync(x=>x.Source == TafsirSource.Jalalayn);
+                var tafsirSeeder = services.GetRequiredService<ITafsirSeederService>();
+                if (tafsirsCount == 0) 
+                {
+                    await tafsirSeeder.SeedTafsirAsync(TafsirSource.Jalalayn); // أو IbnKathir, Saadi, etc.
+                }
+                else
+                {
+                    var logger = services.GetRequiredService<ILogger<Program>>();
+                    logger.LogInformation($"tafsir {TafsirSource.Jalalayn} already seeded, skipping...");
+                }
             }
             catch (Exception ex)
             {

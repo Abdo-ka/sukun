@@ -85,14 +85,10 @@ namespace Sukun.Infrastructure.InfrastructureBases
             }
         }
 
-        public async Task<Result<bool>> DeleteAsync(Guid id, bool softDelete = true)
+        public async Task<Result<bool>> DeleteAsync(T entity, bool softDelete = true)
         {
             try
-            {
-                var entity = await GetByIdAsync(id);
-                if (entity == null)
-                    return Result<bool>.Failure("Entity not found");
-
+            {           
                 if (softDelete)
                 {
                     entity.IsDeleted = true;
@@ -134,38 +130,7 @@ namespace Sukun.Infrastructure.InfrastructureBases
         {
             return _dbSet.AsQueryable().Where(e => !e.IsDeleted).AsNoTracking();
         }
-        public async Task<PaginatedResult<T>> GetPaginatedAsync(
-        int pageNumber,
-        int pageSize,
-        Expression<Func<T, bool>>? predicate = null,
-        Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
-        CancellationToken cancellationToken = default)
-        {
-            var query = _dbSet.Where(e => !e.IsDeleted);
-
-            if (predicate != null)
-                query = query.Where(predicate);
-
-            var totalCount = await query.CountAsync(cancellationToken);
-
-            if (orderBy != null)
-                query = orderBy(query);
-
-            var items = await query
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync(cancellationToken);
-
-            return new PaginatedResult<T>
-            {
-                Data = items,
-                CurrentPage = pageNumber,
-                PageSize = pageSize,
-                TotalCount = totalCount,
-                TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize)
-            };
-
-        }
+  
         public virtual async Task<Result<int>> DeleteRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default)
         {
             try

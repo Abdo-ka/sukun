@@ -1,6 +1,12 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using FluentValidation;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Sukun.Api.Filter;
+using Sukun.Application.Dtos.Admin.Request;
+using Sukun.Application.Dtos.Admin.Validators;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -12,7 +18,7 @@ public static class ServiceCollectionExtensions
         IConfiguration configuration)
     {
         // التحكم في JSON
-        services.AddControllers()
+        services.AddControllers(op => op.Filters.Add(typeof(ValidationFilter)))
             .AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
@@ -20,6 +26,10 @@ public static class ServiceCollectionExtensions
             });
 
         services.AddEndpointsApiExplorer();
+        services.AddHttpContextAccessor();
+        services.AddValidatorsFromAssemblyContaining<AdminUpdateDtoValidator>();
+
+
 
         services.AddSwaggerConfiguration();
         services.AddJwtAuthentication(configuration);
@@ -80,13 +90,13 @@ public static class ServiceCollectionExtensions
                 x.SaveToken = true;
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuer = Boolean.Parse(jwtSettings["ValidateIssuer"]!),
-                    ValidIssuer = jwtSettings["Issuer"],
-                    ValidateAudience = Boolean.Parse(jwtSettings["ValidateAudience"]),
-                    ValidAudience = jwtSettings["Audience"],
-                    ValidateIssuerSigningKey = Boolean.Parse(jwtSettings["ValidateIssuerSigningKey"]!),
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["jwtSettings:Secret"]!)),
-                    ValidateLifetime = Boolean.Parse(jwtSettings["ValidateIssuerSigningKey"]!),
+                    ValidateIssuer = Boolean.Parse(jwtSettings["validateIssuer"]!),
+                    ValidIssuer = jwtSettings["issuer"],
+                    ValidateAudience = Boolean.Parse(jwtSettings["validateAudience"]),
+                    ValidAudience = jwtSettings["audience"],
+                    ValidateIssuerSigningKey = Boolean.Parse(jwtSettings["validateIssuerSigningKey"]!),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["secret"]!)),
+                    ValidateLifetime = Boolean.Parse(jwtSettings["validateLifetime"]!),
                     ClockSkew = TimeSpan.Zero,
                 };
             });

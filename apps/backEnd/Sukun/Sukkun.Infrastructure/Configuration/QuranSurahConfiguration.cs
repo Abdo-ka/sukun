@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using Sukun.Domin.Entities;
+using Sukun.Domin.Enums;
 
 namespace Sukun.Infrastructure.Configuration
 {
@@ -24,7 +25,9 @@ namespace Sukun.Infrastructure.Configuration
                 .HasMaxLength(100);
 
             builder.Property(s => s.RevelationType)
-                .HasConversion<int>()
+                .HasConversion<string>()
+                .HasMaxLength(50)
+                .HasDefaultValue(RevelationType.Makki)
                 .IsRequired();
 
             builder.Property(s => s.RevelationOrder)
