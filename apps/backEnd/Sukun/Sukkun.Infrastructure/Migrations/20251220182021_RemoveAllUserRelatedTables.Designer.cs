@@ -12,7 +12,7 @@ using Sukun.Infrastructure.Context;
 namespace Sukun.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251220172410_RemoveAllUserRelatedTables")]
+    [Migration("20251220182021_RemoveAllUserRelatedTables")]
     partial class RemoveAllUserRelatedTables
     {
         /// <inheritdoc />
@@ -177,10 +177,6 @@ namespace Sukun.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("EnglishNameTranslation")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()

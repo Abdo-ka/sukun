@@ -22,22 +22,11 @@ namespace Sukun.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
-
-            migrationBuilder.AddColumn<string>(
-                name: "EnglishNameTranslation",
-                table: "QuranSurahs",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "EnglishNameTranslation",
-                table: "QuranSurahs");
-
             migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new

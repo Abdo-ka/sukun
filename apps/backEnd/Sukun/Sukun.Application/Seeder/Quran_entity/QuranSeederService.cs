@@ -41,7 +41,7 @@ namespace Sukun.Application.Seeder.Quran
                         Number = apiSurah.Number,
                         Name = apiSurah.Name,
                         EnglishName = apiSurah.EnglishName,
-                        EnglishNameTranslation = apiSurah.EnglishNameTranslation,
+                        //EnglishNameTranslation = apiSurah.EnglishNameTranslation,
                         TotalVerses = apiSurah.Ayahs.Count,
                         RevelationType = apiSurah.RevelationType == "Meccan" ? RevelationType.Makki : RevelationType.Madani,
                         RevelationOrder = apiSurah.RevelationOrder
