@@ -81,7 +81,7 @@ namespace Sukun.Infrastructure.Migrations
                         .IsUnique()
                         .HasDatabaseName("IX_Admins_Email");
 
-                    b.ToTable("Admins");
+                    b.ToTable("Admins", (string)null);
                 });
 
             modelBuilder.Entity("Sukun.Domin.Entities.BaseEntity", b =>
@@ -101,7 +101,7 @@ namespace Sukun.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("BaseEntity");
+                    b.ToTable("BaseEntity", (string)null);
                 });
 
             modelBuilder.Entity("Sukun.Domin.Entities.City", b =>
@@ -378,7 +378,7 @@ namespace Sukun.Infrastructure.Migrations
 
                     b.HasIndex("CityId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Sukun.Domin.Entities.UserBookmark", b =>

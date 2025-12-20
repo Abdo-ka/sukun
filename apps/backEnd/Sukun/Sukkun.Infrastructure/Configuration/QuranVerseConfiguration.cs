@@ -36,10 +36,6 @@ namespace Sukun.Infrastructure.Configuration
                    .HasForeignKey(t=>t.VerseId)
                    .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasMany(v => v.Bookmarks)
-              .WithOne(b => b.Verse)
-              .HasForeignKey(b => b.VerseId)
-              .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

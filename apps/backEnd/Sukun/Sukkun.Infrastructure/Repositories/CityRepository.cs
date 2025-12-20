@@ -69,38 +69,6 @@ namespace Sukun.Infrastructure.Repositories
             }
         }
 
-        public async Task<IEnumerable<City>> GetCitiesWithUsersAsync()
-        {
-            try
-            {
-                return await _dbSet
-                    .Include(c => c.Users)
-                    .Where(c => c.Users.Any())
-                    .OrderBy(c => c.Name)
-                    .ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error getting cities with users");
-                throw;
-            }
-        }
-
-        public async Task<City?> GetCityWithUsersAsync(Guid cityId)
-        {
-            try
-            {
-                return await _dbSet
-                    .Include(c => c.Users)
-                    .FirstOrDefaultAsync(c => c.Id == cityId);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error getting city with users: {CityId}", cityId);
-                throw;
-            }
-        }
-
         public async Task<IEnumerable<City>> GetCitiesByTimeZoneAsync(int timeZone)
         {
             try

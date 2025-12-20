@@ -39,10 +39,6 @@ namespace Sukun.Infrastructure.Configuration
             builder.Property(c => c.TimeZone)
                 .IsRequired();
 
-            builder.HasMany(c => c.Users)
-                .WithOne(u => u.City)
-                .HasForeignKey(u => u.CityId)
-                .OnDelete(DeleteBehavior.Restrict); 
 
         }
     }

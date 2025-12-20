@@ -87,38 +87,6 @@ namespace Sukun.Application.Implemantation
             }
         }
 
-        public async Task<Result<IEnumerable<CityResponseDto>>> GetCitiesWithUsersAsync()
-        {
-            try
-            {
-                _logger.LogDebug("Getting cities with users");
-                var cities = await _unitOfWork.Cities.GetCitiesWithUsersAsync();
-                return Result<IEnumerable<CityResponseDto>>.Success(cities.Select(CityMapper.ToResponseDto));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error getting cities with users");
-                return Result<IEnumerable<CityResponseDto>>.Failure($"Error retrieving cities: {ex.Message}");
-            }
-        }
-
-        public async Task<Result<CityResponseDto>> GetCityWithUsersAsync(Guid cityId)
-        {
-            try
-            {
-                _logger.LogDebug("Getting city with users by ID: {CityId}", cityId);
-                var city = await _unitOfWork.Cities.GetCityWithUsersAsync(cityId);
-                if (city == null)
-                    return Result<CityResponseDto>.NotFound($"City with ID {cityId} not found");
-
-                return Result<CityResponseDto>.Success(CityMapper.ToResponseDto(city));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error getting city with users: {CityId}", cityId);
-                return Result<CityResponseDto>.Failure($"Error retrieving city: {ex.Message}");
-            }
-        }
 
         public async Task<Result<IEnumerable<CityResponseDto>>> GetCitiesByTimeZoneAsync(int timeZone)
         {
@@ -206,24 +174,6 @@ namespace Sukun.Application.Implemantation
             {
                 _logger.LogError(ex, "Error creating city: {Name}, {Country}", dto.Name, dto.Country);
                 return Result<CityResponseDto>.Failure($"Error creating city: {ex.Message}");
-            }
-        }
-
-        public async Task<Result<CityResponseDto>> GetCityDetailAsync(Guid cityId)
-        {
-            try
-            {
-                _logger.LogDebug("Getting city details for ID: {CityId}", cityId);
-                var city = await _unitOfWork.Cities.GetCityWithUsersAsync(cityId);
-                if (city == null)
-                    return Result<CityResponseDto>.NotFound($"City with ID {cityId} not found");
-
-                return Result<CityResponseDto>.Success(CityMapper.ToResponseDto(city));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error getting city details for ID: {CityId}", cityId);
-                return Result<CityResponseDto>.Failure($"Error getting city details: {ex.Message}");
             }
         }
 

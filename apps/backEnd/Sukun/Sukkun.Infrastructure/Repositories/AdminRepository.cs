@@ -1,55 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Sukun.Domin.Common;
 using Sukun.Domin.Entities;
-using Sukun.Domin.Enums;
 using Sukun.Infrastructure.Abstracts;
 using Sukun.Infrastructure.Context;
 using Sukun.Infrastructure.InfrastructureBases;
-using System.Linq.Expressions;
 
 namespace Sukun.Infrastructure.Repositories
 {
-    public class UserRepository : Repository<User>, IUserRepository
-    {
-        public UserRepository(ApplicationDbContext context, ILogger<UserRepository> logger)
-            : base(context, logger)
-        {
-        }
-        public async Task<User?> GetUserWithDetailsAsync(Guid userId)
-        {
-            try
-            {
-                return await _dbSet
-                    .Include(u => u.City)
-                    .Include(u => u.Devices)
-                    .Include(u => u.Bookmarks)
-                        .ThenInclude(b => b.Verse)
-                        .ThenInclude(v => v.Surah)
-                    .FirstOrDefaultAsync(u => u.Id == userId);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error getting anonymous user with details: {UserId}", userId);
-                throw;
-            }
-        }
-
-        public async Task<bool> UserExistsAsync(Guid userId)
-        {
-            try
-            {
-                return await _dbSet.AnyAsync(u => u.Id == userId);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error checking if anonymous user exists: {UserId}", userId);
-                throw;
-            }
-        }
-    }
-
-
     public class AdminRepository : Repository<Admin>, IAdminRepository
     {
         public AdminRepository(ApplicationDbContext context, ILogger<AdminRepository> logger)

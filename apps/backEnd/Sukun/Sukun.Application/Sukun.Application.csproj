@@ -23,8 +23,6 @@
     <Folder Include="Dtos\QuranVerse\Validators\" />
     <Folder Include="Dtos\Tafsir\Request\" />
     <Folder Include="Dtos\Tafsir\Validators\" />
-    <Folder Include="Dtos\User\Request\" />
-    <Folder Include="Dtos\User\Validators\" />
   </ItemGroup>
 
 </Project>

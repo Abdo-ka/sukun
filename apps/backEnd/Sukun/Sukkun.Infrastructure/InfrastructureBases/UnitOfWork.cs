@@ -17,36 +17,25 @@ namespace Sukun.Infrastructure.InfrastructureBases
         private bool _disposed = false;
 
         // Specific Repositories
-        public IUserRepository Users { get; }
         public IAdminRepository Admins { get; }
         public ICityRepository Cities { get; }
         public IQuranRepository Quran { get; }
-        public IUserDeviceRepository UserDevices { get; }
-        public IFCMTokenRepository FCMTokens { get; }
-        public IUserBookmarkRepository UserBookmarks { get; }
 
         
         public UnitOfWork(ApplicationDbContext context, ILogger<UnitOfWork> logger,
-            IUserRepository userRepository,
             ICityRepository cityRepository,
             IQuranRepository quranRepository,
-            IUserDeviceRepository userDeviceRepository,
-            IFCMTokenRepository fcmTokenRepository,
-            IAdminRepository adminRepository,
-            IUserBookmarkRepository userBookmarkRepository)
+            IAdminRepository adminRepository
+            )
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _repositories = new Dictionary<Type, object>();
 
             // Initialize specific repositories
-            Users = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
             Admins = adminRepository ?? throw new ArgumentNullException(nameof(adminRepository));
             Cities = cityRepository ?? throw new ArgumentNullException(nameof(cityRepository));
             Quran = quranRepository ?? throw new ArgumentNullException(nameof(quranRepository));
-            UserDevices = userDeviceRepository ?? throw new ArgumentNullException(nameof(userDeviceRepository));
-            FCMTokens = fcmTokenRepository ?? throw new ArgumentNullException(nameof(fcmTokenRepository));
-            UserBookmarks = userBookmarkRepository ?? throw new ArgumentNullException(nameof(userBookmarkRepository));
         }
         public IRepository<T> Repository<T>() where T : BaseEntity
         {

@@ -15,13 +15,9 @@ namespace Sukun.Infrastructure
             services.AddScoped<IUnitOfWork, UnitOfWork>();
      
             // Specific Repositories
-            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ICityRepository, CityRepository>();
             services.AddScoped<IQuranRepository, QuranRepository>();
             services.AddScoped<IQuranRepository, QuranRepository>();
-            services.AddScoped<IUserDeviceRepository, UserDeviceRepository>();
-            services.AddScoped<IFCMTokenRepository, FCMTokenRepository>();
-            services.AddScoped<IUserBookmarkRepository, UserBookmarkRepository>();
             services.AddScoped<IAdminRepository, AdminRepository>();
             return services;
         }

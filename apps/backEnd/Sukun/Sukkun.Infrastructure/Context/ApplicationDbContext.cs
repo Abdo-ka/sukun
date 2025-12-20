@@ -11,15 +11,11 @@ namespace Sukun.Infrastructure.Context
         {
 
         }
-        public DbSet<User> Users { get; set; }
         public DbSet<Admin> Admins { get; set; }
         public DbSet<City> Cities { get; set; }
-        public DbSet<UserDevice> UserDevices { get; set; }
-        public DbSet<FCMToken> FCMTokens { get; set; }
         public DbSet<QuranSurah> QuranSurahs { get; set; }
         public DbSet<QuranVerse> QuranVerses { get; set; }
         public DbSet<Tafsir> Tafsirs { get; set; }
-        public DbSet<UserBookmark> UserBookmarks { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

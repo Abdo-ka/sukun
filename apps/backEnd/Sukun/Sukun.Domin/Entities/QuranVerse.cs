@@ -12,7 +12,6 @@
         // Navigation Properties
         public virtual QuranSurah Surah { get; set; }
         public virtual ICollection<Tafsir> Tafsirs { get; set; } = new List<Tafsir>();
-        public virtual ICollection<UserBookmark> Bookmarks { get; set; } = new List<UserBookmark>();
     }
 }
 
