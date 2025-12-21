@@ -8,6 +8,7 @@ namespace Sukun.Infrastructure.InfrastructureBases
         IRepository<T> Repository<T>() where T : BaseEntity;
         // Specific Repositories
         public IAdminRepository Admins { get; }
+        public IAsmaulHusnaRepository AsmaulHusna { get; }
         public ICityRepository Cities { get; }
         public IQuranRepository Quran { get; }
         // Save changes

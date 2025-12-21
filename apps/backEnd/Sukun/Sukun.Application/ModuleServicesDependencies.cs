@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Sukun.Application.Implemantation;
 using Sukun.Application.Interfaces;
+using Sukun.Application.Seeder.AsumalHausna_entity;
 using Sukun.Application.Seeder.Quran;
 using Sukun.Application.Seeder.Tafsir_entity;
 
@@ -14,14 +15,19 @@ namespace Sukun.Application
             // Services
             services.AddScoped<ICityService, CityService>();
             services.AddScoped<IQuranService, QuranService>();
-            services.AddScoped<IQuranSeederService, QuranSeederService>();
-            services.AddScoped<ITafsirSeederService, TafsirSeederService>();
+            services.AddScoped<IAdminService, AdminService>();
+            services.AddScoped<IAsmaulHusnaService, AsmaulHusnaService>();
+               
             // Supporting services
             services.AddScoped<IPasswordHasher, BCryptPasswordHasher>();
             services.AddScoped<IJwtService, JwtService>();
             // services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IPasswordHasher, PasswordHasher>();
-            services.AddScoped<IAdminService, AdminService>();
+
+            //Seeder
+            services.AddScoped<IQuranSeederService, QuranSeederService>();
+            services.AddScoped<ITafsirSeederService, TafsirSeederService>();
+            services.AddScoped<IAsmaulHusnaSeederService, AsmaulHusnaSeederService>();
             return services;
         }
     }

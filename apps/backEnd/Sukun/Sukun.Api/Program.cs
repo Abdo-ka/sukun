@@ -1,18 +1,15 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
-using Sukun.Infrastructure.Context;
-using Sukun.Infrastructure;
-using System.Text.Json.Serialization;
-using System.Text.Json;
 using Sukun.Application;
-using Microsoft.OpenApi.Models;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using System.Text;
-using Sukun.Middleware;
-using Microsoft.IdentityModel.Tokens;
-using Sukun.Domin.Enums;
+using Sukun.Application.Seeder.AsumalHausna_entity;
 using Sukun.Application.Seeder.Quran;
 using Sukun.Application.Seeder.Tafsir_entity;
+using Sukun.Domin.Enums;
+using Sukun.Infrastructure;
+using Sukun.Infrastructure.Context;
+using Sukun.Middleware;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Sukun.Api
 {
@@ -53,7 +50,7 @@ namespace Sukun.Api
                     });
             });
             #endregion
-           
+
 
             //Auth Filter
             var app = builder.Build();
@@ -70,39 +67,26 @@ namespace Sukun.Api
 
             using var Scope = app.Services.CreateScope();
             var services = Scope.ServiceProvider;
-            var LoggerFactory = services.GetRequiredService<ILoggerFactory>();
-
+            var loggerFactory = services.GetRequiredService<ILoggerFactory>();
+            var logger = loggerFactory.CreateLogger<Program>();
             try
             {
-                var dbContext = services.GetRequiredService <ApplicationDbContext>();
+                var dbContext = services.GetRequiredService<ApplicationDbContext>();
                 await dbContext.Database.MigrateAsync();
+                logger.LogInformation("Database migration completed successfully.");
+
                 var quranSeeder = services.GetRequiredService<IQuranSeederService>();
-                var surahsCount = await dbContext.QuranSurahs.CountAsync();
-                if (surahsCount == 0) // أو < 114
-                {
-                    await quranSeeder.SeedQuranAsync();
-                }
-                else
-                {
-                    var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogInformation("Quran already seeded, skipping...");
-                }
-                var tafsirsCount = await dbContext.Tafsirs.CountAsync(x=>x.Source == TafsirSource.Jalalayn);
+                await quranSeeder.SeedQuranAsync();
+
                 var tafsirSeeder = services.GetRequiredService<ITafsirSeederService>();
-                if (tafsirsCount == 0) 
-                {
-                    await tafsirSeeder.SeedTafsirAsync(TafsirSource.Jalalayn); // أو IbnKathir, Saadi, etc.
-                }
-                else
-                {
-                    var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogInformation($"tafsir {TafsirSource.Jalalayn} already seeded, skipping...");
-                }
+                await tafsirSeeder.SeedTafsirAsync(TafsirSource.Jalalayn); 
+
+                var asmaulHusnaSeeder = services.GetRequiredService<IAsmaulHusnaSeederService>();
+                await asmaulHusnaSeeder.SeedAsmaulHusnaAsync();
             }
             catch (Exception ex)
             {
-                var Logger = LoggerFactory.CreateLogger<Program>();
-                Logger.LogError(ex, "Error! Database Not Updated");
+                logger.LogError(ex, "Error! Database Not Updated");
             }
 
             #endregion

@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Dtos\AsmaulHusna\Request\" />
     <Folder Include="Dtos\QuranSurah\Request\" />
     <Folder Include="Dtos\QuranSurah\Validators\" />
     <Folder Include="Dtos\QuranVerse\Request\" />

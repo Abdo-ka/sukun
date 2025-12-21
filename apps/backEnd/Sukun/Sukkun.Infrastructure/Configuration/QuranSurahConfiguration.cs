@@ -24,9 +24,9 @@ namespace Sukun.Infrastructure.Configuration
                 .IsRequired()
                 .HasMaxLength(100);
 
-            builder.Property(s => s.EnglishNameTranslation)
-                .IsRequired()
-                .HasMaxLength(100);
+            //builder.Property(s => s.EnglishNameTranslation)
+            //    .IsRequired()
+            //    .HasMaxLength(100);
 
             builder.Property(s => s.RevelationType)
                 .HasConversion<string>()

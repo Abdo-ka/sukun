@@ -19,6 +19,7 @@ namespace Sukun.Infrastructure
             services.AddScoped<IQuranRepository, QuranRepository>();
             services.AddScoped<IQuranRepository, QuranRepository>();
             services.AddScoped<IAdminRepository, AdminRepository>();
+            services.AddScoped<IAsmaulHusnaRepository, AsmaulHusnaRepository>();
             return services;
         }
             

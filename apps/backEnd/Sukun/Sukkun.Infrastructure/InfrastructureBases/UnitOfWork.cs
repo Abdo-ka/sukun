@@ -20,12 +20,14 @@ namespace Sukun.Infrastructure.InfrastructureBases
         public IAdminRepository Admins { get; }
         public ICityRepository Cities { get; }
         public IQuranRepository Quran { get; }
+        public IAsmaulHusnaRepository AsmaulHusna { get; }
 
         
         public UnitOfWork(ApplicationDbContext context, ILogger<UnitOfWork> logger,
             ICityRepository cityRepository,
             IQuranRepository quranRepository,
-            IAdminRepository adminRepository
+            IAdminRepository adminRepository,
+            IAsmaulHusnaRepository asmaulHusnaRepository
             )
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -36,6 +38,7 @@ namespace Sukun.Infrastructure.InfrastructureBases
             Admins = adminRepository ?? throw new ArgumentNullException(nameof(adminRepository));
             Cities = cityRepository ?? throw new ArgumentNullException(nameof(cityRepository));
             Quran = quranRepository ?? throw new ArgumentNullException(nameof(quranRepository));
+            AsmaulHusna = asmaulHusnaRepository ?? throw new ArgumentNullException(nameof(asmaulHusnaRepository));
         }
         public IRepository<T> Repository<T>() where T : BaseEntity
         {
