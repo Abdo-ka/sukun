@@ -6,7 +6,7 @@ namespace Sukun.Application.Mapper
 {
     public static class CityMapper
     {
-        public static CityResponseDto ToResponseDto(City city)
+        public static CityResponseDto ToResponseDto(this City city)
         {
             if (city == null) return null!;
 

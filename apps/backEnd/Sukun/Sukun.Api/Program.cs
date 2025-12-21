@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
 using Sukun.Application;
+using Sukun.Application.Seeder;
 using Sukun.Application.Seeder.AsumalHausna_entity;
 using Sukun.Application.Seeder.Quran;
 using Sukun.Application.Seeder.Tafsir_entity;
@@ -74,7 +75,7 @@ namespace Sukun.Api
                 var dbContext = services.GetRequiredService<ApplicationDbContext>();
                 await dbContext.Database.MigrateAsync();
                 logger.LogInformation("Database migration completed successfully.");
-
+                await DataSeeder.SeedAsync(dbContext);
                 var quranSeeder = services.GetRequiredService<IQuranSeederService>();
                 await quranSeeder.SeedQuranAsync();
 

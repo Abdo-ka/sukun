@@ -7,28 +7,35 @@ namespace Sukun.Domin.Helping
 {
     public static class QueryableExtensions
     {
-        public static async Task<PagedResponseDto<T>> ToPaginatedListAsync<T>(this IQueryable<T> query, int pageNumber, int pageSize)
-          where T : class
+        public static async Task<PagedResponseDto<T>> ToPaginatedListAsync<T>(
+        this IQueryable<T> query,
+        int pageNumber,
+        int pageSize) where T : class
         {
-            if (query == null)
-            {
-                throw new Exception("Empty");
-            }
+            if (query == null) throw new ArgumentNullException(nameof(query));
 
             pageNumber = pageNumber <= 0 ? 1 : pageNumber;
             pageSize = pageSize <= 0 ? 10 : pageSize;
-            int count = await query.AsNoTracking().CountAsync();
-            if (count == 0)
-                return new PagedResponseDto<T>();
-            var items = await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
-            return new PagedResponseDto<T>(){};
-        }
-        public static  IQueryable<T> ApplyPaginatedAsync<T>(this IQueryable<T> query,
-        int pageNumber,
-        int pageSize)
-        {
-            query = query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
-            return query;
+
+            var totalCount = await query.AsNoTracking().CountAsync();
+            var items = await query
+                .AsNoTracking()
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+
+            return new PagedResponseDto<T>
+            {
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalCount = totalCount,
+                TotalPages = totalPages,
+                HasPreviousPage = pageNumber > 1,
+                HasNextPage = pageNumber < totalPages,
+                Items = items
+            };
         }
     }
 }

@@ -189,10 +189,9 @@ namespace Sukun.Application.Implemantation
                     query = query.Where(b => b.Name == request.SearchTerm || b.NameAr == request.SearchTerm);
                 }
                 var totalCount = query.Count();
-               
-                query = query.ApplyPaginatedAsync(request.PageNumber,request.PageSize);
-                var pagedCitiesDto = query.Select(CityMapper.ToResponseDto).ToList();
-                var response = CreatePagedResponse(pagedCitiesDto, request.PageNumber, request.PageSize, totalCount);
+                query = query.OrderBy(x=>x.Name);
+                var dtoQuery = query.Select(c=>c.ToResponseDto());
+                var response = await dtoQuery.ToPaginatedListAsync(request.PageNumber,request.PageSize);
                 return Result<PagedResponseDto<CityResponseDto>>.Success(response);
             }
             catch (Exception ex)

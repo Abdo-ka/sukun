@@ -11,12 +11,14 @@ namespace Sukun.Infrastructure.InfrastructureBases
         public IAsmaulHusnaRepository AsmaulHusna { get; }
         public ICityRepository Cities { get; }
         public IQuranRepository Quran { get; }
+        public INarrativeRepository Narrative { get; }
+        public INarrativeSectionRepository NarrativeSection { get; }
         // Save changes
-       public Task<int> CompleteAsync();
-       public Task<bool> SaveEntitiesAsync();
-       // Transaction support
-       public Task BeginTransactionAsync();
-       public Task CommitTransactionAsync();
-       public Task RollbackTransactionAsync();
+        public Task<int> CompleteAsync();
+        public Task<bool> SaveEntitiesAsync();
+        // Transaction support
+        public Task BeginTransactionAsync();
+        public Task CommitTransactionAsync();
+        public Task RollbackTransactionAsync();
     }
 }

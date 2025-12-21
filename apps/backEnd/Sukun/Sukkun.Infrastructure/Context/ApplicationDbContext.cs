@@ -16,6 +16,9 @@ namespace Sukun.Infrastructure.Context
         public DbSet<QuranSurah> QuranSurahs { get; set; }
         public DbSet<QuranVerse> QuranVerses { get; set; }
         public DbSet<AsmaulHusna> AsmaulHusna { get; set; }
+        public DbSet<Narrative> Narratives { get; set; }
+        public DbSet<NarrativeSection> NarrativeSections { get; set; }
+        public DbSet<Tag> Tags { get; set; }
         public DbSet<Tafsir> Tafsirs { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

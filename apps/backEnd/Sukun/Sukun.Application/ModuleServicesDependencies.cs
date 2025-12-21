@@ -17,7 +17,8 @@ namespace Sukun.Application
             services.AddScoped<IQuranService, QuranService>();
             services.AddScoped<IAdminService, AdminService>();
             services.AddScoped<IAsmaulHusnaService, AsmaulHusnaService>();
-               
+            services.AddScoped<INarrativeService, NarrativeService>();
+
             // Supporting services
             services.AddScoped<IPasswordHasher, BCryptPasswordHasher>();
             services.AddScoped<IJwtService, JwtService>();

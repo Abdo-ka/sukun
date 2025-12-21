@@ -1,0 +1,210 @@
+{
+  "tags": [
+    {
+      "tagType": 1,
+      "nameAr": "مميز",
+      "nameEn": "Featured",
+      "iconUrl": null
+    },
+    {
+      "tagType": 10,
+      "nameAr": "حياة الرسول ﷺ",
+      "nameEn": "Prophet Life",
+      "iconUrl": "https://example.com/icons/prophet.png"
+    },
+    {
+      "tagType": 11,
+      "nameAr": "غزوات النبي",
+      "nameEn": "Prophet Battles",
+      "iconUrl": "https://example.com/icons/battle.png"
+    },
+    {
+      "tagType": 12,
+      "nameAr": "زوجات النبي",
+      "nameEn": "Prophet Wives",
+      "iconUrl": "https://example.com/icons/wives.png"
+    },
+    {
+      "tagType": 13,
+      "nameAr": "خلق الرسول",
+      "nameEn": "Prophet Morals",
+      "iconUrl": "https://example.com/icons/morals.png"
+    },
+    {
+      "tagType": 20,
+      "nameAr": "قصص الصحابة",
+      "nameEn": "Companions",
+      "iconUrl": "https://example.com/icons/sahaba.png"
+    },
+    {
+      "tagType": 30,
+      "nameAr": "قصص الأنبياء",
+      "nameEn": "Prophets Stories",
+      "iconUrl": "https://example.com/icons/prophets.png"
+    },
+    {
+      "tagType": 31,
+      "nameAr": "قصة يوسف عليه السلام",
+      "nameEn": "Story of Yusuf",
+      "iconUrl": "https://example.com/icons/yusuf.png"
+    }
+  ],
+  "narratives": [
+    {
+      "title": "حياة الرسول محمد ﷺ",
+      "titleAr": "حياة الرسول محمد ﷺ",
+      "shortDescription": "السيرة النبوية الكاملة",
+      "coverImageUrl": "https://example.com/covers/prophet-life.jpg",
+      "type": 2,
+      "isFeatured": true,
+      "parentId": null,
+      "tagTypes": [ 10, 1 ],
+      "sections": [
+        {
+          "title": "المقدمة",
+          "content": "بسم الله الرحمن الرحيم، هذا سرد لحياة خير الخلق محمد ﷺ...",
+          "displayOrder": 1,
+          "mediaUrl": null
+        }
+      ]
+    },
+    {
+      "title": "غزوات النبي ﷺ",
+      "titleAr": "غزوات النبي ﷺ",
+      "shortDescription": "أهم الغزوات في السيرة النبوية",
+      "coverImageUrl": "https://example.com/covers/battles.jpg",
+      "type": 3,
+      "isFeatured": false,
+      "parentId": null,
+      "tagTypes": [ 11 ],
+      "children": [
+        {
+          "title": "غزوة بدر",
+          "titleAr": "غزوة بدر",
+          "type": 3,
+          "tagTypes": []
+        },
+        {
+          "title": "غزوة أحد",
+          "titleAr": "غزوة أحد",
+          "type": 3,
+          "tagTypes": []
+        },
+        {
+          "title": "غزوة الخندق",
+          "titleAr": "غزوة الخندق",
+          "type": 3,
+          "tagTypes": []
+        }
+      ]
+    },
+    {
+      "title": "زوجات النبي ﷺ",
+      "titleAr": "أمهات المؤمنين",
+      "shortDescription": "سيرة زوجات رسول الله ﷺ",
+      "coverImageUrl": "https://example.com/covers/wives.jpg",
+      "type": 2,
+      "isFeatured": true,
+      "parentId": null,
+      "tagTypes": [ 12 ],
+      "children": [
+        {
+          "title": "خديجة بنت خويلد",
+          "titleAr": "خديجة رضي الله عنها",
+          "type": 2,
+          "tagTypes": []
+        },
+        {
+          "title": "عائشة بنت أبي بكر",
+          "titleAr": "عائشة رضي الله عنها",
+          "type": 2,
+          "tagTypes": []
+        },
+        {
+          "title": "حفصة بنت عمر",
+          "titleAr": "حفصة رضي الله عنها",
+          "type": 2,
+          "tagTypes": []
+        }
+      ]
+    },
+    {
+      "title": "قصص الصحابة رضي الله عنهم",
+      "titleAr": "قصص الصحابة",
+      "shortDescription": "سير ومواقف عظيمة من الصحابة",
+      "coverImageUrl": "https://example.com/covers/sahaba.jpg",
+      "type": 1,
+      "isFeatured": true,
+      "parentId": null,
+      "tagTypes": [ 20 ],
+      "children": [
+        {
+          "title": "أبو بكر الصديق",
+          "titleAr": "أبو بكر الصديق رضي الله عنه",
+          "type": 2,
+          "tagTypes": []
+        },
+        {
+          "title": "عمر بن الخطاب",
+          "titleAr": "عمر بن الخطاب رضي الله عنه",
+          "type": 2,
+          "tagTypes": []
+        },
+        {
+          "title": "عثمان بن عفان",
+          "titleAr": "عثمان بن عفان رضي الله عنه",
+          "type": 2,
+          "tagTypes": []
+        }
+      ]
+    },
+    {
+      "title": "قصص الأنبياء عليهم السلام",
+      "titleAr": "قصص الأنبياء",
+      "shortDescription": "قصص الأنبياء من آدم إلى محمد ﷺ",
+      "coverImageUrl": "https://example.com/covers/prophets.jpg",
+      "type": 1,
+      "isFeatured": true,
+      "parentId": null,
+      "tagTypes": [ 30 ],
+      "children": [
+        {
+          "title": "قصة آدم عليه السلام",
+          "titleAr": "قصة آدم",
+          "type": 1,
+          "tagTypes": []
+        },
+        {
+          "title": "قصة نوح عليه السلام",
+          "titleAr": "قصة نوح",
+          "type": 1,
+          "tagTypes": []
+        },
+        {
+          "title": "قصة إبراهيم عليه السلام",
+          "titleAr": "قصة إبراهيم",
+          "type": 1,
+          "tagTypes": []
+        },
+        {
+          "title": "قصة يوسف عليه السلام",
+          "titleAr": "قصة يوسف",
+          "type": 1,
+          "tagTypes": [ 31 ]
+        },
+        {
+          "title": "قصة موسى عليه السلام",
+          "titleAr": "قصة موسى",
+          "type": 1,
+          "tagTypes": []
+        },
+        {
+          "title": "قصة عيسى عليه السلام",
+          "titleAr": "قصة عيسى",
+          "type": 1,
+          "tagTypes": []
+        }
+      ]
+    }
+  ]
+}
