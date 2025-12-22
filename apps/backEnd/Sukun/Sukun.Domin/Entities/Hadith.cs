@@ -21,8 +21,12 @@ namespace Sukun.Domin.Entities
         public string? BookName { get; set; }
         public string? ChapterName { get; set; }
         public int? HadithNumber { get; set; }
+        public Guid BookId { get; set; }
+        public Guid? SectionId { get; set; }
 
-        // Navigation Properties
+        // Navigation
+        public virtual IslamicBook Book { get; set; } = null!;
+        public virtual IslamicBookSection? Section { get; set; }
         public virtual HadithCategory Category { get; set; }
         public virtual ICollection<HadithExplanation> Explanations { get; set; } = new List<HadithExplanation>();
     }

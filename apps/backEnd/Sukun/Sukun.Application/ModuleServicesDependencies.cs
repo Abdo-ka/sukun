@@ -6,6 +6,7 @@ using Sukun.Application.Seeder.AsumalHausna_entity;
 using Sukun.Application.Seeder.Hadith_entity;
 using Sukun.Application.Seeder.Quran;
 using Sukun.Application.Seeder.Tafsir_entity;
+using Sukun.Infrastructure.Abstracts;
 
 namespace Sukun.Application
 {
@@ -22,8 +23,9 @@ namespace Sukun.Application
             services.AddScoped<IHadithService, HadithService>();
             services.AddScoped<IHadithCategoryService, HadithCategoryService>();
             services.AddScoped<IHadithExplanationService, HadithExplanationService>();
-
-
+            services.AddScoped<IIslamicBookService, IslamicBookService>();
+            services.AddScoped<IIslamicBookSectionService, IslamicBookSectionService>();
+            services.AddScoped<IBookContentService, BookContentService>();
             // Supporting services
             services.AddScoped<IPasswordHasher, BCryptPasswordHasher>();
             services.AddScoped<IJwtService, JwtService>();

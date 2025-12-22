@@ -49,6 +49,16 @@ namespace Sukun.Infrastructure.Configuration
                 .WithOne(e => e.Hadith)
                 .HasForeignKey(e => e.HadithId)
                 .OnDelete(DeleteBehavior.ClientSetNull); // نفس حل Narrative
+
+            builder.HasOne(h => h.Book)
+                .WithMany(b => b.Hadiths)
+                .HasForeignKey(h => h.BookId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(h => h.Section)
+                .WithMany(s => s.Hadiths)
+                .HasForeignKey(h => h.SectionId)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

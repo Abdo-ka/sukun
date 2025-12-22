@@ -20,6 +20,9 @@ namespace Sukun.Infrastructure.Context
         public DbSet<NarrativeSection> NarrativeSections { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<Tafsir> Tafsirs { get; set; }
+        public DbSet<IslamicBook> IslamicBooks { get; set; }
+        public DbSet<IslamicBookSection> IslamicBookSections { get; set; }
+        public DbSet<BookContent> BookContents { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sukun.Infrastructure.Context;
 
@@ -11,9 +12,11 @@ using Sukun.Infrastructure.Context;
 namespace Sukun.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251222162909_CreateIslamicBooksSystem")]
+    partial class CreateIslamicBooksSystem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -168,55 +171,6 @@ namespace Sukun.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("BaseEntity");
-                });
-
-            modelBuilder.Entity("Sukun.Domin.Entities.BookContent", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWID()");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasMaxLength(2147483647)
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreateAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<int>("DisplayOrder")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
-                    b.Property<string>("MediaUrl")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<Guid>("SectionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DisplayOrder");
-
-                    b.HasIndex("SectionId");
-
-                    b.ToTable("BookContents", (string)null);
                 });
 
             modelBuilder.Entity("Sukun.Domin.Entities.City", b =>
@@ -447,9 +401,6 @@ namespace Sukun.Infrastructure.Migrations
                         .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IconUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
@@ -847,17 +798,6 @@ namespace Sukun.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Sukun.Domin.Entities.BookContent", b =>
-                {
-                    b.HasOne("Sukun.Domin.Entities.IslamicBookSection", "Section")
-                        .WithMany("Contents")
-                        .HasForeignKey("SectionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Section");
-                });
-
             modelBuilder.Entity("Sukun.Domin.Entities.Hadith", b =>
                 {
                     b.HasOne("Sukun.Domin.Entities.IslamicBook", "Book")
@@ -965,8 +905,6 @@ namespace Sukun.Infrastructure.Migrations
 
             modelBuilder.Entity("Sukun.Domin.Entities.IslamicBookSection", b =>
                 {
-                    b.Navigation("Contents");
-
                     b.Navigation("Hadiths");
                 });
 
