@@ -24,13 +24,13 @@ namespace Sukun.Application.Interfaces
         Task<Result<NarrativeSectionResponseDto>> GetSectionByIdAsync(Guid sectionId);
         Task<Result<PagedResponseDto<NarrativeListResponseDto>>> GetPagedAsync(PagedRequestDto request);
         Task<Result<IEnumerable<NarrativeListResponseDto>>> GetProphetLifeMainSectionsAsync();
-        
+
         Task<Result<IEnumerable<NarrativeListResponseDto>>> GetProphetBattlesAsync();
-        
+
         Task<Result<IEnumerable<NarrativeListResponseDto>>> GetProphetWivesAsync();
-        
+
         Task<Result<IEnumerable<NarrativeListResponseDto>>> GetCompanionsStoriesAsync();
-        
+
         Task<Result<IEnumerable<NarrativeListResponseDto>>> GetProphetsStoriesAsync();
 
     }

@@ -14,6 +14,7 @@ namespace Sukun.Domin.Entities
 
         public AdminRole Role { get; set; } = AdminRole.Admin;
     }
+
 }
 
 

@@ -12,12 +12,6 @@ namespace Sukun.Infrastructure.Configuration
 
             builder.ToTable("QuranVerses");
 
-           builder.Property(s => s.JuzNumber)
-                .IsRequired();
-
-            builder.HasIndex(s => s.PageNumber)
-                .IsUnique();
-
             builder.Property(s => s.Text)
                 .IsRequired()
                 .HasColumnType("nvarchar(MAX)")

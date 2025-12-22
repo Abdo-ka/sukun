@@ -13,6 +13,9 @@ namespace Sukun.Infrastructure.InfrastructureBases
         public IQuranRepository Quran { get; }
         public INarrativeRepository Narrative { get; }
         public INarrativeSectionRepository NarrativeSection { get; }
+        public IHadithCategoryRepository HadithCategories { get; }
+        public IHadithRepository Hadiths { get; }
+        public IHadithExplanationRepository HadithExplanations { get; }
         // Save changes
         public Task<int> CompleteAsync();
         public Task<bool> SaveEntitiesAsync();

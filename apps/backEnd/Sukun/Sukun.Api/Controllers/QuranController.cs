@@ -93,13 +93,6 @@ namespace Sukun.Api.Controllers
         //[Authorize(Roles = "SuperAdmin")]
         public async Task<ApiResult> SeedQuran()
         {
-            var surahsCount = await _quranService.GetTotalSurahCountAsync();
-            if (!surahsCount.IsSuccess)
-                return this.ToApiResult(Result.Failure(surahsCount.Message ?? "Error checking Quran data"));
-
-            if (surahsCount.Value > 0)
-                return ApiResult.Ok("Quran already seeded, skipping...");
-
             try
             {
                 await _quranSeederService.SeedQuranAsync();
@@ -116,13 +109,6 @@ namespace Sukun.Api.Controllers
         [Authorize(Roles = "SuperAdmin")]
         public async Task<ApiResult> SeedTafsir([FromQuery] TafsirSource source = TafsirSource.Jalalayn)
         {
-            var existingCount = await _quranService.GetTafsirCountBySourceAsync(source);
-            if (!existingCount.IsSuccess)
-                return this.ToApiResult(Result.Failure("Error checking tafsir data"));
-
-            if (existingCount.Value > 0)
-                return ApiResult.Ok($"Tafsir {source} already seeded, skipping...");
-
             try
             {
                 await _tafsirSeederService.SeedTafsirAsync(source);

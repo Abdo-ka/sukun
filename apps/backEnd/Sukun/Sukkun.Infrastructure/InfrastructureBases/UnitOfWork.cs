@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using Sukun.Domin.Entities;
 using Sukun.Infrastructure.Abstracts;
 using Sukun.Infrastructure.Context;
-using Sukun.Infrastructure.Repositories;
 
 namespace Sukun.Infrastructure.InfrastructureBases
 {
@@ -23,10 +22,11 @@ namespace Sukun.Infrastructure.InfrastructureBases
         public IAsmaulHusnaRepository AsmaulHusna { get; }
 
         public INarrativeRepository Narrative { get; }
-
-
+      
         public INarrativeSectionRepository NarrativeSection { get; }
-
+        public IHadithCategoryRepository HadithCategories { get; }
+        public IHadithExplanationRepository HadithExplanations { get; }
+        public IHadithRepository Hadiths { get; }
 
         public UnitOfWork(ApplicationDbContext context, ILogger<UnitOfWork> logger,
             ICityRepository cityRepository,
@@ -34,7 +34,10 @@ namespace Sukun.Infrastructure.InfrastructureBases
             IAdminRepository adminRepository,
             IAsmaulHusnaRepository asmaulHusnaRepository,
             INarrativeSectionRepository narrativeSection,
-            INarrativeRepository narrative
+            INarrativeRepository narrative,
+            IHadithCategoryRepository hadithCategoryRepository,
+            IHadithRepository hadithRepository,
+            IHadithExplanationRepository hadithExplanationRepository
             )
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -48,6 +51,9 @@ namespace Sukun.Infrastructure.InfrastructureBases
             AsmaulHusna = asmaulHusnaRepository ?? throw new ArgumentNullException(nameof(asmaulHusnaRepository));
             Narrative = narrative ?? throw new ArgumentNullException(nameof(narrative));
             NarrativeSection = narrativeSection ?? throw new ArgumentNullException(nameof(narrativeSection));
+            HadithCategories = hadithCategoryRepository ?? throw new ArgumentNullException(nameof(hadithCategoryRepository));
+            Hadiths = hadithRepository ?? throw new ArgumentNullException(nameof(hadithRepository));
+            HadithExplanations = hadithExplanationRepository ?? throw new ArgumentNullException(nameof(hadithExplanationRepository)); ;
         }
         public IRepository<T> Repository<T>() where T : BaseEntity
         {

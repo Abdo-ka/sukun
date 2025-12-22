@@ -22,6 +22,9 @@ namespace Sukun.Infrastructure
             services.AddScoped<IAsmaulHusnaRepository, AsmaulHusnaRepository>();
             services.AddScoped<INarrativeRepository, NarrativeRepository>();
             services.AddScoped<INarrativeSectionRepository, NarrativeSectionRepository>();
+            services.AddScoped<IHadithCategoryRepository, HadithCategoryRepository>();
+            services.AddScoped<IHadithRepository, HadithRepository>();
+            services.AddScoped<IHadithExplanationRepository, HadithExplanationRepository>();
             return services;
         }
             
