@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Sukun.Domin.Entities;
 using Sukun.Infrastructure.Abstracts;
 using Sukun.Infrastructure.Context;
+using Sukun.Infrastructure.Repositories;
 
 namespace Sukun.Infrastructure.InfrastructureBases
 {
@@ -28,7 +29,17 @@ namespace Sukun.Infrastructure.InfrastructureBases
         public IHadithExplanationRepository HadithExplanations { get; }
         public IHadithRepository Hadiths { get; }
 
-        public UnitOfWork(ApplicationDbContext context, ILogger<UnitOfWork> logger,
+        public IBookContentRepository BookContent { get; }
+
+        public IIslamicBookRepository IslamicBook { get; }
+
+        public IIslamicBookSectionRepository IslamicBookSection { get; }
+
+        public IDuaCategoryRepository DuaCategoryRepository { get; }
+
+        public IDuaItemRepository DuaItemRepository{ get; }
+
+    public UnitOfWork(ApplicationDbContext context, ILogger<UnitOfWork> logger,
             ICityRepository cityRepository,
             IQuranRepository quranRepository,
             IAdminRepository adminRepository,
@@ -37,7 +48,13 @@ namespace Sukun.Infrastructure.InfrastructureBases
             INarrativeRepository narrative,
             IHadithCategoryRepository hadithCategoryRepository,
             IHadithRepository hadithRepository,
-            IHadithExplanationRepository hadithExplanationRepository
+            IHadithExplanationRepository hadithExplanationRepository,
+            IDuaCategoryRepository duaCategoryRepository,
+            IDuaItemRepository duaItemRepository,
+            IBookContentRepository bookContentRepository ,
+             IIslamicBookSectionRepository islamicBookSectionRepository,
+             IIslamicBookRepository islamicBookRepository
+        
             )
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -53,7 +70,14 @@ namespace Sukun.Infrastructure.InfrastructureBases
             NarrativeSection = narrativeSection ?? throw new ArgumentNullException(nameof(narrativeSection));
             HadithCategories = hadithCategoryRepository ?? throw new ArgumentNullException(nameof(hadithCategoryRepository));
             Hadiths = hadithRepository ?? throw new ArgumentNullException(nameof(hadithRepository));
-            HadithExplanations = hadithExplanationRepository ?? throw new ArgumentNullException(nameof(hadithExplanationRepository)); ;
+            HadithExplanations = hadithExplanationRepository ?? throw new ArgumentNullException(nameof(hadithExplanationRepository)); 
+            IslamicBook = islamicBookRepository ??  throw new ArgumentNullException(nameof(islamicBookRepository));
+            IslamicBookSection = islamicBookSectionRepository ??  throw new ArgumentNullException(nameof(islamicBookSectionRepository));
+            BookContent = bookContentRepository ?? throw new ArgumentNullException(nameof(bookContentRepository));
+            DuaCategoryRepository = duaCategoryRepository ?? throw new ArgumentNullException(nameof(duaCategoryRepository));
+            DuaItemRepository = duaItemRepository ?? throw new ArgumentNullException(nameof(duaItemRepository));
+            
+            
         }
         public IRepository<T> Repository<T>() where T : BaseEntity
         {

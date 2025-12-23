@@ -23,6 +23,8 @@ namespace Sukun.Infrastructure.Context
         public DbSet<IslamicBook> IslamicBooks { get; set; }
         public DbSet<IslamicBookSection> IslamicBookSections { get; set; }
         public DbSet<BookContent> BookContents { get; set; }
+        public DbSet<DuaCategory> DuaCategories { get; set; }
+        public DbSet<DuaItem> DuaItems { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

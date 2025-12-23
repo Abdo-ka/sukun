@@ -1,5 +1,6 @@
 ﻿using Sukun.Domin.Entities;
 using Sukun.Infrastructure.Abstracts;
+using Sukun.Infrastructure.Repositories;
 
 namespace Sukun.Infrastructure.InfrastructureBases
 {
@@ -16,6 +17,11 @@ namespace Sukun.Infrastructure.InfrastructureBases
         public IHadithCategoryRepository HadithCategories { get; }
         public IHadithRepository Hadiths { get; }
         public IHadithExplanationRepository HadithExplanations { get; }
+        public IBookContentRepository BookContent { get; }
+        public IIslamicBookRepository IslamicBook { get; }
+        public IIslamicBookSectionRepository IslamicBookSection { get; }
+        public IDuaCategoryRepository DuaCategoryRepository { get; }
+        public IDuaItemRepository DuaItemRepository { get; }
         // Save changes
         public Task<int> CompleteAsync();
         public Task<bool> SaveEntitiesAsync();

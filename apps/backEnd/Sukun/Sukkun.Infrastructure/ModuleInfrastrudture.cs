@@ -27,6 +27,9 @@ namespace Sukun.Infrastructure
             services.AddScoped<IHadithExplanationRepository, HadithExplanationRepository>();
             services.AddScoped<IIslamicBookRepository, IslamicBookRepository>();
             services.AddScoped<IIslamicBookSectionRepository, IslamicBookSectionRepository>();
+            services.AddScoped<IBookContentRepository, BookContentRepository>();
+            services.AddScoped<IDuaCategoryRepository, DuaCategoryRepository>();
+            services.AddScoped<IDuaItemRepository, DuaItemRepository>();
             return services;
         }
             

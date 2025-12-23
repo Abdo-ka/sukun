@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Sukun.Application;
 using Sukun.Application.Seeder;
 using Sukun.Application.Seeder.AsumalHausna_entity;
+using Sukun.Application.Seeder.Dua_entity;
 using Sukun.Application.Seeder.Hadith_entity;
 using Sukun.Application.Seeder.Quran;
 using Sukun.Application.Seeder.Tafsir_entity;
@@ -88,6 +89,9 @@ namespace Sukun.Api
 
                 var hadithSeeder = services.GetRequiredService<IHadithSeederService>();
                 await hadithSeeder.SeedHadithsAsync();
+
+                var duaSeeder = services.GetRequiredService<IDuaSeederService>();
+                await duaSeeder.SeedDuasAsync();
             }
             catch (Exception ex)
             {
