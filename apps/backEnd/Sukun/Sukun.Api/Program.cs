@@ -9,6 +9,7 @@ using Sukun.Application.Seeder.Quran;
 using Sukun.Application.Seeder.Tafsir_entity;
 using Sukun.Domin.Enums;
 using Sukun.Infrastructure;
+using Sukun.Infrastructure.Configuration;
 using Sukun.Infrastructure.Context;
 using Sukun.Middleware;
 using System.Text.Json;
@@ -33,7 +34,8 @@ namespace Sukun.Api
             ;
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddDbContext<ApplicationDbContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddDbContext<ApplicationDbContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+                                                                                .AddInterceptors(new VersionInterceptor()));
             builder.Services.AddHttpClient();
             builder.Services.AddServicesDependencies(builder.Configuration)
                             .AddInfrastructureDependencies()
