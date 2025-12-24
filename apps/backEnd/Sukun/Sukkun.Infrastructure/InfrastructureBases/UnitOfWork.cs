@@ -41,6 +41,8 @@ namespace Sukun.Infrastructure.InfrastructureBases
         public IRemembranceCategoryRepository RemembranceCategories { get; }
         public IRemembranceRepository Remembrances { get; }
         public IRemembranceContentRepository RemembranceContents { get; }
+        public ITasbihRepository Tasbihs { get; }
+        public IMosqueRepository Mosques { get; }
         public UnitOfWork(ApplicationDbContext context, ILogger<UnitOfWork> logger,
             ICityRepository cityRepository,
             IQuranRepository quranRepository,
@@ -58,8 +60,9 @@ namespace Sukun.Infrastructure.InfrastructureBases
             IIslamicBookRepository islamicBookRepository,
             IRemembranceCategoryRepository remembranceCategoryRepository,
             IRemembranceRepository remembranceRepository,
-            IRemembranceContentRepository remembranceContentRepository
-
+            IRemembranceContentRepository remembranceContentRepository,
+            ITasbihRepository tasbihRepository,
+            IMosqueRepository mosqueRepository
             )
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -84,7 +87,8 @@ namespace Sukun.Infrastructure.InfrastructureBases
             RemembranceCategories = remembranceCategoryRepository ?? throw new ArgumentNullException(nameof(remembranceCategoryRepository));
             Remembrances = remembranceRepository ?? throw new ArgumentNullException(nameof(remembranceRepository));
             RemembranceContents = remembranceContentRepository ?? throw new ArgumentNullException(nameof(remembranceContentRepository));
-
+            Tasbihs = tasbihRepository ?? throw new ArgumentNullException(nameof(tasbihRepository));
+            Mosques = mosqueRepository ?? throw new ArgumentNullException(nameof(mosqueRepository));
         }
         public IRepository<T> Repository<T>() where T : BaseEntity
         {

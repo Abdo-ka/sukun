@@ -33,6 +33,8 @@ namespace Sukun.Infrastructure
             services.AddScoped<IRemembranceCategoryRepository, RemembranceCategoryRepository>();
             services.AddScoped<IRemembranceRepository, RemembranceRepository>();
             services.AddScoped<IRemembranceContentRepository, RemembranceContentRepository>();
+            services.AddScoped<ITasbihRepository, TasbihRepository>();
+            services.AddScoped<IMosqueRepository, MosqueRepository>();
             return services;
         }
             

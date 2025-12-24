@@ -7,33 +7,36 @@ using Sukun.Infrastructure.InfrastructureBases;
 
 namespace Sukun.Infrastructure.Repositories
 {
-    public class AsmaulHusnaRepository : Repository<AsmaulHusna>, IAsmaulHusnaRepository
+    public class TasbihRepository : Repository<Tasbih>, ITasbihRepository
     {
-        public AsmaulHusnaRepository(ApplicationDbContext context, ILogger<AsmaulHusnaRepository> logger)
+        public TasbihRepository(ApplicationDbContext context, ILogger<Repository<Tasbih>> logger)
             : base(context, logger)
         {
         }
 
-        public async Task<AsmaulHusna?> GetByNumberAsync(int number)
+        public async Task<IEnumerable<Tasbih>> GetAllOrderedAsync()
         {
-            return await _dbSet.FirstOrDefaultAsync(a => a.Number == number);
+            return await _dbSet
+                .Where(t => !t.IsDeleted)
+                .OrderBy(t => t.Order)
+                .ThenBy(t => t.Title)
+                .ToListAsync();
         }
 
-        public async Task<IEnumerable<AsmaulHusna>> GetRandomAsync(int count)
+        public async Task<Tasbih?> GetRandomAsync()
         {
             try
             {
-                var countExists = await _dbSet.CountAsync();
-                if (countExists == 0)
+                var count = await _dbSet.CountAsync();
+                if (count == 0)
                     return null;
 
                 var random = new Random();
-                var skip = random.Next(0, countExists);
+                var skip = random.Next(0, count);
 
                 return await _dbSet.AsQueryable()
                     .Skip(skip)
-                    .Take(count)
-                    .ToListAsync();
+                    .FirstOrDefaultAsync();
             }
             catch (Exception ex)
             {
@@ -42,5 +45,4 @@ namespace Sukun.Infrastructure.Repositories
             }
         }
     }
-
 }

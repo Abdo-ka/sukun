@@ -32,6 +32,8 @@ namespace Sukun.Application
             services.AddScoped<IDuaItemService, DuaItemService>();
             services.AddScoped<IRemembranceCategoryService, RemembranceCategoryService>();
             services.AddScoped<IRemembranceService, RemembranceService>();
+            services.AddScoped<ITasbihService, TasbihService>();
+            services.AddScoped<IMosqueService, MosqueService>();
             // Supporting services
             services.AddScoped<IPasswordHasher, BCryptPasswordHasher>();
             services.AddScoped<IJwtService, JwtService>();

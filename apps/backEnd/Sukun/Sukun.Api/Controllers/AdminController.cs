@@ -22,7 +22,7 @@ namespace Sukun.Api.Controllers
             _logger = logger;
         }
 
-       
+
         [HttpPost("login")]
         [AllowAnonymous]
         public async Task<ApiResult<AdminLoginResponseDto>> Login([FromBody] AdminLoginDto request)
@@ -32,7 +32,7 @@ namespace Sukun.Api.Controllers
             return this.ToApiResult(result);
         }
 
-       
+
         [HttpPost]
         //[Authorize(Roles = "SuperAdmin")]
         public async Task<ApiResult<AdminResponseDto>> CreateAdmin([FromForm] AdminCreateDto request)
@@ -42,7 +42,7 @@ namespace Sukun.Api.Controllers
             return this.ToApiResult(result);
         }
 
-       
+
         [HttpGet("me")]
         [Authorize]
         public async Task<ApiResult<AdminResponseDto>> GetCurrentAdmin()
@@ -115,5 +115,5 @@ namespace Sukun.Api.Controllers
             return this.ToApiResult(result);
         }
     }
- 
+
 }
