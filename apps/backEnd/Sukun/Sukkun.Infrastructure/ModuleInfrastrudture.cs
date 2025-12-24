@@ -30,6 +30,9 @@ namespace Sukun.Infrastructure
             services.AddScoped<IBookContentRepository, BookContentRepository>();
             services.AddScoped<IDuaCategoryRepository, DuaCategoryRepository>();
             services.AddScoped<IDuaItemRepository, DuaItemRepository>();
+            services.AddScoped<IRemembranceCategoryRepository, RemembranceCategoryRepository>();
+            services.AddScoped<IRemembranceRepository, RemembranceRepository>();
+            services.AddScoped<IRemembranceContentRepository, RemembranceContentRepository>();
             return services;
         }
             

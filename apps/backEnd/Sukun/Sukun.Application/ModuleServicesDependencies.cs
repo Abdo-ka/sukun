@@ -6,6 +6,7 @@ using Sukun.Application.Seeder.AsumalHausna_entity;
 using Sukun.Application.Seeder.Dua_entity;
 using Sukun.Application.Seeder.Hadith_entity;
 using Sukun.Application.Seeder.Quran;
+using Sukun.Application.Seeder.Remembrance_entity;
 using Sukun.Application.Seeder.Tafsir_entity;
 using Sukun.Infrastructure.Abstracts;
 
@@ -29,6 +30,8 @@ namespace Sukun.Application
             services.AddScoped<IBookContentService, BookContentService>();
             services.AddScoped<IDuaCategoryService, DuaCategoryService>();
             services.AddScoped<IDuaItemService, DuaItemService>();
+            services.AddScoped<IRemembranceCategoryService, RemembranceCategoryService>();
+            services.AddScoped<IRemembranceService, RemembranceService>();
             // Supporting services
             services.AddScoped<IPasswordHasher, BCryptPasswordHasher>();
             services.AddScoped<IJwtService, JwtService>();
@@ -41,6 +44,7 @@ namespace Sukun.Application
             services.AddScoped<IAsmaulHusnaSeederService, AsmaulHusnaSeederService>();
             services.AddScoped<IHadithSeederService, HadithSeederService>();
             services.AddScoped<IDuaSeederService, DuaSeederService>();
+            services.AddScoped<IRemembranceSeederService, RemembranceSeederService>();
             return services;
         }
     }

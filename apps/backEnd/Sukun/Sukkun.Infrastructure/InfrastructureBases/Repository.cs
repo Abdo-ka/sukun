@@ -109,7 +109,7 @@ namespace Sukun.Infrastructure.InfrastructureBases
 
         public async Task<bool> ExistsAsync(Expression<Func<T, bool>> predicate)
         {
-            return await _dbSet.Where(e => !e.IsDeleted).AnyAsync(predicate);
+            return await _dbSet.AsNoTracking().Where(e => !e.IsDeleted).AnyAsync(predicate);
         }
 
         public async Task<int> CountAsync(Expression<Func<T, bool>> predicate = null)

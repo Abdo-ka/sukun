@@ -22,6 +22,9 @@ namespace Sukun.Infrastructure.InfrastructureBases
         public IIslamicBookSectionRepository IslamicBookSection { get; }
         public IDuaCategoryRepository DuaCategoryRepository { get; }
         public IDuaItemRepository DuaItemRepository { get; }
+        public IRemembranceCategoryRepository RemembranceCategories { get; }
+        public IRemembranceRepository Remembrances { get; }
+        public IRemembranceContentRepository RemembranceContents { get; }
         // Save changes
         public Task<int> CompleteAsync();
         public Task<bool> SaveEntitiesAsync();

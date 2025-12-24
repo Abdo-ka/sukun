@@ -25,6 +25,9 @@ namespace Sukun.Infrastructure.Context
         public DbSet<BookContent> BookContents { get; set; }
         public DbSet<DuaCategory> DuaCategories { get; set; }
         public DbSet<DuaItem> DuaItems { get; set; }
+        public DbSet<Remembrance> Remembrances { get; set; }
+        public DbSet<RemembranceCategory> RemembranceCategories { get; set; }
+        public DbSet<RemembranceCategoryLinks> RemembranceCategoryLinks { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

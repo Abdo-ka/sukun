@@ -4,7 +4,6 @@ using Sukun.Application.Dtos.Admin.Response;
 using Sukun.Application.Interfaces;
 using Sukun.Application.Mapper;
 using Sukun.Domin.Common;
-using Sukun.Domin.Entities;
 using Sukun.Infrastructure.Abstracts;
 using Sukun.Infrastructure.InfrastructureBases;
 

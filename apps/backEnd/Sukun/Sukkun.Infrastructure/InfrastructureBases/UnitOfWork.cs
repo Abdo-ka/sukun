@@ -38,8 +38,10 @@ namespace Sukun.Infrastructure.InfrastructureBases
         public IDuaCategoryRepository DuaCategoryRepository { get; }
 
         public IDuaItemRepository DuaItemRepository{ get; }
-
-    public UnitOfWork(ApplicationDbContext context, ILogger<UnitOfWork> logger,
+        public IRemembranceCategoryRepository RemembranceCategories { get; }
+        public IRemembranceRepository Remembrances { get; }
+        public IRemembranceContentRepository RemembranceContents { get; }
+        public UnitOfWork(ApplicationDbContext context, ILogger<UnitOfWork> logger,
             ICityRepository cityRepository,
             IQuranRepository quranRepository,
             IAdminRepository adminRepository,
@@ -52,9 +54,12 @@ namespace Sukun.Infrastructure.InfrastructureBases
             IDuaCategoryRepository duaCategoryRepository,
             IDuaItemRepository duaItemRepository,
             IBookContentRepository bookContentRepository ,
-             IIslamicBookSectionRepository islamicBookSectionRepository,
-             IIslamicBookRepository islamicBookRepository
-        
+            IIslamicBookSectionRepository islamicBookSectionRepository,
+            IIslamicBookRepository islamicBookRepository,
+            IRemembranceCategoryRepository remembranceCategoryRepository,
+            IRemembranceRepository remembranceRepository,
+            IRemembranceContentRepository remembranceContentRepository
+
             )
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -76,8 +81,10 @@ namespace Sukun.Infrastructure.InfrastructureBases
             BookContent = bookContentRepository ?? throw new ArgumentNullException(nameof(bookContentRepository));
             DuaCategoryRepository = duaCategoryRepository ?? throw new ArgumentNullException(nameof(duaCategoryRepository));
             DuaItemRepository = duaItemRepository ?? throw new ArgumentNullException(nameof(duaItemRepository));
-            
-            
+            RemembranceCategories = remembranceCategoryRepository ?? throw new ArgumentNullException(nameof(remembranceCategoryRepository));
+            Remembrances = remembranceRepository ?? throw new ArgumentNullException(nameof(remembranceRepository));
+            RemembranceContents = remembranceContentRepository ?? throw new ArgumentNullException(nameof(remembranceContentRepository));
+
         }
         public IRepository<T> Repository<T>() where T : BaseEntity
         {
