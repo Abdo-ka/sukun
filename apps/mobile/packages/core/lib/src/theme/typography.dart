@@ -2,89 +2,95 @@ part of "app_theme.dart";
 
 TextTheme textTheme = TextTheme(
   displayLarge: TextStyle(
-      fontFamily: 'NotoKufiArabic',
-      fontSize: 57.sp,
-      fontWeight: FontWeight.w400),
-  displayMedium: TextStyle(
-      fontFamily: 'NotoKufiArabic',
-      fontSize: 42.sp,
-      fontWeight: FontWeight.w400,
-      height: 40.fromFigmaHeight(32)),
-  displaySmall: TextStyle(
-      fontFamily: 'NotoKufiArabic',
-      fontSize: 32.sp,
-      fontWeight: FontWeight.w400),
-
-  /// headline
-  headlineLarge: TextStyle(
-    fontFamily: 'NotoKufiArabic',
-    fontSize: 32.sp,
-    fontWeight: FontWeight.w600,
-    color: const Color(0xff023047),
-    height: 1.2,
+    fontSize: 56,
+    overflow: TextOverflow.ellipsis,
+    fontFamily: 'Almarai',
+    fontWeight: FontWeight.w400,
   ),
-
+  displayMedium: TextStyle(
+    fontSize: 46,
+    overflow: TextOverflow.ellipsis,
+    fontFamily: 'Almarai',
+    fontWeight: FontWeight.w400,
+  ),
+  displaySmall: TextStyle(
+    fontSize: 36,
+    fontWeight: FontWeight.w400,
+    overflow: TextOverflow.ellipsis,
+    fontFamily: 'Almarai',
+  ),
+  headlineLarge: TextStyle(
+    fontSize: 32,
+    fontWeight: FontWeight.w400,
+    overflow: TextOverflow.ellipsis,
+    fontFamily: 'Almarai',
+  ),
   headlineMedium: TextStyle(
-    fontFamily: 'NotoKufiArabic',
-    fontSize: 28.sp,
-    fontWeight: FontWeight.w600,
-    color: const Color(0xff023047),
-    height: 32.fromFigmaHeight(28),
+    fontSize: 28,
+    fontWeight: FontWeight.w700,
+    overflow: TextOverflow.ellipsis,
+    fontFamily: 'Almarai',
   ),
   headlineSmall: TextStyle(
-    fontFamily: 'NotoKufiArabic',
-    fontSize: 24.sp,
-    fontWeight: FontWeight.w600,
-    letterSpacing: -0.5.w,
-    color: const Color(0xff023047),
-    height: 32.fromFigmaHeight(24),
+    fontSize: 24,
+    fontWeight: FontWeight.w700,
+    overflow: TextOverflow.ellipsis,
+    fontFamily: 'Almarai',
   ),
-
-  ///Title
   titleLarge: TextStyle(
-      fontFamily: 'NotoKufiArabic',
-      fontSize: 20.0.sp,
-      fontWeight: FontWeight.w400),
-  titleMedium: TextStyle(
-      fontFamily: 'NotoKufiArabic',
-      fontSize: 18.0.sp,
-      fontWeight: FontWeight.w400),
-  titleSmall: TextStyle(
-      fontFamily: 'NotoKufiArabic',
-      fontSize: 16.0.sp,
-      fontWeight: FontWeight.w500),
-
-  ///Label
-  labelLarge: TextStyle(
-      fontFamily: 'NotoKufiArabic',
-      fontSize: 14.0.sp,
-      fontWeight: FontWeight.w500),
-  labelMedium: TextStyle(
-    fontFamily: 'NotoKufiArabic',
-    fontSize: 12.0.sp,
-    fontWeight: FontWeight.w500,
-    height: 24.fromFigmaHeight(18),
+    fontSize: 22,
+    fontWeight: FontWeight.w400,
+    overflow: TextOverflow.ellipsis,
+    fontFamily: 'Almarai',
   ),
-  labelSmall: TextStyle(
-      fontFamily: 'NotoKufiArabic',
-      fontSize: 11.0.sp,
-      fontWeight: FontWeight.w500),
-
-  ///Body
+  titleMedium: TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w700,
+    overflow: TextOverflow.ellipsis,
+    fontFamily: 'Almarai',
+  ),
+  titleSmall: TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w700,
+    overflow: TextOverflow.ellipsis,
+    fontFamily: 'Almarai',
+  ),
   bodyLarge: TextStyle(
-      fontFamily: 'NotoKufiArabic',
-      fontSize: 16.0.sp,
-      fontWeight: FontWeight.w400),
+    fontSize: 16,
+    overflow: TextOverflow.ellipsis,
+    fontFamily: 'Almarai',
+    fontWeight: FontWeight.w400,
+  ),
   bodyMedium: TextStyle(
-    fontFamily: 'NotoKufiArabic',
-    fontSize: 14.0.sp,
-    fontWeight: FontWeight.w500,
-    height: 24.fromFigmaHeight(16),
+    fontSize: 14,
+    overflow: TextOverflow.ellipsis,
+    fontFamily: 'Almarai',
+    fontWeight: FontWeight.w400,
   ),
   bodySmall: TextStyle(
-      fontFamily: 'NotoKufiArabic',
-      fontSize: 12.0.sp,
-      fontWeight: FontWeight.w400),
+    fontSize: 12,
+    overflow: TextOverflow.ellipsis,
+    fontFamily: 'Almarai',
+    fontWeight: FontWeight.w400,
+  ),
+  labelLarge: TextStyle(
+    fontSize: 14,
+    overflow: TextOverflow.ellipsis,
+    fontFamily: 'Almarai',
+    fontWeight: FontWeight.w700,
+  ),
+  labelMedium: TextStyle(
+    fontSize: 12,
+    overflow: TextOverflow.ellipsis,
+    fontFamily: 'Almarai',
+    fontWeight: FontWeight.w700,
+  ),
+  labelSmall: TextStyle(
+    fontSize: 11,
+    overflow: TextOverflow.ellipsis,
+    fontFamily: 'Almarai',
+    fontWeight: FontWeight.w700,
+  ),
 );
 
 // // //?  Design text styles
@@ -214,20 +220,38 @@ extension FamilyUtils on TextStyle {
 
 class HelperFont {
   static FontWeight? w440 = FontWeight.lerp(
-      FontWeight.w400, FontWeight.w500, 0.4);
+    FontWeight.w400,
+    FontWeight.w500,
+    0.4,
+  );
 
   static FontWeight? w430 = FontWeight.lerp(
-      FontWeight.w400, FontWeight.w500, 0.3);
+    FontWeight.w400,
+    FontWeight.w500,
+    0.3,
+  );
 
   static FontWeight? w460 = FontWeight.lerp(
-      FontWeight.w400, FontWeight.w500, 0.6);
+    FontWeight.w400,
+    FontWeight.w500,
+    0.6,
+  );
 
   static FontWeight? w428 = FontWeight.lerp(
-      FontWeight.w400, FontWeight.w500, 0.28);
+    FontWeight.w400,
+    FontWeight.w500,
+    0.28,
+  );
 
   static FontWeight? w472 = FontWeight.lerp(
-      FontWeight.w400, FontWeight.w500, 0.72);
+    FontWeight.w400,
+    FontWeight.w500,
+    0.72,
+  );
 
   static FontWeight? w536 = FontWeight.lerp(
-      FontWeight.w500, FontWeight.w600, 0.36);
+    FontWeight.w500,
+    FontWeight.w600,
+    0.36,
+  );
 }

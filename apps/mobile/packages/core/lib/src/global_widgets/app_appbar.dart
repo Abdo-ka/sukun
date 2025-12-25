@@ -2,7 +2,8 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
+class AppAppBar extends StatelessWidget
+    implements PreferredSizeWidget {
   const AppAppBar({
     super.key,
     this.titleTextStyle,
@@ -110,19 +111,24 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       titleTextStyle: titleTextStyle,
-      backgroundColor: backgroundColor,
+      backgroundColor:
+          backgroundColor ?? context.colorScheme.surface,
       shape: shape,
       leading: showDefaultBackButton
           ? IconButton(
-              icon: AppImage.asset('packages/core/assets/icons/arrow_left.svg',
-                  color: defaultBackButtonColor),
+              icon: AppImage.asset(
+                'packages/core/assets/icons/arrow_left.svg',
+                color: defaultBackButtonColor,
+              ),
               onPressed: () => Navigator.of(context).pop(),
             )
           : leading,
       title: label != null
           ? AppText.labelMedium(
               label!,
-              color: titleTextStyle == null ? labelColor : null,
+              color: titleTextStyle == null
+                  ? labelColor
+                  : null,
               style: titleTextStyle,
             )
           : title,
@@ -139,15 +145,19 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
       toolbarHeight: toolbarHeight,
       actions: actions,
       actionsIconTheme: actionsIconTheme,
-      automaticallyImplyLeading: automaticallyImplyLeading ?? true,
+      automaticallyImplyLeading:
+          automaticallyImplyLeading ?? true,
       bottomOpacity: bottomOpacity ?? 1,
-      excludeHeaderSemantics: excludeHeaderSemantics ?? false,
+      excludeHeaderSemantics:
+          excludeHeaderSemantics ?? false,
       flexibleSpace: flexibleSpace,
-      forceMaterialTransparency: forceMaterialTransparency ?? false,
+      forceMaterialTransparency:
+          forceMaterialTransparency ?? false,
       iconTheme: iconTheme,
       leadingWidth: leadingWidth,
       notificationPredicate:
-          notificationPredicate ?? defaultScrollNotificationPredicate,
+          notificationPredicate ??
+          defaultScrollNotificationPredicate,
       scrolledUnderElevation: scrolledUnderElevation,
       systemOverlayStyle: systemOverlayStyle,
       toolbarOpacity: toolbarOpacity ?? 1.0,
@@ -157,5 +167,7 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => Size.fromHeight(
-      (toolbarHeight ?? kToolbarHeight) + (bottom?.preferredSize.height ?? 0));
+    (toolbarHeight ?? kToolbarHeight) +
+        (bottom?.preferredSize.height ?? 0),
+  );
 }

@@ -2,12 +2,11 @@ import 'package:core/core.dart';
 import 'package:mobile/services/hive_service.dart';
 import 'package:injectable/injectable.dart';
 
-
 import '../../../../core/config/constants/hive_key.dart';
 
 @injectable
-class {{feature_name.pascalCase()}}LocaleDataSource {
-  {{feature_name.pascalCase()}}LocaleDataSource({required this.hiveService});
+class HomeLocaleDataSource {
+  HomeLocaleDataSource({required this.hiveService});
 
   final HiveService hiveService;
 

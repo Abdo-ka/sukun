@@ -12,34 +12,38 @@
 class $AssetsFontsGen {
   const $AssetsFontsGen();
 
-  /// File path: assets/fonts/NotoKufiArabic-Bold.ttf
-  String get notoKufiArabicBold => 'assets/fonts/NotoKufiArabic-Bold.ttf';
+  /// File path: assets/fonts/Almarai-Bold.ttf
+  String get almaraiBold => 'assets/fonts/Almarai-Bold.ttf';
 
-  /// File path: assets/fonts/NotoKufiArabic-Light.ttf
-  String get notoKufiArabicLight => 'assets/fonts/NotoKufiArabic-Light.ttf';
+  /// File path: assets/fonts/Almarai-ExtraBold.ttf
+  String get almaraiExtraBold => 'assets/fonts/Almarai-ExtraBold.ttf';
 
-  /// File path: assets/fonts/NotoKufiArabic-Medium.ttf
-  String get notoKufiArabicMedium => 'assets/fonts/NotoKufiArabic-Medium.ttf';
+  /// File path: assets/fonts/Almarai-Light.ttf
+  String get almaraiLight => 'assets/fonts/Almarai-Light.ttf';
 
-  /// File path: assets/fonts/NotoKufiArabic-Regular.ttf
-  String get notoKufiArabicRegular => 'assets/fonts/NotoKufiArabic-Regular.ttf';
-
-  /// File path: assets/fonts/NotoKufiArabic-SemiBold.ttf
-  String get notoKufiArabicSemiBold =>
-      'assets/fonts/NotoKufiArabic-SemiBold.ttf';
-
-  /// File path: assets/fonts/NotoKufiArabic-Thin.ttf
-  String get notoKufiArabicThin => 'assets/fonts/NotoKufiArabic-Thin.ttf';
+  /// File path: assets/fonts/Almarai-Regular.ttf
+  String get almaraiRegular => 'assets/fonts/Almarai-Regular.ttf';
 
   /// List of all assets
   List<String> get values => [
-    notoKufiArabicBold,
-    notoKufiArabicLight,
-    notoKufiArabicMedium,
-    notoKufiArabicRegular,
-    notoKufiArabicSemiBold,
-    notoKufiArabicThin,
+    almaraiBold,
+    almaraiExtraBold,
+    almaraiLight,
+    almaraiRegular,
   ];
+}
+
+class $AssetsIconsGen {
+  const $AssetsIconsGen();
+
+  /// File path: assets/icons/azan_duher.svg
+  String get azanDuher => 'assets/icons/azan_duher.svg';
+
+  /// File path: assets/icons/notification.svg
+  String get notification => 'assets/icons/notification.svg';
+
+  /// List of all assets
+  List<String> get values => [azanDuher, notification];
 }
 
 class $AssetsLottieGen {
@@ -69,6 +73,7 @@ class Assets {
   const Assets._();
 
   static const $AssetsFontsGen fonts = $AssetsFontsGen();
+  static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsLottieGen lottie = $AssetsLottieGen();
   static const $AssetsTranslationsGen translations = $AssetsTranslationsGen();
 }

@@ -17,7 +17,7 @@ class LocalizationServices extends StatelessWidget {
       supportedLocales: AppLocalization.supportedLocales,
       path: 'assets/translations',
       fallbackLocale: AppLocalization.fallbackLocale,
-      startLocale: AppLocalization.enLocale,
+      startLocale: AppLocalization.arLocale,
       saveLocale: true,
       child: child,
     );
