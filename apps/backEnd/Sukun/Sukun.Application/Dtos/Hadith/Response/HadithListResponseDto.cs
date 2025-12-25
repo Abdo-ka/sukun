@@ -10,8 +10,8 @@ namespace Sukun.Application.Dtos.Hadith.Response
         public HadithGrade Grade { get; set; }
         public string? BookName { get; set; }
         public string? ChapterName { get; set; }
-        public int? HadithNumber { get; set; }
-        public Guid CategoryId { get; set; }
+        public string? HadithNumber { get; set; }
+        public Guid? CategoryId { get; set; }
         public string CategoryName { get; set; } = string.Empty;
     }
 

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Sukun.Domin.Entities;
+using System.Reflection.Emit;
 
 namespace Sukun.Infrastructure.Configuration
 {
@@ -33,6 +34,8 @@ namespace Sukun.Infrastructure.Configuration
             builder.Property(e => e.IsDeleted)
             .HasDefaultValue(false)
             .IsRequired();
+
+            builder.HasQueryFilter(p => !p.IsDeleted);
         }
     }
     public class VersionInterceptor : SaveChangesInterceptor

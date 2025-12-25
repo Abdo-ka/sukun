@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sukun.Infrastructure.Context;
 
@@ -11,9 +12,11 @@ using Sukun.Infrastructure.Context;
 namespace Sukun.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251225105204_edtiHadithAndIslamicBook")]
+    partial class edtiHadithAndIslamicBook
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -477,8 +480,8 @@ namespace Sukun.Infrastructure.Migrations
                     b.Property<int>("Grade")
                         .HasColumnType("int");
 
-                    b.Property<string>("HadithNumber")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("HadithNumber")
+                        .HasColumnType("int");
 
                     b.Property<string>("HeadingArabic")
                         .HasColumnType("nvarchar(max)");

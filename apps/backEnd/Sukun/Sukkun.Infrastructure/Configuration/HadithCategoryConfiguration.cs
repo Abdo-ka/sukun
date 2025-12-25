@@ -22,7 +22,8 @@ namespace Sukun.Infrastructure.Configuration
             builder.HasMany(c => c.Hadiths)
                 .WithOne(h => h.Category)
                 .HasForeignKey(h => h.CategoryId)
-                .OnDelete(DeleteBehavior.Cascade); // آمن لأن الحذف هنا منطقي
+                .OnDelete(DeleteBehavior.Cascade)
+                .IsRequired(false);
         }
     }
 }

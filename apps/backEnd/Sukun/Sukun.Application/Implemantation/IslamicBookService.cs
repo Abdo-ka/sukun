@@ -83,7 +83,6 @@ namespace Sukun.Application.Implemantation
             if (dto.Author != null) book.Author = dto.Author;
             if (dto.Description != null) book.Description = dto.Description;
             if (dto.Type != 0) book.Type = dto.Type;
-            if (dto.IconUrl != null) book.IconUrl = dto.IconUrl;
             book.Order = dto.Order;
 
             book.UpdatedAt = DateTime.UtcNow;

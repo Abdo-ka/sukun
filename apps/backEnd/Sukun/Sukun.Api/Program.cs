@@ -83,6 +83,9 @@ namespace Sukun.Api
                 var quranSeeder = services.GetRequiredService<IQuranSeederService>();
                 await quranSeeder.SeedQuranAsync();
 
+                var tafsirqSeeder = services.GetRequiredService<IQuranTafsirSeederService>();
+                await tafsirqSeeder.SeedTafsirIbnKathirAsync();
+
                 var tafsirSeeder = services.GetRequiredService<ITafsirSeederService>();
                 await tafsirSeeder.SeedTafsirAsync(TafsirSource.Jalalayn); 
 

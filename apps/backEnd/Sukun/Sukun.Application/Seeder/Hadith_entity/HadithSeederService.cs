@@ -1,133 +1,169 @@
 ﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Sukun.Domin.Entities;
 using Sukun.Domin.Enums;
 using Sukun.Infrastructure.InfrastructureBases;
+using System.Net.Http.Json;
 using System.Text.Json;
 
 namespace Sukun.Application.Seeder.Hadith_entity
 {
-    public class HadithSeederService : IHadithSeederService
-        {
-            private readonly IUnitOfWork _unitOfWork;
-            private readonly IHttpClientFactory _httpClientFactory;
-            private readonly ILogger<HadithSeederService> _logger;
 
-            public HadithSeederService(
-                IUnitOfWork unitOfWork,
-                IHttpClientFactory httpClientFactory,
-                ILogger<HadithSeederService> logger)
+    public class HadithSeederService : IHadithSeederService
+    {
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly HadithApiOptions _apiOptions;
+        private readonly ILogger<HadithSeederService> _logger;
+
+        public HadithSeederService(
+            IUnitOfWork unitOfWork,
+            IHttpClientFactory httpClientFactory,
+            IOptions<HadithApiOptions> apiOptions,
+            ILogger<HadithSeederService> logger)
+        {
+            _unitOfWork = unitOfWork;
+            _httpClientFactory = httpClientFactory;
+            _apiOptions = apiOptions.Value;
+            _logger = logger;
+        }
+
+        public async Task SeedHadithsAsync()
+        {
+            if (string.IsNullOrEmpty(_apiOptions.Key))
             {
-                _unitOfWork = unitOfWork;
-                _httpClientFactory = httpClientFactory;
-                _logger = logger;
+                _logger.LogError("Hadith API Key is missing");
+                return;
             }
 
-            public async Task SeedHadithsAsync()
+            var client = _httpClientFactory.CreateClient();
+            var apiKey = _apiOptions.Key;
+
+            var bookRepo = _unitOfWork.Repository<IslamicBook>();
+            var sectionRepo = _unitOfWork.Repository<IslamicBookSection>();
+            var hadithRepo = _unitOfWork.Repository<Hadith>();
+
+            var existingHadiths = await hadithRepo.CountAsync();
+            if (existingHadiths > 5000)
             {
-                try
+                _logger.LogInformation("Hadiths already seeded ({Count}), skipping.", existingHadiths);
+                return;
+            }
+
+            _logger.LogInformation("Starting Hadith seeding from hadithapi.com...");
+
+            // جلب الكتب
+            var booksUrl = $"https://hadithapi.com/api/books?apiKey={apiKey}";
+            var booksResponse = await client.GetFromJsonAsync<ApiBooksResponse>(booksUrl);
+
+            if (booksResponse == null || booksResponse.Books == null)
+            {
+                _logger.LogError("Failed to fetch books");
+                return;
+            }
+
+            int totalAdded = 0;
+
+            foreach (var apiBook in booksResponse.Books)
+            {
+                // إنشاء أو جلب الكتاب
+                var book = await bookRepo.FirstOrDefaultAsync(b => b.Name == apiBook.BookName);
+                if (book == null)
                 {
-                    var hadithRepo = _unitOfWork.Repository<Hadith>();
-                    var categoryRepo = _unitOfWork.Repository<HadithCategory>();
-
-                    // تحقق إذا كانت الأحاديث موجودة بالفعل
-                    var existingCount = await hadithRepo.CountAsync();
-                    if (existingCount >= 42) // الأربعين النووية + 2 إضافي
+                    book = new IslamicBook
                     {
-                        _logger.LogInformation("Hadiths already seeded ({Count}), skipping.", existingCount);
-                        return;
-                    }
+                        Id = Guid.NewGuid(),
+                        Name = apiBook.BookName,
+                        NameAr = apiBook.BookName,
+                        Author = apiBook.WriterName,
+                        Type = BookType.Hadith,
+                        CreateAt = DateTime.UtcNow
+                    };
+                    await bookRepo.AddAsync(book);
+                    await _unitOfWork.CompleteAsync();
+                }
 
-                    _logger.LogInformation("Starting Hadith seeding from external API...");
+                // جلب الفصول
+                var chaptersUrl = $"https://hadithapi.com/api/{apiBook.BookSlug}/chapters?apiKey={apiKey}";
+                var chaptersResponse = await client.GetFromJsonAsync<ApiChaptersResponse>(chaptersUrl);
 
-                    var client = _httpClientFactory.CreateClient();
+                if (chaptersResponse == null || chaptersResponse.Chapters == null) continue;
 
-                    // مصدر موثوق: الأربعين النووية من مشروع fawazahmed0 (مشهور وموثوق)
-                    var url = "https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1/editions/ara-nawawi.json";
-
-                    var json = await client.GetStringAsync(url);
-
-                    var apiResponse = JsonSerializer.Deserialize<HadithApiResponse>(json, new JsonSerializerOptions
+                foreach (var apiChapter in chaptersResponse.Chapters)
+                {
+                    var section = await sectionRepo.FirstOrDefaultAsync(s => s.BookId == book.Id && s.Name == apiChapter.ChapterArabic);
+                    if (section == null)
                     {
-                        PropertyNameCaseInsensitive = true
-                    });
-
-                    if (apiResponse?.Hadiths == null || !apiResponse.Hadiths.Any())
-                    {
-                        _logger.LogError("Failed to fetch hadiths from external API");
-                        return;
-                    }
-
-                    // فئة افتراضية إذا لم توجد
-                    var defaultCategory = await categoryRepo.FirstOrDefaultAsync(c => c.Name == "الأخلاق والآداب");
-                    if (defaultCategory == null)
-                    {
-                        defaultCategory = new HadithCategory
+                        section = new IslamicBookSection
                         {
                             Id = Guid.NewGuid(),
-                            Name = "الأخلاق والآداب",
-                            Description = "أحاديث في الأخلاق والآداب من الأربعين النووية",
-                            CreateAt = DateTime.UtcNow
+                            BookId = book.Id,
+                            NameEn= apiChapter.ChapterEnglish,
+                            Name = apiChapter.ChapterArabic,
+                            CreateAt = DateTime.UtcNow,
+                            ChapterNumber = apiChapter.ChapterNumber,
                         };
-                        await categoryRepo.AddAsync(defaultCategory);
+                        await sectionRepo.AddAsync(section);
                         await _unitOfWork.CompleteAsync();
                     }
 
-                    int addedCount = 0;
-                    foreach (var apiHadith in apiResponse.Hadiths)
+                    // جلب الأحاديث في الفصل (pagination)
+                    int page = 1;
+                    bool hasMore = true;
+
+                    while (hasMore)
                     {
-                        // تجنب التكرار بناءً على HadithNumber
-                        var existing = await hadithRepo.FirstOrDefaultAsync(h => h.HadithNumber == apiHadith.HadithNumber && h.BookName.Contains("نووي"));
-                        if (existing != null) continue;
+                        var hadithsUrl = $"https://hadithapi.com/api/hadiths?book={apiBook.BookSlug}&chapter={apiChapter.ChapterNumber}?page={page}&paginate=100&apiKey={apiKey}";
+                        var hadithsResponse = await client.GetFromJsonAsync<ApiHadithsResponse>(hadithsUrl);
 
-                        var hadith = new Hadith
+                        if (hadithsResponse == null || hadithsResponse.Hadiths?.Data == null || !hadithsResponse.Hadiths.Data.Any())
                         {
-                            Id = Guid.NewGuid(),
-                            CategoryId = defaultCategory.Id,
-                            Reference = $"الأربعين النووية {apiHadith.HadithNumber}",
-                            Text = apiHadith.Text?.Trim() ?? "غير متوفر",
-                            Grade = HadithGrade.Sahih, // كلها صحيحة أو حسنة
-                            GradedBy = "الإمام النووي",
-                            GradeExplanation = apiHadith.Grade ?? "متفق عليه أو حسن",
-                            BookName = "الأربعين النووية",
-                            ChapterName = null,
-                            HadithNumber = apiHadith.HadithNumber,
-                            CreateAt = DateTime.UtcNow
-                        };
-
-                        // إضافة شرح بسيط إذا وجد
-                        if (!string.IsNullOrWhiteSpace(apiHadith.Explanation))
-                        {
-                            hadith.Explanations.Add(new HadithExplanation
-                            {
-                                Id = Guid.NewGuid(),
-                                HadithId = hadith.Id,
-                                Scholar = "الإمام النووي",
-                                Explanation = apiHadith.Explanation.Trim(),
-                                CreateAt = DateTime.UtcNow
-                            });
+                            hasMore = false;
+                            break;
                         }
 
-                        await hadithRepo.AddAsync(hadith);
-                        addedCount++;
-                    }
+                        foreach (var apiHadith in hadithsResponse.Hadiths.Data)
+                        {
+                            var exists = await hadithRepo.ExistsAsync(h => h.BookId == book.Id && h.HadithNumber == apiHadith.HadithNumber && h.SectionId == section.Id);
+                            if (exists) continue;
 
-                    if (addedCount > 0)
-                    {
+                            var hadith = new Hadith
+                            {
+                                Id = Guid.NewGuid(),
+                                BookId = book.Id,
+                                SectionId = section.Id,
+                                HadithNumber = apiHadith.HadithNumber,
+                                Text = apiHadith.HadithArabic,
+                                Grade = ParseGrade(apiHadith.Status),
+                                CreateAt = DateTime.UtcNow,
+                                Reference = apiHadith.Book.BookName,
+                                HeadingArabic = apiHadith.HeadingArabic
+
+                            };
+
+                            await hadithRepo.AddAsync(hadith);
+                            totalAdded++;
+                        }
                         await _unitOfWork.CompleteAsync();
-                        _logger.LogInformation("Hadith seeding completed. Added {AddedCount} hadiths from Arba'een Nawawiyyah.", addedCount);
+
+                        page++;
+                        if (page > hadithsResponse.Hadiths.Last_page) hasMore = false;
                     }
-                    else
-                    {
-                        _logger.LogInformation("No new hadiths to add.");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Error during Hadith seeding from external source");
-                    throw;
                 }
             }
+
+            _logger.LogInformation("Hadith seeding completed. Added {Count} hadiths from hadithapi.com.", totalAdded);
         }
-    
+        private HadithGrade ParseGrade(string grade)
+        {
+            return grade.ToLower() switch
+            {
+                "sahih" => HadithGrade.Sahih,
+                "hasan" => HadithGrade.Hasan,
+                "daif" => HadithGrade.Daif,
+                _ => HadithGrade.Unknown
+            };
+        }
+    }
 }
 

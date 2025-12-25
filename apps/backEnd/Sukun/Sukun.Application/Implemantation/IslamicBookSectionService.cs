@@ -62,7 +62,6 @@ namespace Sukun.Application.Implemantation
                 Id = Guid.NewGuid(),
                 BookId = bookId,
                 Name = dto.Name,
-                NameAr = dto.NameAr,
                 NameEn = dto.NameEn,
                 Description = dto.Description,
                 Order = dto.Order,
@@ -85,7 +84,6 @@ namespace Sukun.Application.Implemantation
                 return Result<IslamicBookSectionResponseDto>.NotFound("Section not found");
 
             if (!string.IsNullOrEmpty(dto.Name)) section.Name = dto.Name;
-            if (!string.IsNullOrEmpty(dto.NameAr)) section.NameAr = dto.NameAr;
             if (dto.NameEn != null) section.NameEn = dto.NameEn;
             if (dto.Description != null) section.Description = dto.Description;
             section.Order = dto.Order;

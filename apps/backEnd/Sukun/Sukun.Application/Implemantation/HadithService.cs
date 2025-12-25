@@ -44,6 +44,9 @@ namespace Sukun.Application.Implemantation
             if (request.PageSize < 1 || request.PageSize > 100) request.PageSize = 20;
 
             var query = _hadithRepository.AsQueryable();
+            query =  query.Include(x => x.Book)
+                 .Include(x => x.Category)
+                 .Include(x => x.Section);
 
             if (!string.IsNullOrWhiteSpace(request.SearchTerm))
             {
@@ -51,7 +54,7 @@ namespace Sukun.Application.Implemantation
                 query = query.Where(h =>
                     h.Text.ToLower().Contains(term) ||
                     h.Reference.ToLower().Contains(term) ||
-                    (h.BookName != null && h.BookName.ToLower().Contains(term)));
+                    (h.Book.Name != null && h.Book.Name.ToLower().Contains(term)));
             }
 
             query = query.OrderBy(h => h.HadithNumber);
@@ -159,11 +162,7 @@ namespace Sukun.Application.Implemantation
             if (!string.IsNullOrEmpty(dto.Reference)) hadith.Reference = dto.Reference;
             if (!string.IsNullOrEmpty(dto.Text)) hadith.Text = dto.Text;
             if (dto.Grade != 0) hadith.Grade = dto.Grade;
-            if (dto.GradedBy != null) hadith.GradedBy = dto.GradedBy;
-            if (dto.GradeExplanation != null) hadith.GradeExplanation = dto.GradeExplanation;
-            if (dto.BookName != null) hadith.BookName = dto.BookName;
-            if (dto.ChapterName != null) hadith.ChapterName = dto.ChapterName;
-            if (dto.HadithNumber.HasValue) hadith.HadithNumber = dto.HadithNumber;
+            if (!string.IsNullOrEmpty(dto.HadithNumber)) hadith.HadithNumber = dto.HadithNumber;
 
             // تحديث الشروح (بسيط: حذف القديمة وإضافة الجديدة)
             if (dto.Explanations != null)

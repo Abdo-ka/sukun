@@ -4,6 +4,7 @@ using Sukun.Domin.Entities;
 using Sukun.Domin.Enums;
 using Sukun.Infrastructure.InfrastructureBases;
 using System.Net.Http.Json;
+using System.Text.Json;
 
 namespace Sukun.Application.Seeder.Tafsir_entity
 {
@@ -119,5 +120,114 @@ namespace Sukun.Application.Seeder.Tafsir_entity
                 throw;
             }
         }
+    }
+    public interface IQuranTafsirSeederService
+    {
+        Task SeedTafsirIbnKathirAsync();
+    }
+    public class QuranTafsirSeederService : IQuranTafsirSeederService
+    {
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly ILogger<QuranTafsirSeederService> _logger;
+
+        public QuranTafsirSeederService(
+            IUnitOfWork unitOfWork,
+            IHttpClientFactory httpClientFactory,
+            ILogger<QuranTafsirSeederService> logger)
+        {
+            _unitOfWork = unitOfWork;
+            _httpClientFactory = httpClientFactory;
+            _logger = logger;
+        }
+
+        public async Task SeedTafsirIbnKathirAsync()
+        {
+            try
+            {
+                var tafsirRepo = _unitOfWork.Repository<Tafsir>();
+                var ayahRepo = _unitOfWork.Repository<QuranVerse>();
+
+                // تحقق إذا كان التفسير موجود
+                var existingCount = await tafsirRepo.CountAsync(t => t.Source == TafsirSource.IbnKathir);
+                if (existingCount > 1000) // تفسير ابن كثير يحتوي على آلاف التفاسير
+                {
+                    _logger.LogInformation("Tafsir Ibn Kathir already seeded ({Count}), skipping.", existingCount);
+                    return;
+                }
+
+                _logger.LogInformation("Starting Tafsir Ibn Kathir seeding...");
+
+                var client = _httpClientFactory.CreateClient();
+                var url = "https://raw.githubusercontent.com/quran/tafsir-ibn-kathir-json/main/tafsir.json";
+
+                var json = await client.GetStringAsync(url);
+
+                var apiTafsirs = JsonSerializer.Deserialize<List<ApiTafsir>>(json, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+                if (apiTafsirs == null || !apiTafsirs.Any())
+                {
+                    _logger.LogError("Failed to fetch tafsir from external source");
+                    return;
+                }
+
+                int added = 0;
+
+                foreach (var apiTafsir in apiTafsirs)
+                {
+                    // البحث عن الآية بالسورة ورقم الآية
+                    var ayah = await ayahRepo.FirstOrDefaultAsync(a =>
+                        a.Surah.Number == apiTafsir.Surah &&
+                        a.VerseNumber == apiTafsir.Ayah);
+
+                    if (ayah == null)
+                    {
+                        _logger.LogWarning("Ayah not found: Surah {Surah}, Ayah {Ayah}", apiTafsir.Surah, apiTafsir.Ayah);
+                        continue;
+                    }
+
+                    // تجنب التكرار
+                    var exists = await tafsirRepo.ExistsAsync(t =>
+                        t.VerseId == ayah.Id &&
+                        t.Source == TafsirSource.IbnKathir);
+
+                    if (exists) continue;
+
+                    var tafsir = new Tafsir
+                    {
+                        Id = Guid.NewGuid(),
+                        VerseId = ayah.Id,
+                        Source = TafsirSource.IbnKathir,
+                        Text = apiTafsir.Text.Trim(),
+                        CreateAt = DateTime.UtcNow
+                    };
+
+                    await tafsirRepo.AddAsync(tafsir);
+                    added++;
+                }
+
+                if (added > 0)
+                {
+                    await _unitOfWork.CompleteAsync();
+                    _logger.LogInformation("Tafsir Ibn Kathir seeding completed. Added {Count} tafsir entries.", added);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error during Tafsir Ibn Kathir seeding");
+                throw;
+            }
+        }
+    }
+
+    // Class للـ Deserialize من JSON
+    public class ApiTafsir
+    {
+        public int Surah { get; set; }
+        public int Ayah { get; set; }
+        public string Text { get; set; } = string.Empty;
     }
 }

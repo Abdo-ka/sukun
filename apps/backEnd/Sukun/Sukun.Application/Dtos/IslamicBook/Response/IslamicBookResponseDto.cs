@@ -18,7 +18,6 @@ namespace Sukun.Application.Dtos.IslamicBook.Response
         public string? Description { get; set; }
         public BookType Type { get; set; }
         public int Order { get; set; }
-        public string? IconUrl { get; set; }
         public int HadithsCount { get; set; }
         public int SectionsCount { get; set; }
         public List<IslamicBookSectionResponseDto> Sections { get; set; } = new();

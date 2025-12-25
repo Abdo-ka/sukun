@@ -47,7 +47,7 @@ namespace Sukun.Infrastructure.Repositories
                 .Where(h => !h.IsDeleted &&
                     (h.Text.ToLower().Contains(lowerQuery) ||
                      h.Reference.ToLower().Contains(lowerQuery) ||
-                     h.BookName != null && h.BookName.ToLower().Contains(lowerQuery)))
+                     h.Book.Name != null && h.Book.Name.ToLower().Contains(lowerQuery)))
                 .Take(50)
                 .ToListAsync();
         }

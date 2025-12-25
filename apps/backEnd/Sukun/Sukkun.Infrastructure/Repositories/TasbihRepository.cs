@@ -27,7 +27,7 @@ namespace Sukun.Infrastructure.Repositories
         {
             try
             {
-                var count = await _dbSet.CountAsync();
+                var count = await _dbSet.AsQueryable().CountAsync();
                 if (count == 0)
                     return null;
 

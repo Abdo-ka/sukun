@@ -43,6 +43,8 @@ namespace Sukun.Application
             // services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IPasswordHasher, PasswordHasher>();
 
+            services.Configure<HadithApiOptions>(configuration.GetSection("HadithApi"));
+
             //Seeder
             services.AddScoped<IQuranSeederService, QuranSeederService>();
             services.AddScoped<ITafsirSeederService, TafsirSeederService>();
@@ -50,6 +52,7 @@ namespace Sukun.Application
             services.AddScoped<IHadithSeederService, HadithSeederService>();
             services.AddScoped<IDuaSeederService, DuaSeederService>();
             services.AddScoped<IRemembranceSeederService, RemembranceSeederService>();
+            services.AddScoped<IQuranTafsirSeederService, QuranTafsirSeederService>();
             return services;
         }
     }

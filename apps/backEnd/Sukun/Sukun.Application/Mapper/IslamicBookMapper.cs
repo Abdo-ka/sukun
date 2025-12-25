@@ -18,7 +18,6 @@ namespace Sukun.Application.Mapper
                 NameEn = book.NameEn,
                 Author = book.Author,
                 Type = book.Type,
-                IconUrl = book.IconUrl,
                 Order = book.Order,
                 HadithsCount = book.Hadiths.Count(h => !h.IsDeleted)
             };
@@ -36,7 +35,6 @@ namespace Sukun.Application.Mapper
                 Description = book.Description,
                 Type = book.Type,
                 Order = book.Order,
-                IconUrl = book.IconUrl,
                 HadithsCount = book.Hadiths.Count(h => !h.IsDeleted),
                 SectionsCount = book.Sections.Count(s => !s.IsDeleted),
                 Sections = book.Sections
@@ -53,7 +51,6 @@ namespace Sukun.Application.Mapper
             {
                 Id = section.Id,
                 Name = section.Name,
-                NameAr = section.NameAr,
                 NameEn = section.NameEn,
                 Description = section.Description,
                 Order = section.Order,
@@ -78,7 +75,6 @@ namespace Sukun.Application.Mapper
                 Description = dto.Description,
                 Type = dto.Type,
                 Order = dto.Order,
-                IconUrl = dto.IconUrl,
                 CreateAt = DateTime.UtcNow
             };
         }

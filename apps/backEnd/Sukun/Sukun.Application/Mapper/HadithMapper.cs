@@ -25,8 +25,8 @@ namespace Sukun.Application.Mapper
                 Reference = hadith.Reference,
                 Text = hadith.Text,
                 Grade = hadith.Grade,
-                BookName = hadith.BookName,
-                ChapterName = hadith.ChapterName,
+                BookName = hadith.Book is not null ? hadith.Book.Name : "",
+                ChapterName = hadith.Section is not null ? hadith.Section.Name : "",
                 HadithNumber = hadith.HadithNumber,
                 CategoryId = hadith.CategoryId,
                 CategoryName = hadith.Category?.Name ?? string.Empty
@@ -41,12 +41,10 @@ namespace Sukun.Application.Mapper
                 Reference = hadith.Reference,
                 Text = hadith.Text,
                 Grade = hadith.Grade,
-                GradedBy = hadith.GradedBy,
-                GradeExplanation = hadith.GradeExplanation,
-                BookName = hadith.BookName,
-                ChapterName = hadith.ChapterName,
+                BookName = hadith.Book.Name,
+                ChapterName = hadith.Section.Name,
                 HadithNumber = hadith.HadithNumber,
-                CategoryId = hadith.CategoryId,
+                CategoryId = hadith.CategoryId.Value,
                 CategoryName = hadith.Category?.Name ?? string.Empty,
                 Explanations = hadith.Explanations
                     .OrderBy(e => e.CreateAt)
@@ -75,10 +73,6 @@ namespace Sukun.Application.Mapper
                 Reference = dto.Reference,
                 Text = dto.Text,
                 Grade = dto.Grade,
-                GradedBy = dto.GradedBy,
-                GradeExplanation = dto.GradeExplanation,
-                BookName = dto.BookName,
-                ChapterName = dto.ChapterName,
                 HadithNumber = dto.HadithNumber,
                 CreateAt = DateTime.UtcNow
             };

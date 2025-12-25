@@ -10,8 +10,6 @@ namespace Sukun.Application.Dtos.IslamicBookSection.Validation
             RuleFor(x => x.Name)
                 .NotEmpty().MaximumLength(400);
 
-            RuleFor(x => x.NameAr)
-                .NotEmpty().MaximumLength(400);
         }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sukun.Infrastructure.Context;
 
@@ -11,9 +12,11 @@ using Sukun.Infrastructure.Context;
 namespace Sukun.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251225080725_AddQueryFilterIsDeleted")]
+    partial class AddQueryFilterIsDeleted
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -463,11 +466,19 @@ namespace Sukun.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWID()");
 
-                    b.Property<Guid?>("BookId")
+                    b.Property<Guid>("BookId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CategoryId")
+                    b.Property<string>("BookName")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ChapterName")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
 
                     b.Property<DateTime>("CreateAt")
                         .ValueGeneratedOnAdd()
@@ -477,11 +488,16 @@ namespace Sukun.Infrastructure.Migrations
                     b.Property<int>("Grade")
                         .HasColumnType("int");
 
-                    b.Property<string>("HadithNumber")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("GradeExplanation")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
 
-                    b.Property<string>("HeadingArabic")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("GradedBy")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int?>("HadithNumber")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -489,6 +505,7 @@ namespace Sukun.Infrastructure.Migrations
                         .HasDefaultValue(false);
 
                     b.Property<string>("Reference")
+                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
@@ -498,6 +515,13 @@ namespace Sukun.Infrastructure.Migrations
                     b.Property<string>("Text")
                         .IsRequired()
                         .HasMaxLength(5000)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Translation")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Transliteration")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -514,6 +538,10 @@ namespace Sukun.Infrastructure.Migrations
                     b.HasIndex("BookId");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("Grade");
+
+                    b.HasIndex("Reference");
 
                     b.HasIndex("SectionId");
 
@@ -625,6 +653,9 @@ namespace Sukun.Infrastructure.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("IconUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
@@ -673,9 +704,6 @@ namespace Sukun.Infrastructure.Migrations
                     b.Property<Guid>("BookId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("ChapterNumber")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CreateAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
@@ -690,6 +718,11 @@ namespace Sukun.Infrastructure.Migrations
                         .HasDefaultValue(false);
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(400)
+                        .HasColumnType("nvarchar(400)");
+
+                    b.Property<string>("NameAr")
                         .IsRequired()
                         .HasMaxLength(400)
                         .HasColumnType("nvarchar(400)");
@@ -1423,12 +1456,14 @@ namespace Sukun.Infrastructure.Migrations
                     b.HasOne("Sukun.Domin.Entities.IslamicBook", "Book")
                         .WithMany("Hadiths")
                         .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Sukun.Domin.Entities.HadithCategory", "Category")
                         .WithMany("Hadiths")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Sukun.Domin.Entities.IslamicBookSection", "Section")
                         .WithMany("Hadiths")
@@ -1446,7 +1481,8 @@ namespace Sukun.Infrastructure.Migrations
                 {
                     b.HasOne("Sukun.Domin.Entities.Hadith", "Hadith")
                         .WithMany("Explanations")
-                        .HasForeignKey("HadithId");
+                        .HasForeignKey("HadithId")
+                        .IsRequired();
 
                     b.Navigation("Hadith");
                 });

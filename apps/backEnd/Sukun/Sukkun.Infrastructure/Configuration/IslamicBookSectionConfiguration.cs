@@ -16,10 +16,10 @@ namespace Sukun.Infrastructure.Configuration
                 .IsRequired()
                 .HasMaxLength(400);
 
-            builder.Property(s => s.NameAr)
-                .IsRequired()
-                .HasMaxLength(400);
+            builder.Property(s => s.ChapterNumber)
+                   .IsRequired(false);
 
+          
             builder.HasOne(s => s.Book)
                 .WithMany(b => b.Sections)
                 .HasForeignKey(s => s.BookId)

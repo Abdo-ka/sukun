@@ -11,6 +11,5 @@ namespace Sukun.Application.Dtos.IslamicBookSection.Request
         public string? Description { get; set; }
         public BookType Type { get; set; } = BookType.Hadith;
         public int Order { get; set; }
-        public string? IconUrl { get; set; }
     }
 }
