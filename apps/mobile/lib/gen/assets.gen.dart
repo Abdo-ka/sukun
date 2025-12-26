@@ -41,6 +41,24 @@ class $AssetsIconsGen {
   /// File path: assets/icons/Others.svg
   String get others => 'assets/icons/Others.svg';
 
+  /// File path: assets/icons/al-aser.svg
+  String get alAser => 'assets/icons/al-aser.svg';
+
+  /// File path: assets/icons/al-duhr.svg
+  String get alDuhr => 'assets/icons/al-duhr.svg';
+
+  /// File path: assets/icons/al-eshaa.svg
+  String get alEshaa => 'assets/icons/al-eshaa.svg';
+
+  /// File path: assets/icons/al-fajir.svg
+  String get alFajir => 'assets/icons/al-fajir.svg';
+
+  /// File path: assets/icons/al-maghrib.svg
+  String get alMaghrib => 'assets/icons/al-maghrib.svg';
+
+  /// File path: assets/icons/al-shuruq.svg
+  String get alShuruq => 'assets/icons/al-shuruq.svg';
+
   /// File path: assets/icons/azan_duher.svg
   String get azanDuher => 'assets/icons/azan_duher.svg';
 
@@ -53,6 +71,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/haddith.svg
   String get haddith => 'assets/icons/haddith.svg';
 
+  /// File path: assets/icons/location.svg
+  String get location => 'assets/icons/location.svg';
+
   /// File path: assets/icons/notification.svg
   String get notification => 'assets/icons/notification.svg';
 
@@ -62,16 +83,27 @@ class $AssetsIconsGen {
   /// File path: assets/icons/quran.svg
   String get quran => 'assets/icons/quran.svg';
 
+  /// File path: assets/icons/setting.svg
+  String get setting => 'assets/icons/setting.svg';
+
   /// List of all assets
   List<dynamic> get values => [
     others,
+    alAser,
+    alDuhr,
+    alEshaa,
+    alFajir,
+    alMaghrib,
+    alShuruq,
     azanDuher,
     azkar,
     doaa,
     haddith,
+    location,
     notification,
     qibla,
     quran,
+    setting,
   ];
 }
 

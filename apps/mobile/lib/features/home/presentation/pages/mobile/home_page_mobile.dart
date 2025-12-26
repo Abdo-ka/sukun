@@ -23,9 +23,14 @@ class _HomePageMobileState extends State<HomePageMobile> {
       appBar: AppAppBar(
         actions: [
           ButtonWidget(
+            width: 38.w,
+            height: 38.h,
             onPressed: () {},
             prefixIcon: AppImage.asset(
               Assets.icons.notification,
+              width: 25.w,
+              size: 25,
+              height: 25.h,
             ),
           ),
         ],

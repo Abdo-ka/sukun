@@ -1,6 +1,7 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AppAppBar extends StatelessWidget
     implements PreferredSizeWidget {
@@ -36,7 +37,7 @@ class AppAppBar extends StatelessWidget
     this.toolbarOpacity,
     this.toolbarTextStyle,
     this.label,
-    this.showDefaultBackButton = false,
+    this.showDefaultBackButton = true,
     this.defaultBackButtonColor,
     this.labelColor = const Color(0xff667085),
   });
@@ -109,59 +110,92 @@ class AppAppBar extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      titleTextStyle: titleTextStyle,
-      backgroundColor:
-          backgroundColor ?? context.colorScheme.surface,
-      shape: shape,
-      leading: showDefaultBackButton
-          ? IconButton(
-              icon: AppImage.asset(
-                'packages/core/assets/icons/arrow_left.svg',
-                color: defaultBackButtonColor,
-              ),
-              onPressed: () => Navigator.of(context).pop(),
-            )
-          : leading,
-      title: label != null
-          ? AppText.labelMedium(
-              label!,
-              color: titleTextStyle == null
-                  ? labelColor
-                  : null,
-              style: titleTextStyle,
-            )
-          : title,
-      key: key,
-      bottom: bottom,
-      elevation: elevation,
-      clipBehavior: clipBehavior,
-      foregroundColor: foregroundColor,
-      surfaceTintColor: surfaceTintColor,
-      shadowColor: shadowColor,
-      primary: primary ?? true,
-      titleSpacing: titleSpacing,
-      centerTitle: centerTitle,
-      toolbarHeight: toolbarHeight,
-      actions: actions,
-      actionsIconTheme: actionsIconTheme,
-      automaticallyImplyLeading:
-          automaticallyImplyLeading ?? true,
-      bottomOpacity: bottomOpacity ?? 1,
-      excludeHeaderSemantics:
-          excludeHeaderSemantics ?? false,
-      flexibleSpace: flexibleSpace,
-      forceMaterialTransparency:
-          forceMaterialTransparency ?? false,
-      iconTheme: iconTheme,
-      leadingWidth: leadingWidth,
-      notificationPredicate:
-          notificationPredicate ??
-          defaultScrollNotificationPredicate,
-      scrolledUnderElevation: scrolledUnderElevation,
-      systemOverlayStyle: systemOverlayStyle,
-      toolbarOpacity: toolbarOpacity ?? 1.0,
-      toolbarTextStyle: toolbarTextStyle,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: AppBar(
+        titleTextStyle: titleTextStyle,
+        backgroundColor:
+            backgroundColor ?? context.colorScheme.surface,
+        shape: shape,
+        leading:
+            leading ??
+            (showDefaultBackButton
+                ? context.locale.languageCode == 'ar'
+                      ? Transform.scale(
+                          scale: .8,
+                          child: ButtonWidget(
+                            width: 20.w,
+                            height: 20.h,
+                            prefixIcon: AppImage.asset(
+                              'packages/core/assets/icons/arrow-right-square.svg',
+                              width: 30.w,
+                              height: 30.h,
+                              size: 30,
+                              color: defaultBackButtonColor,
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                        )
+                      : ButtonWidget(
+                          width: 38.w,
+                          height: 38.h,
+                          prefixIcon: Transform.rotate(
+                            angle: 3.1416,
+                            child: AppImage.asset(
+                              'packages/core/assets/icons/arrow-right-square.svg',
+                              width: 30.w,
+                              height: 30.h,
+                              size: 30,
+                              color: defaultBackButtonColor,
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        )
+                : SizedBox.shrink()),
+        title: label != null
+            ? AppText.labelMedium(
+                label!,
+                color: titleTextStyle == null
+                    ? labelColor
+                    : null,
+                style: titleTextStyle,
+              )
+            : title,
+        key: key,
+        bottom: bottom,
+        elevation: elevation,
+        clipBehavior: clipBehavior,
+        foregroundColor: foregroundColor,
+        surfaceTintColor: surfaceTintColor,
+        shadowColor: shadowColor,
+        primary: primary ?? true,
+        titleSpacing: titleSpacing,
+        centerTitle: centerTitle,
+        toolbarHeight: toolbarHeight,
+        actions: actions,
+        actionsIconTheme: actionsIconTheme,
+        automaticallyImplyLeading:
+            automaticallyImplyLeading ?? true,
+        bottomOpacity: bottomOpacity ?? 1,
+        excludeHeaderSemantics:
+            excludeHeaderSemantics ?? false,
+        flexibleSpace: flexibleSpace,
+        forceMaterialTransparency:
+            forceMaterialTransparency ?? false,
+        iconTheme: iconTheme,
+        leadingWidth: leadingWidth,
+        notificationPredicate:
+            notificationPredicate ??
+            defaultScrollNotificationPredicate,
+        scrolledUnderElevation: scrolledUnderElevation,
+        systemOverlayStyle: systemOverlayStyle,
+        toolbarOpacity: toolbarOpacity ?? 1.0,
+        toolbarTextStyle: toolbarTextStyle,
+      ),
     );
   }
 

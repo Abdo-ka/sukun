@@ -25,6 +25,16 @@ import 'package:mobile/features/home/domain/repositories/home_repository.dart'
     as _i54;
 import 'package:mobile/features/home/presentation/state/bloc/home_bloc.dart'
     as _i726;
+import 'package:mobile/features/prayer/data/data_sources/prayer_local_datasource.dart'
+    as _i325;
+import 'package:mobile/features/prayer/data/data_sources/prayer_remote_datasource.dart'
+    as _i821;
+import 'package:mobile/features/prayer/data/repositories/prayer_repository_imp.dart'
+    as _i575;
+import 'package:mobile/features/prayer/domain/repositories/prayer_repository.dart'
+    as _i375;
+import 'package:mobile/features/prayer/presentation/state/bloc/prayer_bloc.dart'
+    as _i776;
 import 'package:mobile/services/hive_service.dart' as _i775;
 import 'package:mobile/services/router/router.dart' as _i426;
 import 'package:shared_preferences/shared_preferences.dart' as _i460;
@@ -47,6 +57,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i176.HomeLocaleDataSource>(
       () => _i176.HomeLocaleDataSource(hiveService: gh<_i775.HiveService>()),
     );
+    gh.factory<_i325.PrayerLocaleDataSource>(
+      () => _i325.PrayerLocaleDataSource(hiveService: gh<_i775.HiveService>()),
+    );
     gh.singletonAsync<_i1029.LocalStorage>(
       () async =>
           _i1029.LocalStorage(await getAsync<_i460.SharedPreferences>()),
@@ -54,9 +67,20 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i231.HomeRemoteDataSource>(
       () => _i231.HomeRemoteDataSource(dio: gh<_i494.DioClient>()),
     );
+    gh.factory<_i821.PrayerRemoteDataSource>(
+      () => _i821.PrayerRemoteDataSource(dio: gh<_i494.DioClient>()),
+    );
     gh.factory<_i54.HomeRepository>(
       () =>
           _i247.HomeRepositoryImp(dataSource: gh<_i231.HomeRemoteDataSource>()),
+    );
+    gh.factory<_i375.PrayerRepository>(
+      () => _i575.PrayerRepositoryImp(
+        dataSource: gh<_i821.PrayerRemoteDataSource>(),
+      ),
+    );
+    gh.factory<_i776.PrayerBloc>(
+      () => _i776.PrayerBloc(gh<_i375.PrayerRepository>()),
     );
     gh.factory<_i726.HomeBloc>(() => _i726.HomeBloc(gh<_i54.HomeRepository>()));
     return this;

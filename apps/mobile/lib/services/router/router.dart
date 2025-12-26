@@ -9,6 +9,11 @@ class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
     CustomRoute(page: HomeRoute.page, initial: true),
+    CustomRoute(
+      page: PrayerRoute.page,
+      transitionsBuilder:
+          TransitionsBuilders.slideRightWithFade,
+    ),
     // CustomRoute(
     //   page: HomeRoute.page,
     //   transitionsBuilder: TransitionsBuilders.slideRightWithFade,
