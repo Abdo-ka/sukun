@@ -28,8 +28,8 @@ public class HadithController : ControllerBase
         => this.ToApiResult(await _hadithService.GetAllCategoriesAsync());
 
     [HttpGet("paged")]
-    public async Task<ApiResult<PagedResponseDto<HadithListResponseDto>>> GetPaged([FromQuery] PagedRequestDto request)
-        => this.ToApiResult(await _hadithService.GetPagedAsync(request));
+    public async Task<ApiResult<PagedResponseDto<HadithListResponseDto>>> GetPaged([FromQuery] PagedRequestDto request, Guid? bookId)
+        => this.ToApiResult(await _hadithService.GetPagedAsync(request, bookId));
 
     [HttpGet("category/{categoryId:guid}")]
     public async Task<ApiResult<IEnumerable<HadithListResponseDto>>> GetByCategory(Guid categoryId)

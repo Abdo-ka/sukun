@@ -21,6 +21,7 @@ namespace Sukun.Infrastructure.Repositories
                 .Where(b => !b.IsDeleted)
                 .OrderBy(b => b.Order)
                 .Include(b => b.Sections.Where(s => !s.IsDeleted))
+                .Include(b => b.Hadiths.Where(h => !h.IsDeleted))
                 .ToListAsync();
         }
 
@@ -36,6 +37,8 @@ namespace Sukun.Infrastructure.Repositories
         {
             return await _dbSet
                 .Where(b => !b.IsDeleted && b.Type == type)
+                .Include(b => b.Hadiths.Where(h => !h.IsDeleted))
+                .Include(b => b.Sections.Where(s => !s.IsDeleted))
                 .OrderBy(b => b.Order)
                 .ToListAsync();
         }

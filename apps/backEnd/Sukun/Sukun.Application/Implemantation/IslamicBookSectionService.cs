@@ -42,7 +42,7 @@ namespace Sukun.Application.Implemantation
 
         public async Task<Result<IslamicBookSectionResponseDto>> GetByIdAsync(Guid id)
         {
-            var section = await _sectionRepository.GetByIdAsync(id);
+            var section = await _sectionRepository.GetByIdWithIncludesAsync(id , x=>x.Hadiths,x=>x.Contents);
             if (section == null || section.IsDeleted)
                 return Result<IslamicBookSectionResponseDto>.NotFound("Section not found");
 

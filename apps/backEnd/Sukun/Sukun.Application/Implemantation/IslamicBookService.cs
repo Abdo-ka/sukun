@@ -40,7 +40,7 @@ namespace Sukun.Application.Implemantation
 
         public async Task<Result<IslamicBookResponseDto>> GetByIdAsync(Guid id)
         {
-            var book = await _bookRepository.GetByIdAsync(id);
+            var book = await _bookRepository.GetByIdWithIncludesAsync(id, x=>x.Hadiths ,x=>x.Sections);
             if (book == null || book.IsDeleted)
                 return Result<IslamicBookResponseDto>.NotFound("Book not found");
 

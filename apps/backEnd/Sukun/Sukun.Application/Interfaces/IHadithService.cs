@@ -11,7 +11,7 @@ namespace Sukun.Application.Interfaces
         Task<Result<IEnumerable<HadithCategoryResponseDto>>> GetAllCategoriesAsync();
 
         // Hadiths
-        Task<Result<PagedResponseDto<HadithListResponseDto>>> GetPagedAsync(PagedRequestDto request);
+        Task<Result<PagedResponseDto<HadithListResponseDto>>> GetPagedAsync(PagedRequestDto request, Guid? bookId = null);
         Task<Result<IEnumerable<HadithListResponseDto>>> GetByCategoryAsync(Guid categoryId);
         Task<Result<HadithResponseDto>> GetByIdAsync(Guid id);
         Task<Result<IEnumerable<HadithListResponseDto>>> GetRandomAsync(int count = 5);

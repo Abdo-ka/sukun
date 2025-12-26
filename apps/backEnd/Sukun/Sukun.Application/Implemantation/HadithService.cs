@@ -38,12 +38,13 @@ namespace Sukun.Application.Implemantation
             return Result<IEnumerable<HadithCategoryResponseDto>>.Success(dtos);
         }
 
-        public async Task<Result<PagedResponseDto<HadithListResponseDto>>> GetPagedAsync(PagedRequestDto request)
+        public async Task<Result<PagedResponseDto<HadithListResponseDto>>> GetPagedAsync(PagedRequestDto request, Guid? bookId )
         {
             if (request.PageNumber < 1) request.PageNumber = 1;
             if (request.PageSize < 1 || request.PageSize > 100) request.PageSize = 20;
 
             var query = _hadithRepository.AsQueryable();
+          
             query =  query.Include(x => x.Book)
                  .Include(x => x.Category)
                  .Include(x => x.Section);
@@ -55,6 +56,10 @@ namespace Sukun.Application.Implemantation
                     h.Text.ToLower().Contains(term) ||
                     h.Reference.ToLower().Contains(term) ||
                     (h.Book.Name != null && h.Book.Name.ToLower().Contains(term)));
+            }
+            if (bookId.HasValue)
+            {
+                query = query.Where(h =>h.BookId == bookId);
             }
 
             query = query.OrderBy(h => h.HadithNumber);
@@ -122,7 +127,7 @@ namespace Sukun.Application.Implemantation
                 SearchTerm = query
             };
 
-            return await GetPagedAsync(request);
+            return await GetPagedAsync(request,null);
         }
 
         // ====================== Admin CRUD ======================

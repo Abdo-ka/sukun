@@ -12,7 +12,6 @@ using Sukun.Infrastructure.InfrastructureBases;
 
 namespace Sukun.Application.Implemantation
 {
-    // ==================== QuranService Implementation ====================
 
     public class QuranService : BaseService, IQuranService
     {
@@ -82,7 +81,7 @@ namespace Sukun.Application.Implemantation
             {
                 _logger.LogDebug("Getting all surahs");
                 var surahs = await _unitOfWork.Quran.GetAllSurahsAsync();
-                return Result<IEnumerable<QuranSurahResponseDto>>.Success(surahs.Select(x => QuranMapper.ToResponseDto(x)));
+                return Result<IEnumerable<QuranSurahResponseDto>>.Success(surahs.OrderBy(x=>x.Number).Select(x => QuranMapper.ToResponseDto(x)));
             }
             catch (Exception ex)
             {
@@ -97,7 +96,7 @@ namespace Sukun.Application.Implemantation
             {
                 _logger.LogDebug("Getting surahs by revelation type: {RevelationType}", revelationType);
                 var surahs = await _unitOfWork.Quran.GetSurahsByRevelationTypeAsync(revelationType);
-                return Result<IEnumerable<QuranSurahResponseDto>>.Success(surahs.Select(x => QuranMapper.ToResponseDto(x)));
+                return Result<IEnumerable<QuranSurahResponseDto>>.Success(surahs.OrderBy(x => x.Number).Select(x => QuranMapper.ToResponseDto(x)));
             }
             catch (Exception ex)
             {
@@ -184,7 +183,7 @@ namespace Sukun.Application.Implemantation
             {
                 _logger.LogDebug("Getting verses by surah: {SurahNumber}", surahNumber);
                 var verses = await _unitOfWork.Quran.GetVersesBySurahAsync(surahNumber);
-                return Result<IEnumerable<QuranVerseResponseDto>>.Success(verses.Select(x => QuranMapper.ToResponseDto(x)));
+                return Result<IEnumerable<QuranVerseResponseDto>>.Success(verses.OrderBy(x => x.VerseNumber).Select(x => QuranMapper.ToResponseDto(x)));
             }
             catch (Exception ex)
             {
@@ -199,7 +198,7 @@ namespace Sukun.Application.Implemantation
             {
                 _logger.LogDebug("Getting verses by page: {PageNumber}", pageNumber);
                 var verses = await _unitOfWork.Quran.GetVersesByPageAsync(pageNumber);
-                return Result<IEnumerable<QuranVerseResponseDto>>.Success(verses.Select(x => QuranMapper.ToResponseDto(x)));
+                return Result<IEnumerable<QuranVerseResponseDto>>.Success(verses.OrderBy(x => x.VerseNumber).Select(x => QuranMapper.ToResponseDto(x)));
             }
             catch (Exception ex)
             {
@@ -214,7 +213,7 @@ namespace Sukun.Application.Implemantation
             {
                 _logger.LogDebug("Getting verses by juz: {JuzNumber}", juzNumber);
                 var verses = await _unitOfWork.Quran.GetVersesByJuzAsync(juzNumber);
-                return Result<IEnumerable<QuranVerseResponseDto>>.Success(verses.Select(x => QuranMapper.ToResponseDto(x)));
+                return Result<IEnumerable<QuranVerseResponseDto>>.Success(verses.OrderBy(x => x.VerseNumber).Select(x => QuranMapper.ToResponseDto(x)));
             }
             catch (Exception ex)
             {
@@ -229,7 +228,7 @@ namespace Sukun.Application.Implemantation
             {
                 _logger.LogDebug("Getting verses by hizb: {HizbNumber}", hizbNumber);
                 var verses = await _unitOfWork.Quran.GetVersesByHizbAsync(hizbNumber);
-                return Result<IEnumerable<QuranVerseResponseDto>>.Success(verses.Select(x => QuranMapper.ToResponseDto(x)));
+                return Result<IEnumerable<QuranVerseResponseDto>>.Success(verses.OrderBy(x => x.VerseNumber).Select(x => QuranMapper.ToResponseDto(x)));
             }
             catch (Exception ex)
             {
@@ -244,7 +243,7 @@ namespace Sukun.Application.Implemantation
             {
                 _logger.LogDebug("Searching verses with text: {SearchText}", searchText);
                 var verses = await _unitOfWork.Quran.SearchVersesAsync(searchText);
-                return Result<IEnumerable<QuranVerseResponseDto>>.Success(verses.Select(x => QuranMapper.ToResponseDto(x)));
+                return Result<IEnumerable<QuranVerseResponseDto>>.Success(verses.OrderBy(x => x.VerseNumber).Select(x => QuranMapper.ToResponseDto(x)));
             }
             catch (Exception ex)
             {
@@ -391,42 +390,7 @@ namespace Sukun.Application.Implemantation
                 return Result<Dictionary<int, int>>.Failure($"Error retrieving counts: {ex.Message}");
             }
         }
-        //public async Task<Result<PagedResponseDto<QuranVerseResponseDto>>> SearchVersesAsync(SearchRequestDto request)
-        //{
-        //    try
-        //    {
-        //        _logger.LogDebug("Searching verses with term: {SearchTerm}", request.SearchTerm);
-        //        IEnumerable<QuranVerse> verses;
-        //        if (!string.IsNullOrWhiteSpace(request.SearchTerm))
-        //            verses = await _unitOfWork.Quran.SearchVersesAsync(request.SearchTerm);
-        //        else
-        //            verses = await _unitOfWork.Repository<QuranVerse>().GetAllAsync();
-
-        //        if (request.SurahNumber.HasValue)
-        //            verses = verses.Where(v => v.Surah!.Number == request.SurahNumber.Value);
-        //        if (request.JuzNumber.HasValue)
-        //            verses = verses.Where(v => v.JuzNumber == request.JuzNumber.Value);
-        //        if (request.PageNumber.HasValue)
-        //            verses = verses.Where(v => v.PageNumber == request.PageNumber.Value);
-        //        if (request.HizbNumber.HasValue)
-        //            verses = verses.Where(v => v.HizbNumber == request.HizbNumber.Value);
-
-        //        var totalCount = verses.Count();
-        //        var pagedVerses = verses
-        //            .Skip((request.PageNumber - 1) * request.PageSize)
-        //            .Take(request.PageSize)
-        //            .Select(QuranMapper.ToVerseResponseDto)
-        //            .ToList();
-
-        //        var response = CreatePagedResponse(pagedVerses, request.PageNumber, request.PageSize, totalCount);
-        //        return Result<PagedResponseDto<QuranVerseResponseDto>>.Success(response);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex, "Error searching verses");
-        //        return Result<PagedResponseDto<QuranVerseResponseDto>>.Failure($"Error searching verses: {ex.Message}");
-        //    }
-        //}
+        
 
         public async Task<Result<Dictionary<int, int>>> GetVersesCountByPageAsync()
         {
