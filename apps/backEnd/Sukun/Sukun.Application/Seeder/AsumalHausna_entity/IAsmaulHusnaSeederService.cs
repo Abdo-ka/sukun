@@ -3,5 +3,6 @@
     public interface IAsmaulHusnaSeederService
     {
         Task SeedAsmaulHusnaAsync();
+        Task SeedAsync();
     }
 }

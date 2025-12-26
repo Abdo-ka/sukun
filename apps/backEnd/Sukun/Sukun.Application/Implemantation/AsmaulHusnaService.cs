@@ -21,7 +21,7 @@ namespace Sukun.Application.Implemantation
         public async Task<Result<IEnumerable<AsmaulHusnaResponseDto>>> GetAllAsync()
         {
             var names = await _asmaulHusnaRepository.GetAllAsync();
-            return Result<IEnumerable<AsmaulHusnaResponseDto>>.Success(names.ToResponseDtos());
+            return Result<IEnumerable<AsmaulHusnaResponseDto>>.Success(names.OrderBy(x=>x.Number).ToResponseDtos());
         }
 
         public async Task<Result<AsmaulHusnaResponseDto>> GetByNumberAsync(int number)

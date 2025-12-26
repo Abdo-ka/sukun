@@ -90,7 +90,7 @@ namespace Sukun.Api
                 await tafsirSeeder.SeedTafsirAsync(TafsirSource.Jalalayn); 
 
                 var asmaulHusnaSeeder = services.GetRequiredService<IAsmaulHusnaSeederService>();
-                await asmaulHusnaSeeder.SeedAsmaulHusnaAsync();
+                await asmaulHusnaSeeder.SeedAsync();
 
                 var hadithSeeder = services.GetRequiredService<IHadithSeederService>();
                 await hadithSeeder.SeedHadithsAsync();

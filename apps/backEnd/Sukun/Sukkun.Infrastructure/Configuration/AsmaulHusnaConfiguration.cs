@@ -20,7 +20,7 @@ namespace Sukun.Infrastructure.Configuration
                 .HasMaxLength(100);
 
             builder.Property(a => a.NameTransliteration)
-                .IsRequired()
+                .IsRequired(false)
                 .HasMaxLength(100);
 
             builder.Property(a => a.MeaningArabic)
@@ -28,10 +28,8 @@ namespace Sukun.Infrastructure.Configuration
                 .HasMaxLength(300);
 
             builder.Property(a => a.MeaningEnglish)
-                .HasMaxLength(300);
-
-            builder.HasIndex(a => a.Number)
-                .IsUnique();
+                .HasMaxLength(300)
+                .IsRequired(false);
         }
     }
 }

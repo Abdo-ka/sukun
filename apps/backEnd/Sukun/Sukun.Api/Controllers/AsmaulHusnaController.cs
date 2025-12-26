@@ -37,7 +37,7 @@ namespace Sukun.Api.Controllers
         [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> SeedAsmaulHusna()
         {
-            await _asmaulHusnaSeederService.SeedAsmaulHusnaAsync();
+            await _asmaulHusnaSeederService.SeedAsync();
             return Ok("Asmaul Husna seeded successfully");
         }
     }

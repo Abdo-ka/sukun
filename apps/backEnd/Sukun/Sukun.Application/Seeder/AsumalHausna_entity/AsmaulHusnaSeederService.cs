@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Sukun.Domin.Entities;
+using Sukun.Infrastructure.Context;
 using Sukun.Infrastructure.InfrastructureBases;
 using System;
 using System.Collections.Generic;
@@ -85,6 +86,41 @@ namespace Sukun.Application.Seeder.AsumalHausna_entity
                 _logger.LogError(ex, "Error during Asmaul Husna seeding");
                 throw;
             }
+        }
+        public async Task SeedAsync()
+        {
+            var repo = _unitOfWork.Repository<AsmaulHusna>();
+
+            // تحقق داخلي: إذا كانت 99 اسمًا موجودة → لا تفعل شيء
+            var existingCount = await repo.CountAsync();
+            if (existingCount >= 99)
+            {
+                _logger.LogInformation("Asmaul Husna already fully seeded ({Count}/99 names), skipping.", existingCount);
+                return;
+            }
+
+            _logger.LogInformation("Starting Asmaul Husna seeding... Current: {Count}/99", existingCount);
+
+            var json = await File.ReadAllTextAsync("C:\\Users\\moner\\source\\repos\\sukun\\apps\\backEnd\\Sukun\\Sukun.Application\\SeedData\\Names_Of_Allah.json");
+            var data = JsonSerializer.Deserialize<List<SeedAllahName>>(json, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            foreach (var item in data)
+            {
+                var asmaulHusna = new AsmaulHusna
+                {
+                    Id = Guid.NewGuid(),
+                    NameArabic = item.Name,
+                    MeaningArabic = item.Text,
+                    Number =item.Id,
+                    CreateAt = DateTime.Now,
+
+                };
+               await repo.AddAsync(asmaulHusna);
+            }
+            await _unitOfWork.CompleteAsync();
         }
     }
 }
