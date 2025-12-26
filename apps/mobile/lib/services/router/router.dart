@@ -66,5 +66,13 @@ class AppRouter extends RootStackRouter {
     //     AutoRoute(page: CarDetailsRoute.page),
     //   ],
     // ),
+    CustomRoute(
+      page: OthersRoute.page,
+      transitionsBuilder: TransitionsBuilders.slideRightWithFade,
+    ),
+    CustomRoute(
+      page: OthersDetailsRoute.page,
+      transitionsBuilder: TransitionsBuilders.slideRightWithFade,
+    ),
   ];
 }

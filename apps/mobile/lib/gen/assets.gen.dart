@@ -59,17 +59,32 @@ class $AssetsIconsGen {
   /// File path: assets/icons/al-shuruq.svg
   String get alShuruq => 'assets/icons/al-shuruq.svg';
 
+  /// File path: assets/icons/allah.svg
+  String get allah => 'assets/icons/allah.svg';
+
+  /// File path: assets/icons/arrow-left-square.svg
+  String get arrowLeftSquare => 'assets/icons/arrow-left-square.svg';
+
+  /// File path: assets/icons/ayah.svg
+  String get ayah => 'assets/icons/ayah.svg';
+
   /// File path: assets/icons/azan_duher.svg
   String get azanDuher => 'assets/icons/azan_duher.svg';
 
   /// File path: assets/icons/azkar.svg
   String get azkar => 'assets/icons/azkar.svg';
 
+  /// File path: assets/icons/dimond.svg
+  String get dimond => 'assets/icons/dimond.svg';
+
   /// File path: assets/icons/doaa.svg
   String get doaa => 'assets/icons/doaa.svg';
 
   /// File path: assets/icons/haddith.svg
   String get haddith => 'assets/icons/haddith.svg';
+
+  /// File path: assets/icons/hijab.png
+  AssetGenImage get hijab => const AssetGenImage('assets/icons/hijab.png');
 
   /// File path: assets/icons/location.svg
   String get location => 'assets/icons/location.svg';
@@ -83,8 +98,26 @@ class $AssetsIconsGen {
   /// File path: assets/icons/quran.svg
   String get quran => 'assets/icons/quran.svg';
 
+  /// File path: assets/icons/saas_marks.svg
+  String get saasMarks => 'assets/icons/saas_marks.svg';
+
   /// File path: assets/icons/setting.svg
   String get setting => 'assets/icons/setting.svg';
+
+  /// File path: assets/icons/star.svg
+  String get star => 'assets/icons/star.svg';
+
+  /// File path: assets/icons/stories.svg
+  String get stories => 'assets/icons/stories.svg';
+
+  /// File path: assets/icons/sunan.svg
+  String get sunan => 'assets/icons/sunan.svg';
+
+  /// File path: assets/icons/woman.png
+  AssetGenImage get woman => const AssetGenImage('assets/icons/woman.png');
+
+  /// File path: assets/icons/zakat.png
+  AssetGenImage get zakat => const AssetGenImage('assets/icons/zakat.png');
 
   /// List of all assets
   List<dynamic> get values => [
@@ -95,15 +128,26 @@ class $AssetsIconsGen {
     alFajir,
     alMaghrib,
     alShuruq,
+    allah,
+    arrowLeftSquare,
+    ayah,
     azanDuher,
     azkar,
+    dimond,
     doaa,
     haddith,
+    hijab,
     location,
     notification,
     qibla,
     quran,
+    saasMarks,
     setting,
+    star,
+    stories,
+    sunan,
+    woman,
+    zakat,
   ];
 }
 

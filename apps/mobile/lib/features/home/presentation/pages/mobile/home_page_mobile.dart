@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mobile/core/config/constant.dart';
 import 'package:mobile/features/home/presentation/widgets/aya_and_ebra_widget.dart';
+import 'package:mobile/services/router/router.gr.dart';
 import 'package:mobile/features/home/presentation/widgets/next_prayer_widget.dart';
 import 'package:mobile/gen/assets.gen.dart';
 
@@ -61,29 +62,36 @@ class _HomePageMobileState extends State<HomePageMobile> {
               homeItemsGridView.length,
               (index) => Column(
                 children: [
-                  Container(
-                    width: 124.w,
-                    height: 101.h,
-                    decoration: BoxDecoration(
-                      color: context.colorScheme.surface,
-                      borderRadius: BorderRadius.circular(
-                        16,
+                  GestureDetector(
+                    onTap: () {
+                      if (homeItemsGridView[index]['label'] == 'متفرقات') {
+                        context.pushRoute(const OthersRoute());
+                      }
+                    },
+                    child: Container(
+                      width: 124.w,
+                      height: 101.h,
+                      decoration: BoxDecoration(
+                        color: context.colorScheme.surface,
+                        borderRadius: BorderRadius.circular(
+                          16,
+                        ),
+                        border: Border.all(
+                          color: context
+                              .colorScheme
+                              .surfaceContainer,
+                        ),
                       ),
-                      border: Border.all(
-                        color: context
-                            .colorScheme
-                            .surfaceContainer,
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 12,
-                      ),
-                      child: AppImage.asset(
-                        homeItemsGridView[index]['icon']!,
-                        height: 76.h,
-                        width: 76.w,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 12,
+                        ),
+                        child: AppImage.asset(
+                          homeItemsGridView[index]['icon']!,
+                          height: 76.h,
+                          width: 76.w,
+                        ),
                       ),
                     ),
                   ),

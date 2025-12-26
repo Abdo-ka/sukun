@@ -14,3 +14,5 @@ export 'package:core/src/extension/context_ext.dart';
 export 'package:core/src/extension/date_time_ext.dart';
 export 'package:core/src/extension/num_ext.dart';
 export 'package:core/src/extension/widget_ext.dart';
+export 'package:core/src/error/app_exception.dart';
+export 'package:either_dart/either.dart';
