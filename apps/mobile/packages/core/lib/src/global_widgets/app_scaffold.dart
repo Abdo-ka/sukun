@@ -42,8 +42,10 @@ class AppScaffold extends StatelessWidget {
 
   final Widget? floatingActionButton;
 
-  final FloatingActionButtonLocation? floatingActionButtonLocation;
-  final FloatingActionButtonAnimator? floatingActionButtonAnimator;
+  final FloatingActionButtonLocation?
+  floatingActionButtonLocation;
+  final FloatingActionButtonAnimator?
+  floatingActionButtonAnimator;
   final List<Widget>? persistentFooterButtons;
   final AlignmentDirectional? persistentFooterAlignment;
   final Widget? drawer;
@@ -78,11 +80,14 @@ class AppScaffold extends StatelessWidget {
       appBar: appBar,
       body: body,
       floatingActionButton: floatingActionButton,
-      floatingActionButtonLocation: floatingActionButtonLocation,
-      floatingActionButtonAnimator: floatingActionButtonAnimator,
+      floatingActionButtonLocation:
+          floatingActionButtonLocation,
+      floatingActionButtonAnimator:
+          floatingActionButtonAnimator,
       persistentFooterButtons: persistentFooterButtons,
       persistentFooterAlignment:
-          persistentFooterAlignment ?? AlignmentDirectional.centerEnd,
+          persistentFooterAlignment ??
+          AlignmentDirectional.centerEnd,
       drawer: drawer,
       onDrawerChanged: onDrawerChanged,
       endDrawer: endDrawer,
@@ -93,13 +98,17 @@ class AppScaffold extends StatelessWidget {
       resizeToAvoidBottomInset: resizeToAvoidBottomInset,
       primary: primary ?? true,
       drawerDragStartBehavior:
-          drawerDragStartBehavior ?? DragStartBehavior.start,
+          drawerDragStartBehavior ??
+          DragStartBehavior.start,
       extendBody: extendBody ?? false,
-      extendBodyBehindAppBar: extendBodyBehindAppBar ?? false,
+      extendBodyBehindAppBar:
+          extendBodyBehindAppBar ?? false,
       drawerScrimColor: drawerScrimColor,
       drawerEdgeDragWidth: drawerEdgeDragWidth,
-      drawerEnableOpenDragGesture: drawerEnableOpenDragGesture ?? true,
-      endDrawerEnableOpenDragGesture: endDrawerEnableOpenDragGesture ?? true,
+      drawerEnableOpenDragGesture:
+          drawerEnableOpenDragGesture ?? true,
+      endDrawerEnableOpenDragGesture:
+          endDrawerEnableOpenDragGesture ?? true,
       key: key,
       restorationId: restorationId,
     );
