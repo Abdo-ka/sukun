@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mobile/features/home/presentation/widgets/next_prayer_widget.dart';
 import 'package:mobile/features/prayer/presentation/widgets/date_hijri_widget.dart';
 import 'package:mobile/features/prayer/presentation/widgets/days_of_week_widget.dart';
+import 'package:mobile/features/prayer/presentation/widgets/prayer_time_date_widget.dart';
 import 'package:mobile/gen/assets.gen.dart';
 
 class PrayerPageMobile extends StatelessWidget {
@@ -56,6 +57,7 @@ class PrayerPageMobile extends StatelessWidget {
               children: [
                 NextPrayerWidget(isFromHome: false),
                 16.verticalSpace,
+                PrayerTimeDateWidget(),
               ],
             ),
           ),

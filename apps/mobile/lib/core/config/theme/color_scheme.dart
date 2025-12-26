@@ -25,6 +25,7 @@ class AppColorScheme {
     inverseSurface: Color(0xff2E3132),
     onInverseSurface: Color(0xffEFF1F1),
     surfaceContainer: Color(0xFFECEEEF),
+    surfaceBright: Color(0xFFF8FAFA),
     surfaceTint: Color(0xff006B58),
     surfaceContainerHighest: Color(0xffDBE4E6),
     onSurfaceVariant: Color(0xff3F484A),
