@@ -19,6 +19,7 @@ class OthersDetailsItemWidget extends StatelessWidget {
     return Container(
       height: 62.h,
       decoration: BoxDecoration(
+        //same here for colors
         color: index.isEven
             ? const Color(0xffF9F9F9)
             : Colors.transparent, // Alternating colors
@@ -28,22 +29,35 @@ class OthersDetailsItemWidget extends StatelessWidget {
       child: Row(
         children: [
           // 1. Diamond (Rightmost)
-          AppImage.asset(Assets.icons.dimond, width: 12.w, height: 12.h),
+          AppImage.asset(
+            Assets.icons.dimond,
+            width: 12.w,
+            height: 12.h,
+          ),
           8.horizontalSpace,
-          
+
           // 2. Text
           Expanded(
-              child: AppText.bodyMedium(
-            item.title ?? '',
-            textAlign: TextAlign.right,
-          )),
-          
+            child: AppText.bodyMedium(
+              item.title ?? '',
+              textAlign: TextAlign.right,
+            ),
+          ),
+
           // 3. Star
-          AppImage.asset(Assets.icons.star, width: 20.w, height: 20.h),
+          AppImage.asset(
+            Assets.icons.star,
+            width: 20.w,
+            height: 20.h,
+          ),
           8.horizontalSpace,
 
           // 4. Arrow (Leftmost)
-          AppImage.asset(Assets.icons.arrowLeftSquare, width: 24.w, height: 24.h),
+          AppImage.asset(
+            Assets.icons.arrowLeftSquare,
+            width: 24.w,
+            height: 24.h,
+          ),
         ],
       ),
     );

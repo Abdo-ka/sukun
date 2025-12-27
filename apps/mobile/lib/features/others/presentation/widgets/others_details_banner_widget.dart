@@ -27,7 +27,9 @@ class OthersDetailsBannerWidget extends StatelessWidget {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16.0,
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -37,7 +39,11 @@ class OthersDetailsBannerWidget extends StatelessWidget {
               children: [
                 AppText.titleMedium(title),
                 4.verticalSpace,
-                AppText.bodySmall('النساء الذي خلد الاسلام ذكرهم', color: Colors.grey),
+                // TODO: don't use Fixed color use instead colors from colorSchema like context.colorSchema.outline that's already define inside color_schema.dart
+                AppText.bodySmall(
+                  'النساء الذي خلد الاسلام ذكرهم',
+                  color: Colors.grey,
+                ),
               ],
             ),
             if (icon is String)

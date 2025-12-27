@@ -29,5 +29,10 @@ class OthersState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [status, categories, items, errorMessage];
+  List<Object?> get props => [
+    status,
+    categories,
+    items,
+    errorMessage,
+  ];
 }

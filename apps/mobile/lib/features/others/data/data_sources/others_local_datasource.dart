@@ -7,8 +7,11 @@ abstract class OthersLocalDataSource {
   Future<List<OtherItemEntity>> getItems();
 }
 
+//TODO: (Aya) don't need to add these into local datasource you can add these into a constants file constants.dart
+// also don't need to use LazySingleton here since there is no state to be maintained you can use  injectable design pattern @Injectable()
 @LazySingleton(as: OthersLocalDataSource)
-class OthersLocalDataSourceImp implements OthersLocalDataSource {
+class OthersLocalDataSourceImp
+    implements OthersLocalDataSource {
   @override
   Future<List<OtherCategoryEntity>> getCategories() async {
     return [
@@ -57,17 +60,46 @@ class OthersLocalDataSourceImp implements OthersLocalDataSource {
     ];
   }
 
+  //TODO: (Aya) don't need to add dummy data here you can fetch these from a local json file or from an api suggest get it from an api
   @override
   Future<List<OtherItemEntity>> getItems() async {
     // Return dummy data for now
     return const [
-       OtherItemEntity(id: 1, title: 'عائشة بنت أبي بكر رضي الله عنه', content: ''),
-       OtherItemEntity(id: 2, title: 'رفيدة الأسلمية', content: ''),
-       OtherItemEntity(id: 3, title: 'نسيبة بنت كعب المازنية', content: ''),
-       OtherItemEntity(id: 4, title: 'الشفاء بنت عبد الله العدوية', content: ''),
-       OtherItemEntity(id: 5, title: 'فاطمة بنت محمد رضي الله عنها', content: ''),
-       OtherItemEntity(id: 6, title: 'خديجة بنت خويلد رضي الله عنها', content: ''),
-       OtherItemEntity(id: 7, title: 'حفصة بنت عمر بن الخطاب', content: ''),
+      OtherItemEntity(
+        id: 1,
+        title: 'عائشة بنت أبي بكر رضي الله عنه',
+        content: '',
+      ),
+      OtherItemEntity(
+        id: 2,
+        title: 'رفيدة الأسلمية',
+        content: '',
+      ),
+      OtherItemEntity(
+        id: 3,
+        title: 'نسيبة بنت كعب المازنية',
+        content: '',
+      ),
+      OtherItemEntity(
+        id: 4,
+        title: 'الشفاء بنت عبد الله العدوية',
+        content: '',
+      ),
+      OtherItemEntity(
+        id: 5,
+        title: 'فاطمة بنت محمد رضي الله عنها',
+        content: '',
+      ),
+      OtherItemEntity(
+        id: 6,
+        title: 'خديجة بنت خويلد رضي الله عنها',
+        content: '',
+      ),
+      OtherItemEntity(
+        id: 7,
+        title: 'حفصة بنت عمر بن الخطاب',
+        content: '',
+      ),
     ];
   }
 }

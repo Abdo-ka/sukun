@@ -18,6 +18,8 @@ class OthersDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //TODO:(Aya) I see here now using AppScaffold but suggest to move it to OthersDetailsPageMobile screen instead of here
+    //! TODO:(Aya) try using mason make feautre to generate automatically all files you need (not important but easier)
     return AppScaffold(
       body: PageLayoutBuilder(
         mobile: (context) => OthersDetailsPageMobile(

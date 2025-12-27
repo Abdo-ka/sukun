@@ -9,9 +9,10 @@ class OthersPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  AppScaffold(
+    //here same move app scaffold into OthersPageMobile instead of here
+    return AppScaffold(
       body: PageLayoutBuilder(
-        mobile: (context) =>  OthersPageMobile(),
+        mobile: (context) => OthersPageMobile(),
       ),
     );
   }
