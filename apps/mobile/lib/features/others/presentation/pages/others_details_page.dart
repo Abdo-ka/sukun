@@ -1,7 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/core/di/di_container.dart';
 import 'package:mobile/features/others/presentation/pages/mobile/others_details_page_mobile.dart';
+import 'package:mobile/features/others/presentation/state/bloc/others_cubit.dart';
 
 @RoutePage()
 class OthersDetailsPage extends StatelessWidget {
@@ -18,14 +21,15 @@ class OthersDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //TODO:(Aya) I see here now using AppScaffold but suggest to move it to OthersDetailsPageMobile screen instead of here
-    //! TODO:(Aya) try using mason make feautre to generate automatically all files you need (not important but easier)
-    return AppScaffold(
-      body: PageLayoutBuilder(
-        mobile: (context) => OthersDetailsPageMobile(
-          categoryId: categoryId,
-          title: title,
-          icon: icon,
+    return BlocProvider(
+      create: (context) => getIt<OthersCubit>()..getItems(categoryId),
+      child: AppScaffold(
+        body: PageLayoutBuilder(
+          mobile: (context) => OthersDetailsPageMobile(
+            categoryId: categoryId,
+            title: title,
+            icon: icon,
+          ),
         ),
       ),
     );

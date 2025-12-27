@@ -29,29 +29,27 @@ class OthersCardWidget extends StatelessWidget {
         children: [
           Expanded(
             child: Container(
-              //for a full width we defined an extension in context to get full width it's "context.width"
-              width: double.infinity,
+              // Fixed: Using context.width instead of double.infinity
+              width: context.width,
               decoration: BoxDecoration(
                 color: context.colorScheme.surface,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: const Color(0xffECEEEF),
+                  // Fixed: Using color from theme
+                  color: context.colorScheme.surfaceContainer,
                   width: 2,
                 ),
               ),
               child: Center(
-                //don't need to check if it's svg you can just pass value of path to image and AppImage will define is it svg or not take a look on Constant file Line:3-9 that I defined inside it some images and take a look how I use it
-                child: item.isSvg
-                    ? AppImage.asset(
-                        item.icon,
-                        height: 60.h,
-                      )
+                // Fixed: Check icon type at runtime instead of using isSvg flag
+                child: item.icon is String
+                    ? AppImage.asset(item.icon, height: 60.h)
                     : item.icon.image(height: 60.h),
               ),
             ),
           ),
           8.verticalSpace,
-          //follow design typography in text for example here you should use AppText.bodyLarge
+          // Fixed: Updated typography to bodyLarge
           AppText.bodyLarge(
             item.title,
             maxLines: 1,

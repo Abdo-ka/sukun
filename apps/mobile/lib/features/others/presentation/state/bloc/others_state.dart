@@ -1,4 +1,4 @@
-part of 'others_bloc.dart';
+part of 'others_cubit.dart';
 
 @immutable
 class OthersState extends Equatable {

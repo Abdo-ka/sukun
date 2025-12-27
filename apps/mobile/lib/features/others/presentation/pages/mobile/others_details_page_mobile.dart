@@ -2,8 +2,7 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mobile/core/di/di_container.dart';
-import 'package:mobile/features/others/presentation/state/bloc/others_bloc.dart';
+import 'package:mobile/features/others/presentation/state/bloc/others_cubit.dart';
 import 'package:mobile/features/others/presentation/widgets/others_details_banner_widget.dart';
 import 'package:mobile/features/others/presentation/widgets/others_details_item_widget.dart';
 
@@ -21,11 +20,7 @@ class OthersDetailsPageMobile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) =>
-          getIt<OthersBloc>()..add(GetOthersItemsEvent(categoryId: categoryId)),
-      child: OthersDetailsView(title: title, icon: icon),
-    );
+    return OthersDetailsView(title: title, icon: icon);
   }
 }
 
@@ -54,7 +49,7 @@ class OthersDetailsView extends StatelessWidget {
         ),
 
         Expanded(
-          child: BlocBuilder<OthersBloc, OthersState>(
+          child: BlocBuilder<OthersCubit, OthersState>(
             builder: (context, state) {
               if (state.status == const BlocStatus.loading()) {
                 return const Center(child: CircularProgressIndicator());

@@ -22,7 +22,8 @@ class OthersDetailsBannerWidget extends StatelessWidget {
         color: context.colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: const Color(0xffECEEEF),
+          // Fixed: Using theme color
+          color: context.colorScheme.surfaceContainer,
           width: 2,
         ),
       ),
@@ -39,17 +40,17 @@ class OthersDetailsBannerWidget extends StatelessWidget {
               children: [
                 AppText.titleMedium(title),
                 4.verticalSpace,
-                // TODO: don't use Fixed color use instead colors from colorSchema like context.colorSchema.outline that's already define inside color_schema.dart
+                // Fixed: Using theme color context.colorScheme.outline
                 AppText.bodySmall(
                   'النساء الذي خلد الاسلام ذكرهم',
-                  color: Colors.grey,
+                  color: context.colorScheme.outline,
                 ),
               ],
             ),
-            if (icon is String)
-              AppImage.asset(icon, height: 60.h)
-            else
-              (icon as AssetGenImage).image(height: 60.h),
+            // Fixed: Check icon type at runtime
+            icon is String
+                ? AppImage.asset(icon, height: 60.h)
+                : (icon as AssetGenImage).image(height: 60.h),
           ],
         ),
       ),

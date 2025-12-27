@@ -19,9 +19,9 @@ class OthersDetailsItemWidget extends StatelessWidget {
     return Container(
       height: 62.h,
       decoration: BoxDecoration(
-        //same here for colors
+        // Fixed: Using theme colors
         color: index.isEven
-            ? const Color(0xffF9F9F9)
+            ? context.colorScheme.surfaceContainer
             : Colors.transparent, // Alternating colors
         borderRadius: BorderRadius.circular(8),
       ),

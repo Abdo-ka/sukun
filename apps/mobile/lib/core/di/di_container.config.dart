@@ -31,8 +31,8 @@ import 'package:mobile/features/others/data/repositories/others_repository_imp.d
     as _i766;
 import 'package:mobile/features/others/domain/repositories/others_repository.dart'
     as _i468;
-import 'package:mobile/features/others/presentation/state/bloc/others_bloc.dart'
-    as _i63;
+import 'package:mobile/features/others/presentation/state/bloc/others_cubit.dart'
+    as _i626;
 import 'package:mobile/features/prayer/data/data_sources/prayer_local_datasource.dart'
     as _i325;
 import 'package:mobile/features/prayer/data/data_sources/prayer_remote_datasource.dart'
@@ -68,13 +68,16 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i325.PrayerLocaleDataSource>(
       () => _i325.PrayerLocaleDataSource(hiveService: gh<_i775.HiveService>()),
     );
-    gh.lazySingleton<_i225.OthersLocalDataSource>(
+    gh.factory<_i225.OthersLocalDataSource>(
       () => _i225.OthersLocalDataSourceImp(),
     );
     gh.factory<_i468.OthersRepository>(
       () => _i766.OthersRepositoryImp(
         dataSource: gh<_i225.OthersLocalDataSource>(),
       ),
+    );
+    gh.factory<_i626.OthersCubit>(
+      () => _i626.OthersCubit(gh<_i468.OthersRepository>()),
     );
     gh.singletonAsync<_i1029.LocalStorage>(
       () async =>
@@ -89,9 +92,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i54.HomeRepository>(
       () =>
           _i247.HomeRepositoryImp(dataSource: gh<_i231.HomeRemoteDataSource>()),
-    );
-    gh.factory<_i63.OthersBloc>(
-      () => _i63.OthersBloc(gh<_i468.OthersRepository>()),
     );
     gh.factory<_i375.PrayerRepository>(
       () => _i575.PrayerRepositoryImp(
