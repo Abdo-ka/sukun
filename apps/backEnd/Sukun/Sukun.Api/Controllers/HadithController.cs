@@ -43,12 +43,6 @@ public class HadithController : ControllerBase
     public async Task<ApiResult<IEnumerable<HadithListResponseDto>>> GetRandom([FromQuery] int count = 5)
         => this.ToApiResult(await _hadithService.GetRandomAsync(count));
 
-    [HttpGet("search")]
-    public async Task<ApiResult<PagedResponseDto<HadithListResponseDto>>> Search(
-        [FromQuery] string query,
-        [FromQuery] PagedRequestDto? paging = null)
-        => this.ToApiResult(await _hadithService.SearchAsync(query, paging));
-
     #endregion
 
     #region Admin 

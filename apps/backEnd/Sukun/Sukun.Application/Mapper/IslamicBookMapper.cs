@@ -18,8 +18,7 @@ namespace Sukun.Application.Mapper
                 NameEn = book.NameEn,
                 Author = book.Author,
                 Type = book.Type,
-                Order = book.Order,
-                HadithsCount = book.Hadiths.Count(h => !h.IsDeleted)
+                Order = book.Order
             };
         }
 
@@ -35,8 +34,6 @@ namespace Sukun.Application.Mapper
                 Description = book.Description,
                 Type = book.Type,
                 Order = book.Order,
-                HadithsCount = book.Hadiths.Count(h => !h.IsDeleted),
-                SectionsCount = book.Sections.Count(s => !s.IsDeleted),
                 Sections = book.Sections
                     .Where(s => !s.IsDeleted)
                     .OrderBy(s => s.Order)
@@ -54,7 +51,6 @@ namespace Sukun.Application.Mapper
                 NameEn = section.NameEn,
                 Description = section.Description,
                 Order = section.Order,
-                HadithsCount = section.Hadiths.Count(h => !h.IsDeleted),
                 Contents = section.Contents.Where(c => !c.IsDeleted)
                                             .OrderBy(c => c.DisplayOrder)
                                             .Select(c => c.ToContentDto())

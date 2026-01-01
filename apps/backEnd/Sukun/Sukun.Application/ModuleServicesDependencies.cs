@@ -36,6 +36,8 @@ namespace Sukun.Application
             services.AddScoped<IMosqueService, MosqueService>();
             services.AddScoped<IPrayerTimeService, PrayerTimeService>();
             services.AddScoped<IDataVersionService, DataVersionService>();
+            services.AddScoped<ITagService, TagService>();
+            services.AddScoped<ICategoryService, CategoryService>();
 
             // Supporting services
             services.AddScoped<IPasswordHasher, BCryptPasswordHasher>();

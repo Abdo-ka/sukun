@@ -20,11 +20,14 @@ namespace Sukun.Infrastructure.Configuration
                 .IsRequired()
                 .HasMaxLength(4000);
 
-            builder.Property(s => s.MediaUrl)
-                .HasMaxLength(500);
-
             builder.Property(s => s.DisplayOrder)
-                .IsRequired();
+                .IsRequired()
+                .HasDefaultValue(0);
+
+            builder.HasOne(s => s.Narrative)
+            .WithMany(n => n.Sections)
+            .HasForeignKey(s => s.NarrativeId)
+            .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasIndex(s => new { s.NarrativeId, s.DisplayOrder });
         }

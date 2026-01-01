@@ -9,6 +9,7 @@ using Sukun.Application.Seeder.Quran;
 using Sukun.Application.Seeder.Tafsir_entity;
 using Sukun.Domin.Enums;
 using Sukun.Infrastructure;
+using Sukun.Infrastructure.Common;
 using Sukun.Infrastructure.Configuration;
 using Sukun.Infrastructure.Context;
 using Sukun.Middleware;

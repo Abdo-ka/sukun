@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Sukun.Application.Dtos.IslamicBook.Request;
 using Sukun.Application.Dtos.IslamicBookSection.Response;
 using Sukun.Application.Interfaces;
@@ -36,20 +37,27 @@ namespace Sukun.Application.Implemantation
                 return Result<IEnumerable<IslamicBookSectionResponseDto>>.NotFound("Book not found");
 
             var sections = await _sectionRepository.GetByBookAsync(bookId);
-            return Result<IEnumerable<IslamicBookSectionResponseDto>>.Success(
-                sections.Select(s => s.ToSectionDto()));
+            var dtos = sections.Select(s => s.ToSectionDto()).ToList();
+            foreach ( var dto in dtos)
+            {
+                dto.HadithsCount = await _unitOfWork.Hadiths.CountAsync(h => h.SectionId == dto.Id);
+
+            }
+            return Result<IEnumerable<IslamicBookSectionResponseDto>>.Success(dtos);
         }
 
         public async Task<Result<IslamicBookSectionResponseDto>> GetByIdAsync(Guid id)
         {
-            var section = await _sectionRepository.GetByIdWithIncludesAsync(id , x=>x.Hadiths,x=>x.Contents);
+            var section = await _sectionRepository.GetByIdWithIncludesAsync(id ,x=>x.Contents);
             if (section == null || section.IsDeleted)
                 return Result<IslamicBookSectionResponseDto>.NotFound("Section not found");
+            var hadithsCount = await _unitOfWork.Hadiths.CountAsync(h => h.SectionId == id);
 
-            return Result<IslamicBookSectionResponseDto>.Success(section.ToSectionDto());
+            var dto = section.ToSectionDto();
+            dto.HadithsCount = hadithsCount;
+
+            return Result<IslamicBookSectionResponseDto>.Success(dto);
         }
-
-        // ====================== Admin ======================
 
         public async Task<Result<IslamicBookSectionResponseDto>> CreateAsync(Guid bookId, IslamicBookSectionCreateDto dto)
         {

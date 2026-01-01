@@ -1,6 +1,9 @@
 ﻿using Sukun.Application.Dtos.City.Request;
 using Sukun.Application.Dtos.Narrative.Request;
 using Sukun.Application.Dtos.Narrative.Response;
+using Sukun.Application.Dtos.NarrativeSection.Request;
+using Sukun.Application.Dtos.NarrativeSection.Response;
+using Sukun.Application.Dtos.Tag.Response;
 using Sukun.Domin.Entities;
 
 namespace Sukun.Application.Mapper
@@ -16,8 +19,6 @@ namespace Sukun.Application.Mapper
                 TitleAr = entity.TitleAr,
                 Type = entity.Type,
                 ShortDescription = entity.ShortDescription,
-                ParentId = entity.ParentId ,
-                CoverImageUrl = entity.CoverImageUrl,
                 IsFeatured = entity.IsFeatured,
                 ViewCount = entity.ViewCount
             };
@@ -32,39 +33,24 @@ namespace Sukun.Application.Mapper
                 TitleAr = entity.TitleAr,
                 Type = entity.Type,
                 ShortDescription = entity.ShortDescription,
-                ParentId = entity.ParentId,
-                CoverImageUrl = entity.CoverImageUrl,
                 IsFeatured = entity.IsFeatured,
                 ViewCount = entity.ViewCount,
                 Sections = entity.Sections
                     .OrderBy(s => s.DisplayOrder)
                     .Select(s => s.ToSectionDto())
                     .ToList(),
-                Children = entity.Children.Select(ToResponseDto) // أو ToResponseDto إذا أردت تفاصيل الأبناء
+                Tags= entity.NarrativeTags.Select(t => new TagResponseDto
+                {
+                    Id=t.TagId,
+                    NameAr = t.Tag.NameAr,
+                    Name = t.Tag.Name
+                }).ToList(),
+                Categories = entity.NarrativeCategories
+                .Select(nc => nc.Category.ToResponseDto())
+                .ToList()
             };
         }
-
-        public static NarrativeResponseDto ToResponseDtoWithChildren(this Narrative entity)
-        {
-            return new NarrativeResponseDto
-            {
-                Id = entity.Id,
-                Title = entity.Title,
-                TitleAr = entity.TitleAr,
-                Type = entity.Type,
-                ShortDescription = entity.ShortDescription,
-                ParentId = entity.ParentId,
-                CoverImageUrl = entity.CoverImageUrl,
-                IsFeatured = entity.IsFeatured,
-                ViewCount = entity.ViewCount,
-                Sections = entity.Sections
-                    .OrderBy(s => s.DisplayOrder)
-                    .Select(s => s.ToSectionDto())
-                    .ToList(),
-                Children = entity.Children.Select(c => c.ToResponseDtoWithChildren()).ToList()
-            };
-        }
-
+       
         public static NarrativeSectionResponseDto ToSectionDto(this NarrativeSection section)
         {
             return new NarrativeSectionResponseDto
@@ -73,7 +59,6 @@ namespace Sukun.Application.Mapper
                 Title = section.Title,
                 Content = section.Content,
                 DisplayOrder = section.DisplayOrder,
-                MediaUrl = section.MediaUrl
             };
         }
         public static NarrativeSection FromCreateSectionDto(this NarrativeSectionCreateDto sectionDto)
@@ -83,7 +68,6 @@ namespace Sukun.Application.Mapper
                 Title = sectionDto.Title,
                 Content = sectionDto.Content,
                 DisplayOrder = sectionDto.DisplayOrder,
-                MediaUrl = sectionDto.MediaUrl
             };
         }
         public static Narrative FromCreateDto(this NarrativeCreateDto dto)
@@ -94,8 +78,6 @@ namespace Sukun.Application.Mapper
                 TitleAr = dto.TitleAr,
                 Type = dto.Type,
                 ShortDescription = dto.ShortDescription,
-                ParentId = dto.ParentId,
-                CoverImageUrl = dto.CoverImageUrl,
                 IsFeatured = dto.IsFeatured,
                 Sections = dto.Sections
                     .OrderBy(s => s.DisplayOrder)

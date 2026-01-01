@@ -12,23 +12,17 @@ namespace Sukun.Infrastructure.Configuration
 
             builder.ToTable("Tags");
 
-            builder.Property(t => t.TagType)
-                .IsRequired();
+            builder.Property(t => t.Name)
+                .IsRequired()
+                .HasMaxLength(100);
 
             builder.Property(t => t.NameAr)
                 .IsRequired()
                 .HasMaxLength(100);
 
-            builder.Property(t => t.NameEn)
-                .IsRequired()
-                .HasMaxLength(100);
+            builder.HasIndex(t => t.Name)
+            .IsUnique();
 
-            builder.Property(t => t.IconUrl)
-                .HasMaxLength(500);
-
-            // كل TagType واحد فقط في الجدول (لا تكرار)
-            builder.HasIndex(t => t.TagType)
-                .IsUnique();
         }
     }
 }

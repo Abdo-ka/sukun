@@ -22,21 +22,6 @@ namespace Sukun.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("NarrativeTag", b =>
-                {
-                    b.Property<Guid>("NarrativesId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("TagsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("NarrativesId", "TagsId");
-
-                    b.HasIndex("TagsId");
-
-                    b.ToTable("NarrativeTags", (string)null);
-                });
-
             modelBuilder.Entity("Sukun.Domin.Entities.Admin", b =>
                 {
                     b.Property<Guid>("Id")
@@ -102,7 +87,7 @@ namespace Sukun.Infrastructure.Migrations
                         .IsUnique()
                         .HasDatabaseName("IX_Admins_Email");
 
-                    b.ToTable("Admins");
+                    b.ToTable("Admins", (string)null);
                 });
 
             modelBuilder.Entity("Sukun.Domin.Entities.AsmaulHusna", b =>
@@ -177,7 +162,7 @@ namespace Sukun.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("BaseEntity");
+                    b.ToTable("BaseEntity", (string)null);
                 });
 
             modelBuilder.Entity("Sukun.Domin.Entities.BookContent", b =>
@@ -233,6 +218,65 @@ namespace Sukun.Infrastructure.Migrations
                     b.HasIndex("SectionId");
 
                     b.ToTable("BookContents", (string)null);
+                });
+
+            modelBuilder.Entity("Sukun.Domin.Entities.Category", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
+
+                    b.Property<DateTime>("CreateAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<bool>("IsMainSection")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<int>("Order")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("TitleAr")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("Version")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasDefaultValue(1L)
+                        .HasColumnName("Version");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsMainSection");
+
+                    b.HasIndex("Order");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("Sukun.Domin.Entities.City", b =>
@@ -808,10 +852,6 @@ namespace Sukun.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWID()");
 
-                    b.Property<string>("CoverImageUrl")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
                     b.Property<DateTime>("CreateAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
@@ -823,10 +863,9 @@ namespace Sukun.Infrastructure.Migrations
                         .HasDefaultValue(false);
 
                     b.Property<bool>("IsFeatured")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid?>("ParentId")
-                        .HasColumnType("uniqueidentifier");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.Property<string>("ShortDescription")
                         .HasMaxLength(500)
@@ -854,17 +893,63 @@ namespace Sukun.Infrastructure.Migrations
                         .HasColumnName("Version");
 
                     b.Property<int>("ViewCount")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
                     b.HasKey("Id");
 
                     b.HasIndex("IsFeatured");
 
-                    b.HasIndex("ParentId");
-
                     b.HasIndex("Type");
 
                     b.ToTable("Narratives", (string)null);
+                });
+
+            modelBuilder.Entity("Sukun.Domin.Entities.NarrativeCategory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreateAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<int>("DisplayOrder")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<Guid>("NarrativeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("Version")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasDefaultValue(1L)
+                        .HasColumnName("Version");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("NarrativeId");
+
+                    b.ToTable("NarrativeCategories", (string)null);
                 });
 
             modelBuilder.Entity("Sukun.Domin.Entities.NarrativeSection", b =>
@@ -885,16 +970,14 @@ namespace Sukun.Infrastructure.Migrations
                         .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<int>("DisplayOrder")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
-
-                    b.Property<string>("MediaUrl")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
 
                     b.Property<Guid>("NarrativeId")
                         .HasColumnType("uniqueidentifier");
@@ -918,6 +1001,47 @@ namespace Sukun.Infrastructure.Migrations
                     b.HasIndex("NarrativeId", "DisplayOrder");
 
                     b.ToTable("NarrativeSections", (string)null);
+                });
+
+            modelBuilder.Entity("Sukun.Domin.Entities.NarrativeTags", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
+
+                    b.Property<DateTime>("CreateAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<Guid>("NarrativeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TagId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("Version")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasDefaultValue(1L)
+                        .HasColumnName("Version");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NarrativeId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("NarrativeTags", (string)null);
                 });
 
             modelBuilder.Entity("Sukun.Domin.Entities.QuranSurah", b =>
@@ -1282,27 +1406,20 @@ namespace Sukun.Infrastructure.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETUTCDATE()");
 
-                    b.Property<string>("IconUrl")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<string>("NameAr")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("NameEn")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("TagType")
-                        .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -1315,7 +1432,7 @@ namespace Sukun.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TagType")
+                    b.HasIndex("Name")
                         .IsUnique();
 
                     b.ToTable("Tags", (string)null);
@@ -1376,21 +1493,6 @@ namespace Sukun.Infrastructure.Migrations
                     b.ToTable("Tasbihs", (string)null);
                 });
 
-            modelBuilder.Entity("NarrativeTag", b =>
-                {
-                    b.HasOne("Sukun.Domin.Entities.Narrative", null)
-                        .WithMany()
-                        .HasForeignKey("NarrativesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Sukun.Domin.Entities.Tag", null)
-                        .WithMany()
-                        .HasForeignKey("TagsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Sukun.Domin.Entities.BookContent", b =>
                 {
                     b.HasOne("Sukun.Domin.Entities.IslamicBookSection", "Section")
@@ -1400,6 +1502,16 @@ namespace Sukun.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Section");
+                });
+
+            modelBuilder.Entity("Sukun.Domin.Entities.Category", b =>
+                {
+                    b.HasOne("Sukun.Domin.Entities.Category", "Parent")
+                        .WithMany("Children")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Parent");
                 });
 
             modelBuilder.Entity("Sukun.Domin.Entities.DuaItem", b =>
@@ -1441,7 +1553,8 @@ namespace Sukun.Infrastructure.Migrations
                 {
                     b.HasOne("Sukun.Domin.Entities.Hadith", "Hadith")
                         .WithMany("Explanations")
-                        .HasForeignKey("HadithId");
+                        .HasForeignKey("HadithId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Hadith");
                 });
@@ -1468,14 +1581,23 @@ namespace Sukun.Infrastructure.Migrations
                     b.Navigation("City");
                 });
 
-            modelBuilder.Entity("Sukun.Domin.Entities.Narrative", b =>
+            modelBuilder.Entity("Sukun.Domin.Entities.NarrativeCategory", b =>
                 {
-                    b.HasOne("Sukun.Domin.Entities.Narrative", "Parent")
-                        .WithMany("Children")
-                        .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                    b.HasOne("Sukun.Domin.Entities.Category", "Category")
+                        .WithMany("NarrativeCategories")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Parent");
+                    b.HasOne("Sukun.Domin.Entities.Narrative", "Narrative")
+                        .WithMany("NarrativeCategories")
+                        .HasForeignKey("NarrativeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Narrative");
                 });
 
             modelBuilder.Entity("Sukun.Domin.Entities.NarrativeSection", b =>
@@ -1483,9 +1605,29 @@ namespace Sukun.Infrastructure.Migrations
                     b.HasOne("Sukun.Domin.Entities.Narrative", "Narrative")
                         .WithMany("Sections")
                         .HasForeignKey("NarrativeId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Narrative");
+                });
+
+            modelBuilder.Entity("Sukun.Domin.Entities.NarrativeTags", b =>
+                {
+                    b.HasOne("Sukun.Domin.Entities.Narrative", "Narrative")
+                        .WithMany("NarrativeTags")
+                        .HasForeignKey("NarrativeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Sukun.Domin.Entities.Tag", "Tag")
+                        .WithMany("NarrativeTags")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Narrative");
+
+                    b.Navigation("Tag");
                 });
 
             modelBuilder.Entity("Sukun.Domin.Entities.QuranVerse", b =>
@@ -1539,6 +1681,13 @@ namespace Sukun.Infrastructure.Migrations
                     b.Navigation("Verse");
                 });
 
+            modelBuilder.Entity("Sukun.Domin.Entities.Category", b =>
+                {
+                    b.Navigation("Children");
+
+                    b.Navigation("NarrativeCategories");
+                });
+
             modelBuilder.Entity("Sukun.Domin.Entities.DuaCategory", b =>
                 {
                     b.Navigation("Duas");
@@ -1570,7 +1719,9 @@ namespace Sukun.Infrastructure.Migrations
 
             modelBuilder.Entity("Sukun.Domin.Entities.Narrative", b =>
                 {
-                    b.Navigation("Children");
+                    b.Navigation("NarrativeCategories");
+
+                    b.Navigation("NarrativeTags");
 
                     b.Navigation("Sections");
                 });
@@ -1595,6 +1746,11 @@ namespace Sukun.Infrastructure.Migrations
             modelBuilder.Entity("Sukun.Domin.Entities.RemembranceCategory", b =>
                 {
                     b.Navigation("RemembranceCategoryLinks");
+                });
+
+            modelBuilder.Entity("Sukun.Domin.Entities.Tag", b =>
+                {
+                    b.Navigation("NarrativeTags");
                 });
 #pragma warning restore 612, 618
         }

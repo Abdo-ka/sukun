@@ -1,6 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Sukun.Application.Dtos.Narrative.Request;
 using Sukun.Application.Dtos.Narrative.Response;
+using Sukun.Application.Dtos.NarrativeSection.Request;
+using Sukun.Application.Dtos.NarrativeSection.Response;
 using Sukun.Application.Dtos.User_Entity.Request;
 using Sukun.Application.Interfaces;
 using Sukun.Application.Mapper;
@@ -30,47 +33,107 @@ namespace Sukun.Application.Implemantation
             ;
         }
 
+    
+
+        public async Task<Result<IEnumerable<NarrativeListResponseDto>>> GetFeaturedAsync(int count = 10)
+        {
+            try
+            {
+                var narratives = await _narrativeRepository.GetFeaturedAsync(count);
+                var dtos = narratives.Select(n => n.ToListDto());
+                return Result<IEnumerable<NarrativeListResponseDto>>.Success(dtos);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving featured narratives");
+                return Result<IEnumerable<NarrativeListResponseDto>>.BadRequest("An error occurred");
+            }
+        }
+
+        public async Task<Result<PagedResponseDto<NarrativeResponseDto>>> GetPagedAsync(PagedRequestDto request , ContentType? type = null, Guid? tagId = null , Guid? categoryId = null)
+        {
+            if (request.PageNumber < 1) request.PageNumber = 1;
+            if (request.PageSize < 1 || request.PageSize > 100) request.PageSize = 20;
+            var query = _narrativeRepository.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(request.SearchTerm))
+            {
+                var term = request.SearchTerm.Trim().ToLower();
+                query = query.Where(n =>
+                    n.Title.ToLower().Contains(term) ||
+                    n.TitleAr != null && n.TitleAr.ToLower().Contains(term) ||
+                    n.ShortDescription != null && n.ShortDescription.ToLower().Contains(term)
+                );
+            }
+
+            query = query.OrderBy(n => n.Title);
+
+            query = query.Include(n=>n.Sections)
+                         .Include(n => n.NarrativeTags)
+                            .ThenInclude(n=>n.Tag)
+                         .Include(n => n.NarrativeCategories)
+                            .ThenInclude(nc=>nc.Category);
+
+            if (type.HasValue)
+                query = query.Where(n => n.Type == type.Value);
+
+            if (tagId.HasValue)
+                query = query.Where(n => n.NarrativeTags.Any(nt=>nt.TagId == tagId.Value));
+
+            if (categoryId.HasValue)
+                query = query.Where(n => n.NarrativeCategories.Any(nc => nc.CategoryId == categoryId.Value));
+
+            var dtoQuery = query.Select(n => n.ToResponseDto());
+
+            var pagedResult = await dtoQuery.ToPaginatedListAsync(request.PageNumber, request.PageSize);
+
+            return Result<PagedResponseDto<NarrativeResponseDto>>.Success(pagedResult);
+        }
         public async Task<Result<IEnumerable<NarrativeListResponseDto>>> GetAllAsync()
         {
             var narratives = await _narrativeRepository.GetAllAsync();
             return Result<IEnumerable<NarrativeListResponseDto>>.Success(narratives.Select(NarrativeMapper.ToListDto));
         }
-
-        public async Task<Result<IEnumerable<NarrativeListResponseDto>>> GetRootAsync()
-        {
-            var narratives = await _narrativeRepository.GetRootNarrativesAsync();
-            return Result<IEnumerable<NarrativeListResponseDto>>.Success(narratives.Select(n => n.ToListDto()));
-        }
-
         public async Task<Result<IEnumerable<NarrativeListResponseDto>>> GetByTypeAsync(ContentType type)
         {
             var narratives = await _narrativeRepository.GetByTypeAsync(type);
             return Result<IEnumerable<NarrativeListResponseDto>>.Success(narratives.Select(n => n.ToListDto()));
         }
 
-        public async Task<Result<IEnumerable<NarrativeListResponseDto>>> GetFeaturedAsync()
+        public async Task<Result<IEnumerable<NarrativeResponseDto>>> GetAllWithFullContent(ContentType? type = null, Guid? tagId = null, Guid? categoryId = null)
         {
-            var narratives = await _narrativeRepository.GetFeaturedAsync();
-            return Result<IEnumerable<NarrativeListResponseDto>>.Success(narratives.Select(n => n.ToListDto()));
+            var narratives = await _narrativeRepository.GetAllWithDetailsAsync(type, tagId , categoryId);
+            return Result<IEnumerable<NarrativeResponseDto>>.Success(narratives.Select(n => n.ToResponseDto()));
         }
-
-        public async Task<Result<IEnumerable<NarrativeListResponseDto>>> GetChildrenAsync(Guid parentId)
+        public async Task<Result<NarrativeResponseDto>> GetByIdWithFullDetailsAsync(Guid id, ContentType? type = null, Guid? tagId = null, Guid? categoryId = null)
         {
-            var children = await _narrativeRepository.GetChildrenAsync(parentId);
-            return Result<IEnumerable<NarrativeListResponseDto>>.Success(children.Select(n => n.ToListDto()));
-        }
-
-        public async Task<Result<NarrativeResponseDto>> GetByIdWithFullDetailsAsync(Guid id)
-        {
-            var narrative = await _narrativeRepository.GetByIdWithFullDetailsAsync(id);
+            var narrative = await _narrativeRepository.GetByIdWithDetailsAsync(id, type, tagId, categoryId);
             if (narrative == null)
                 return Result<NarrativeResponseDto>.NotFound("Narrative not found");
 
-            await IncrementViewCountAsync(id); // زيادة المشاهدات عند القراءة الكاملة
+            await IncrementViewCountAsync(id);
 
-            return Result<NarrativeResponseDto>.Success(narrative.ToResponseDtoWithChildren());
+            return Result<NarrativeResponseDto>.Success(narrative.ToResponseDto());
         }
+        public async Task<Result<NarrativeListResponseDto>> GetByIdAsync(Guid id)
+        {
+            try
+            {
+                var narrative = await _narrativeRepository.GetByIdAsync(id);
+                if (narrative == null)
+                    return Result<NarrativeListResponseDto>.NotFound("Narrative not found");
 
+                await IncrementViewCountAsync(id);
+
+                var dto = narrative.ToListDto();
+                return Result<NarrativeListResponseDto>.Success(dto);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving narrative {Id}", id);
+                return Result<NarrativeListResponseDto>.BadRequest("An error occurred while retrieving the narrative");
+            }
+        }
         public async Task<Result> IncrementViewCountAsync(Guid id)
         {
             var narrative = await _narrativeRepository.GetByIdAsync(id);
@@ -81,88 +144,241 @@ namespace Sukun.Application.Implemantation
             return Result.Success();
         }
 
-        // ====================== Admin CRUD ======================
-
         public async Task<Result<NarrativeResponseDto>> CreateAsync(NarrativeCreateDto dto)
         {
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+                var narrative = dto.FromCreateDto();
 
-            var narrative = await _narrativeRepository.AddAsync(dto.FromCreateDto());
-            await _unitOfWork.CompleteAsync();
 
-            var created = await _narrativeRepository.GetByIdWithFullDetailsAsync(narrative.Value.Id);
-            return Result<NarrativeResponseDto>.Success(created!.ToResponseDtoWithChildren());
+                if (dto.TagIds.Any())
+                {
+                    narrative.NarrativeTags = dto.TagIds.Select(tagId => new NarrativeTags
+                    {
+                        TagId = tagId
+                    }).ToList();
+                }
+
+                if (dto.CategoryIds.Any())
+                {
+                    narrative.NarrativeCategories = dto.CategoryIds.Select(catId => new NarrativeCategory
+                    {
+                        CategoryId = catId,
+                        DisplayOrder = 0
+                    }).ToList();
+
+                }
+                var addResult = await _narrativeRepository.AddAsync(narrative);
+                if (!addResult.IsSuccess)
+                {
+                    await _unitOfWork.RollbackTransactionAsync();
+                    return Result<NarrativeResponseDto>.Failure(addResult.Message);
+                }
+
+                await _unitOfWork.CommitTransactionAsync();
+
+                var created = await _narrativeRepository.GetByIdWithDetailsAsync(narrative.Id);
+                return Result<NarrativeResponseDto>.Success(created!.ToResponseDto());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error creating narrative");
+                return Result<NarrativeResponseDto>.BadRequest("An error occurred while creating the narrative");
+            }
         }
 
         public async Task<Result<NarrativeResponseDto>> UpdateAsync(Guid id, NarrativeUpdateDto dto)
         {
-            var narrative = await _narrativeRepository.GetByIdWithFullDetailsAsync(id);
-            if (narrative == null)
-                return Result<NarrativeResponseDto>.NotFound("Narrative not found");
-
-            if (!string.IsNullOrEmpty(dto.Title)) narrative.Title = dto.Title;
-            if (dto.TitleAr != null) narrative.TitleAr = dto.TitleAr;
-            if (dto.Type.HasValue) narrative.Type = dto.Type.Value;
-            if (dto.ShortDescription != null) narrative.ShortDescription = dto.ShortDescription;
-            if (dto.ParentId.HasValue) narrative.ParentId = dto.ParentId;
-            if (dto.CoverImageUrl != null) narrative.CoverImageUrl = dto.CoverImageUrl;
-            if (dto.IsFeatured.HasValue) narrative.IsFeatured = dto.IsFeatured.Value;
-
-            if (dto.Sections != null)
+            try
             {
-                // تحسين: تحديث أو إضافة/حذف بناءً على ID (بدلاً من حذف الكل)
-                var existingSections = narrative.Sections.ToList();
-                foreach (var sectionDto in dto.Sections)
+                await _unitOfWork.BeginTransactionAsync();
+
+                var narrative = await _narrativeRepository.GetByIdWithDetailsAsync(id);
+                if (narrative == null)
                 {
-                    if (sectionDto.Id.HasValue)
+                    await _unitOfWork.RollbackTransactionAsync();
+                    return Result<NarrativeResponseDto>.NotFound("Narrative not found");
+                }
+
+               
+                if (dto.TagIds != null)
+                {
+                    var currentTags = narrative.NarrativeTags.ToList();
+
+                    var desiredTagIds = dto.TagIds.Distinct().ToList();
+                    var currentTagIds = currentTags.Select(nt => nt.TagId).ToList();
+                    var toAdd = desiredTagIds.Except(currentTagIds).Select(tagId => new NarrativeTags
                     {
-                        var existing = existingSections.FirstOrDefault(s => s.Id == sectionDto.Id.Value);
-                        if (existing != null)
-                        {
-                            existing.Title = sectionDto.Title;
-                            existing.Content = sectionDto.Content;
-                            existing.DisplayOrder = sectionDto.DisplayOrder.Value;
-                            existing.MediaUrl = sectionDto.MediaUrl;
-                        }
-                    }
-                    else
+                        NarrativeId = id,
+                        TagId = tagId
+                    }).ToList();
+
+                    var toRemoveTags = currentTags
+                                        .Where(nt => !desiredTagIds.Contains(nt.TagId))
+                                        .ToList();
+
+                    if (toAdd.Any())
+                        await _unitOfWork.NarrativeTags.AddRangeAsync(toAdd);
+
+                    if (toRemoveTags.Any())
+                         await _unitOfWork.NarrativeTags.DeleteRangeAsync(toRemoveTags);
+                }
+
+                if (dto.CategoryIds != null)
+                {
+
+                    var currentCategories = narrative.NarrativeCategories.ToList();
+
+                    var currentCategoryIds = currentCategories.Select(nc => nc.CategoryId).ToList();
+                    var desiredCategoryIds = dto.CategoryIds.Distinct().ToList();
+
+                    var toAddCats = desiredCategoryIds.Except(currentCategoryIds).Select(catId => new NarrativeCategory
                     {
-                        narrative.Sections.Add(new NarrativeSection
-                        {
-                            Title = sectionDto.Title,
-                            Content = sectionDto.Content,
-                            DisplayOrder = sectionDto.DisplayOrder.Value,
-                            MediaUrl = sectionDto.MediaUrl,
-                            NarrativeId = id
-                        });
+                        NarrativeId = id,
+                        CategoryId = catId,
+                        DisplayOrder = 0
+                    }).ToList();
+
+                    var toRemoveCats = currentCategories
+                                      .Where(nc => !desiredCategoryIds.Contains(nc.CategoryId))
+                                      .ToList();
+
+                    if (toAddCats.Any())
+                        await _unitOfWork.NarrativeCategories.AddRangeAsync(toAddCats);
+
+                    if (toRemoveCats.Any())
+                        await _unitOfWork.NarrativeCategories.DeleteRangeAsync(toRemoveCats);
+                } 
+
+                #region
+                var sentSectionIds = dto.Sections.Where(s => s.Id.HasValue).Select(s => s.Id.Value).ToList();
+                if (sentSectionIds.Distinct().Count() != sentSectionIds.Count)
+                {
+                    await _unitOfWork.RollbackTransactionAsync();
+                    return Result<NarrativeResponseDto>.BadRequest("Duplicate section IDs are not allowed");
+                }
+
+                // 2. فحص أن كل Id مرسل موجود فعليًا في DB وينتمي للـ Narrative
+                var currentSectionIds = narrative.Sections.Select(s => s.Id).ToHashSet();
+                var invalidIds = sentSectionIds.Where(sentId => !currentSectionIds.Contains(sentId)).ToList();
+
+                if (invalidIds.Any())
+                {
+                    await _unitOfWork.RollbackTransactionAsync();
+                    return Result<NarrativeResponseDto>.BadRequest(
+                        $"The following section IDs do not exist or do not belong to this narrative: {string.Join(", ", invalidIds)}");
+                }
+
+                // 3. إضافة الأقسام الجديدة (بدون Id)
+                var newSections = dto.Sections
+                    .Where(s => !s.Id.HasValue)
+                    .Select(s => new NarrativeSection
+                    {
+                        Id = Guid.NewGuid(),
+                        NarrativeId = id,
+                        Title = s.Title ?? "New Section",
+                        Content = s.Content ?? string.Empty,
+                        DisplayOrder = s.DisplayOrder ?? narrative.Sections.Count + 1,
+                        CreateAt = DateTime.UtcNow,
+                        UpdatedAt = DateTime.UtcNow
+                    })
+                    .ToList();
+
+                if (newSections.Any())
+                {
+                    foreach (var section in newSections)
+                    {
+                        await _unitOfWork.NarrativeSection.AddAsync(section);
                     }
                 }
-                // حذف الأقسام غير الموجودة في DTO
-                foreach (var existing in existingSections)
+
+                // 4. تعديل الأقسام الموجودة (مع Id)
+                foreach (var sectionDto in dto.Sections.Where(s => s.Id.HasValue))
                 {
-                    if (!dto.Sections.Any(s => s.Id == existing.Id))
+                    var sectionId = sectionDto.Id!.Value;
+
+                    var existingSection = await _unitOfWork.NarrativeSection.AsQueryableNoTracking()
+                        .FirstOrDefaultAsync(s => s.Id == sectionId && s.NarrativeId == id);
+
+                    if (existingSection != null)
                     {
-                        narrative.Sections.Remove(existing);
+                        if (!string.IsNullOrEmpty(sectionDto.Title)) existingSection.Title = sectionDto.Title;
+                        if (sectionDto.Content != null) existingSection.Content = sectionDto.Content;
+                        if (sectionDto.DisplayOrder.HasValue) existingSection.DisplayOrder = sectionDto.DisplayOrder.Value;
+
+                        existingSection.UpdatedAt = DateTime.UtcNow;
+
+                        await _unitOfWork.NarrativeSection.UpdateAsync(existingSection);
                     }
                 }
+
+                // 5. حذف الأقسام غير المرسلة
+                var sentIdsHash = sentSectionIds.ToHashSet();
+                var sectionsToDelete = narrative.Sections
+                    .Where(s => currentSectionIds.Contains(s.Id) && !sentIdsHash.Contains(s.Id))
+                    .ToList();
+
+                if (sectionsToDelete.Any())
+                {
+                    await _unitOfWork.NarrativeSection.DeleteRangeAsync(sectionsToDelete);
+                    foreach (var section in newSections)
+                    {
+                        if (sectionsToDelete.Contains(section))
+                            narrative.Sections.Remove(section);
+                    }
+                }
+                #endregion
+
+                if (!string.IsNullOrEmpty(dto.Title)) narrative.Title = dto.Title;
+                if (dto.TitleAr != null) narrative.TitleAr = dto.TitleAr;
+                if (dto.ShortDescription != null) narrative.ShortDescription = dto.ShortDescription;
+                if (dto.IsFeatured) narrative.IsFeatured = dto.IsFeatured;
+                narrative.Type = dto.Type;
+
+                narrative.UpdatedAt = DateTime.UtcNow;
+                var updateResult=  await _narrativeRepository.UpdateAsync(narrative);
+                if(!updateResult.IsSuccess)
+                {
+                    await _unitOfWork.RollbackTransactionAsync();
+                    _logger.LogError("Error updating narrative {Id}", id);
+                    return Result<NarrativeResponseDto>.BadRequest("An error occurred while updating the narrative");
+                }
+                await _unitOfWork.CommitTransactionAsync();
+
+                var updated = await _narrativeRepository.GetByIdWithDetailsAsync(id);
+                return Result<NarrativeResponseDto>.Success(updated!.ToResponseDto());
             }
-
-            var updateResult = await _narrativeRepository.UpdateAsync(narrative);
-            if (!updateResult.IsSuccess) return Result<NarrativeResponseDto>.Failure(updateResult.Message);
-            await _unitOfWork.CompleteAsync();
-            var updated = await _narrativeRepository.GetByIdWithFullDetailsAsync(id);
-            return Result<NarrativeResponseDto>.Success(updated!.ToResponseDto());
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                _logger.LogError(ex, "Error updating narrative {Id}", id);
+                return Result<NarrativeResponseDto>.BadRequest("An error occurred while updating the narrative");
+            }
         }
-        public async Task<Result> SoftDeleteAsync(Guid id)
+
+        public async Task<Result<bool>> SoftDeleteAsync(Guid id)
         {
-            var narrative = await _narrativeRepository.GetByIdAsync(id);
-            if (narrative == null)
-                return Result.Failure("Narrative not found");
+            try
+            {
+                var narrative = await _narrativeRepository.GetByIdAsync(id);
+                if (narrative == null)
+                    return Result<bool>.NotFound("Narrative not found");
 
-            narrative.IsDeleted = true;
-            await _unitOfWork.CompleteAsync();
+                var deleteResult = await _narrativeRepository.DeleteAsync(narrative);
+                if (!deleteResult.IsSuccess)
+                    return deleteResult;
 
-            return Result.Success();
+                await _unitOfWork.CompleteAsync();
+                return Result<bool>.Success(true);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error soft deleting narrative {Id}", id);
+                return Result<bool>.BadRequest("An error occurred while deleting the narrative");
+            }
         }
+
         public async Task<Result<NarrativeSectionResponseDto>> AddSectionAsync(Guid narrativeId, NarrativeSectionCreateDto dto)
         {
             // تحقق من وجود Narrative
@@ -221,49 +437,7 @@ namespace Sukun.Application.Implemantation
 
             return Result<NarrativeSectionResponseDto>.Success(section.ToResponseDto());
         }
-        public async Task<Result<PagedResponseDto<NarrativeListResponseDto>>> GetPagedAsync(PagedRequestDto request)
-        {
-            var query = _narrativeRepository.AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(request.SearchTerm))
-            {
-                var term = request.SearchTerm.Trim().ToLower();
-                query = query.Where(n =>
-                    n.Title.ToLower().Contains(term) ||
-                    n.TitleAr != null && n.TitleAr.ToLower().Contains(term) ||
-                    n.ShortDescription != null && n.ShortDescription.ToLower().Contains(term)
-                );
-            }
-
-            query = query.OrderBy(n => n.Title);
-
-            var dtoQuery = query.Select(n => n.ToListDto());
-
-            var pagedResult = await dtoQuery.ToPaginatedListAsync(request.PageNumber, request.PageSize);
-
-            return Result<PagedResponseDto<NarrativeListResponseDto>>.Success(pagedResult);
-        }
-        private async Task<Result<IEnumerable<NarrativeListResponseDto>>> GetChildrenByTagAsync(NarrativeTag tag)
-        {
-            var children = await _narrativeRepository.GetChildrenOfTaggedSectionAsync(tag);
-            return Result<IEnumerable<NarrativeListResponseDto>>.Success(
-                children.Select(c => c.ToListDto()));
-        }
-
-        public async Task<Result<IEnumerable<NarrativeListResponseDto>>> GetProphetLifeMainSectionsAsync()
-            => await GetChildrenByTagAsync(NarrativeTag.ProphetLife);
-
-        public async Task<Result<IEnumerable<NarrativeListResponseDto>>> GetProphetBattlesAsync()
-            => await GetChildrenByTagAsync(NarrativeTag.ProphetBattles);
-
-        public async Task<Result<IEnumerable<NarrativeListResponseDto>>> GetProphetWivesAsync()
-            => await GetChildrenByTagAsync(NarrativeTag.ProphetWives);
-
-        public async Task<Result<IEnumerable<NarrativeListResponseDto>>> GetCompanionsStoriesAsync()
-            => await GetChildrenByTagAsync(NarrativeTag.Companions);
-
-        public async Task<Result<IEnumerable<NarrativeListResponseDto>>> GetProphetsStoriesAsync()
-            => await GetChildrenByTagAsync(NarrativeTag.ProphetsStories);
 
 
     }

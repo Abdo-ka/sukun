@@ -131,46 +131,68 @@ namespace Sukun.Infrastructure.InfrastructureBases
             return _dbSet.AsQueryable().Where(e => !e.IsDeleted).AsNoTracking();
         }
   
-        public virtual async Task<Result<int>> DeleteRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default)
+        public virtual async Task<Result<bool>> DeleteRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default)
         {
             try
             {
-                _dbSet.RemoveRange(entities);
-                var result = await _context.SaveChangesAsync(cancellationToken);
-                return Result<int>.Success(result);
+                foreach (var entity in entities)
+                    entity.IsDeleted = true;
+                _dbSet.UpdateRange(entities);
+                return Result<bool>.Success(true);
             }
             catch (DbUpdateException dbEx)
             {
                 _logger.LogError(dbEx, "Database error while deleting multiple entities");
-                return Result<int>.Failure(dbEx.InnerException?.Message ?? dbEx.Message);
+                return Result<bool>.Failure(dbEx.InnerException?.Message ?? dbEx.Message);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error deleting multiple entities");
-                return Result<int>.Failure(ex.Message);
+                return Result<bool>.Failure(ex.Message);
             }
         }
-        public virtual async Task<Result<int>> DeleteRangeAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
+        public virtual async Task<Result<bool>> DeleteRangeAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
         {
             try
             {
                 var entities = await _dbSet.Where(predicate).ToListAsync(cancellationToken);
                 if (!entities.Any())
-                    return Result<int>.Success(0);
+                    return Result<bool>.Success(true);
 
-                _dbSet.RemoveRange(entities);
-                var result = await _context.SaveChangesAsync(cancellationToken);
-                return Result<int>.Success(result);
+                foreach (var entity in entities)
+                    entity.IsDeleted = true;
+                _dbSet.UpdateRange(entities);
+                return Result<bool>.Success(true);
             }
             catch (DbUpdateException dbEx)
             {
                 _logger.LogError(dbEx, "Database error while deleting multiple entities by predicate");
-                return Result<int>.Failure(dbEx.InnerException?.Message ?? dbEx.Message);
+                return Result<bool>.Failure(dbEx.InnerException?.Message ?? dbEx.Message);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error deleting multiple entities by predicate");
-                return Result<int>.Failure(ex.Message);
+                return Result<bool>.Failure(ex.Message);
+            }
+        }
+
+        public async Task<Result<bool>> AddRangeAsync(IEnumerable<T> entities)
+        {
+            try
+            {
+                await _dbSet.AddRangeAsync(entities);
+                return Result<bool>.Success(true);
+
+            }
+            catch (DbUpdateException dbEx)
+            {
+                _logger.LogError(dbEx, "Database error while adding multiple entitie");
+                return Result<bool>.Failure(dbEx.InnerException?.Message ?? dbEx.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error adding multiple entities ");
+                return Result<bool>.Failure(ex.Message);
             }
         }
     }

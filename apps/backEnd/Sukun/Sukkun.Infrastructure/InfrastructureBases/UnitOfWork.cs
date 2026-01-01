@@ -43,6 +43,12 @@ namespace Sukun.Infrastructure.InfrastructureBases
         public IRemembranceContentRepository RemembranceContents { get; }
         public ITasbihRepository Tasbihs { get; }
         public IMosqueRepository Mosques { get; }
+        public ICategoryRepository Categories{ get; }
+        public INarrativeCategoryRepository NarrativeCategories{ get; }
+        public ITagRepository Tags { get; }
+
+        public INarrativeTagsRepository NarrativeTags { get; }
+
         public UnitOfWork(ApplicationDbContext context, ILogger<UnitOfWork> logger,
             ICityRepository cityRepository,
             IQuranRepository quranRepository,
@@ -62,7 +68,11 @@ namespace Sukun.Infrastructure.InfrastructureBases
             IRemembranceRepository remembranceRepository,
             IRemembranceContentRepository remembranceContentRepository,
             ITasbihRepository tasbihRepository,
-            IMosqueRepository mosqueRepository
+            IMosqueRepository mosqueRepository,
+            ICategoryRepository categoriesRepository,
+            INarrativeCategoryRepository narrativeCategoriesRepository,
+            ITagRepository tagsRepository,
+            INarrativeTagsRepository narrativeTagsRepository
             )
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -89,6 +99,10 @@ namespace Sukun.Infrastructure.InfrastructureBases
             RemembranceContents = remembranceContentRepository ?? throw new ArgumentNullException(nameof(remembranceContentRepository));
             Tasbihs = tasbihRepository ?? throw new ArgumentNullException(nameof(tasbihRepository));
             Mosques = mosqueRepository ?? throw new ArgumentNullException(nameof(mosqueRepository));
+            Categories = categoriesRepository ?? throw new ArgumentNullException(nameof(categoriesRepository));
+            NarrativeCategories = narrativeCategoriesRepository ?? throw new ArgumentNullException(nameof(narrativeCategoriesRepository));
+            Tags = tagsRepository ?? throw new ArgumentNullException(nameof(tagsRepository));
+            NarrativeTags = narrativeTagsRepository ?? throw new ArgumentNullException(nameof(narrativeTagsRepository));
         }
         public IRepository<T> Repository<T>() where T : BaseEntity
         {

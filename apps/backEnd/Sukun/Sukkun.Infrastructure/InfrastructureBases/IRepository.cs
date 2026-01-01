@@ -18,6 +18,7 @@ namespace Sukun.Infrastructure.InfrastructureBases
         Task<IEnumerable<T>> GetAllAsync();
         Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate);
         Task<Result<T>> AddAsync(T entity);
+        Task<Result<bool>> AddRangeAsync(IEnumerable<T> entities);
         Task<Result<T>> UpdateAsync(T entity);
         public IQueryable<T> AsQueryable();
         public IQueryable<T> AsQueryableNoTracking();
@@ -25,7 +26,7 @@ namespace Sukun.Infrastructure.InfrastructureBases
         Task<int> CountAsync(Expression<Func<T, bool>> predicate = null);
         Task<T?> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate);
         Task<Result<bool>> DeleteAsync(T entity, bool softDelete = true);
-        Task<Result<int>> DeleteRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default);
-        Task<Result<int>> DeleteRangeAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
+        Task<Result<bool>> DeleteRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default);
+        Task<Result<bool>> DeleteRangeAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
     }
 }

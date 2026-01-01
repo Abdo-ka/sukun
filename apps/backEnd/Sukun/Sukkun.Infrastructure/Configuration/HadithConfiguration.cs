@@ -30,12 +30,6 @@ namespace Sukun.Infrastructure.Configuration
                 .OnDelete(DeleteBehavior.Restrict)
                 .IsRequired(false); 
 
-            builder.HasMany(h => h.Explanations)
-                .WithOne(e => e.Hadith)
-                .HasForeignKey(e => e.HadithId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .IsRequired(false); 
-
             builder.HasOne(h => h.Book)
                 .WithMany(b => b.Hadiths)
                 .HasForeignKey(h => h.BookId)

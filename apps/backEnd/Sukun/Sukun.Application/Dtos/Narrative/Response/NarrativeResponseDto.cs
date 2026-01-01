@@ -1,4 +1,7 @@
-﻿using Sukun.Domin.Entities;
+﻿using Sukun.Application.Dtos.NarrativeCategory.Response;
+using Sukun.Application.Dtos.NarrativeSection.Response;
+using Sukun.Application.Dtos.Tag.Response;
+using Sukun.Domin.Enums;
 
 namespace Sukun.Application.Dtos.Narrative.Response
 {
@@ -9,11 +12,13 @@ namespace Sukun.Application.Dtos.Narrative.Response
         public string? TitleAr { get; set; }
         public ContentType Type { get; set; }
         public string? ShortDescription { get; set; }
-        public Guid? ParentId { get; set; }
-        public string? CoverImageUrl { get; set; }
         public bool IsFeatured { get; set; }
         public int ViewCount { get; set; }
-        public IEnumerable<NarrativeResponseDto> Children { get; set; }
-        public IEnumerable<NarrativeSectionResponseDto> Sections { get; set; } = new List<NarrativeSectionResponseDto>();
-    }
+        public DateTime CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
+        public List<NarrativeSectionResponseDto> Sections { get; set; } = new();
+        public List<TagResponseDto> Tags { get; set; } = new(); 
+        public List<CategoryResponseDto> Categories { get; set; } = new(); 
+     }
+ 
 }

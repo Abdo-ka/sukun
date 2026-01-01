@@ -4,7 +4,9 @@ namespace Sukun.Application.Dtos.Hadith.Request
 {
     public class HadithCreateDto
     {
-        public Guid CategoryId { get; set; }
+        public Guid? CategoryId { get; set; }
+        public Guid? BookId { get; set; }
+        public Guid? SectionId { get; set; }
         public string Reference { get; set; } = string.Empty;
         public string Text { get; set; } = string.Empty;
         public HadithGrade Grade { get; set; }

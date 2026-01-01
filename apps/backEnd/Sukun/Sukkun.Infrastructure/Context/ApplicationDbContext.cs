@@ -18,7 +18,10 @@ namespace Sukun.Infrastructure.Context
         public DbSet<AsmaulHusna> AsmaulHusna { get; set; }
         public DbSet<Narrative> Narratives { get; set; }
         public DbSet<NarrativeSection> NarrativeSections { get; set; }
+        public DbSet<NarrativeCategory> NarrativeCategories { get; set; }
+        public DbSet<Category> Categories { get; set; }
         public DbSet<Tag> Tags { get; set; }
+        public DbSet<NarrativeTags> NarrativeTags { get; set; }
         public DbSet<Tafsir> Tafsirs { get; set; }
         public DbSet<IslamicBook> IslamicBooks { get; set; }
         public DbSet<IslamicBookSection> IslamicBookSections { get; set; }

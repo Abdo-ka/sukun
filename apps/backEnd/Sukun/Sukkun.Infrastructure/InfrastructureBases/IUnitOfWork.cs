@@ -27,6 +27,10 @@ namespace Sukun.Infrastructure.InfrastructureBases
         public IRemembranceContentRepository RemembranceContents { get; }
         public ITasbihRepository Tasbihs { get; }
         public IMosqueRepository Mosques { get; }
+        public ICategoryRepository Categories { get; }
+        public INarrativeCategoryRepository NarrativeCategories { get; }
+        public INarrativeTagsRepository NarrativeTags { get; }
+        public ITagRepository Tags { get; }
         // Save changes
         public Task<int> CompleteAsync();
         public Task<bool> SaveEntitiesAsync();

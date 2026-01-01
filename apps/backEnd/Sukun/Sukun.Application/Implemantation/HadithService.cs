@@ -17,17 +17,20 @@ namespace Sukun.Application.Implemantation
         private readonly IUnitOfWork _unitOfWork;
         private readonly IHadithRepository _hadithRepository;
         private readonly IHadithCategoryRepository _categoryRepository;
+        private readonly IHadithExplanationRepository _hadithExplanationRepository;
         private readonly ILogger<HadithService> _logger;
 
         public HadithService(
             IUnitOfWork unitOfWork,
             IHadithCategoryRepository categoryRepository,
             IHadithRepository hadithRepository,
+            IHadithExplanationRepository hadithExplanation,
             ILogger<HadithService> logger)
         {
             _unitOfWork = unitOfWork;
             _categoryRepository = categoryRepository;
             _hadithRepository = hadithRepository;
+            _hadithExplanationRepository = hadithExplanation;
             _logger = logger;
         }
 
@@ -38,16 +41,17 @@ namespace Sukun.Application.Implemantation
             return Result<IEnumerable<HadithCategoryResponseDto>>.Success(dtos);
         }
 
-        public async Task<Result<PagedResponseDto<HadithListResponseDto>>> GetPagedAsync(PagedRequestDto request, Guid? bookId )
+        public async Task<Result<PagedResponseDto<HadithListResponseDto>>> GetPagedAsync(PagedRequestDto request, Guid? bookId)
         {
             if (request.PageNumber < 1) request.PageNumber = 1;
             if (request.PageSize < 1 || request.PageSize > 100) request.PageSize = 20;
 
             var query = _hadithRepository.AsQueryable();
-          
-            query =  query.Include(x => x.Book)
+
+            query = query.Include(x => x.Book)
                  .Include(x => x.Category)
-                 .Include(x => x.Section);
+                 .Include(x => x.Section)
+                 .Include(x => x.Explanations);
 
             if (!string.IsNullOrWhiteSpace(request.SearchTerm))
             {
@@ -55,14 +59,16 @@ namespace Sukun.Application.Implemantation
                 query = query.Where(h =>
                     h.Text.ToLower().Contains(term) ||
                     h.Reference.ToLower().Contains(term) ||
+                    h.Section.Name.ToLower().Contains(term) ||
                     (h.Book.Name != null && h.Book.Name.ToLower().Contains(term)));
             }
             if (bookId.HasValue)
             {
-                query = query.Where(h =>h.BookId == bookId);
+                query = query.Where(h => h.BookId == bookId);
             }
 
-            query = query.OrderBy(h => h.HadithNumber);
+            // query = query.OrderBy(h => GetSortValue(h.HadithNumber));
+
 
             var totalCount = await query.CountAsync();
             var items = await query
@@ -84,7 +90,23 @@ namespace Sukun.Application.Implemantation
 
             return Result<PagedResponseDto<HadithListResponseDto>>.Success(paged);
         }
+        private static int GetSortValue(string hadithNumber)
+        {
+            if (string.IsNullOrEmpty(hadithNumber)) return 99999;
+            var parts = hadithNumber.Split(',');
+            var numberPart = parts[0].Trim();
+            string numbers = " ";
+            foreach (var c in numberPart)
+            {
+                if (c >= '0' && c <= '9')
+                    numbers += c;
+                else
+                    break;
+            }
+            if (string.IsNullOrEmpty(numbers)) return 99999;
+            return int.Parse(numbers);
 
+        }
         public async Task<Result<IEnumerable<HadithListResponseDto>>> GetByCategoryAsync(Guid categoryId)
         {
             var exists = await _categoryRepository.ExistsAsync(c => c.Id == categoryId);
@@ -116,81 +138,168 @@ namespace Sukun.Application.Implemantation
             return Result<IEnumerable<HadithListResponseDto>>.Success(hadiths.Select(h => h.ToListDto()));
         }
 
-        public async Task<Result<PagedResponseDto<HadithListResponseDto>>> SearchAsync(string query, PagedRequestDto? paging = null)
-        {
-            paging ??= new PagedRequestDto { PageNumber = 1, PageSize = 20 };
-
-            var request = new PagedRequestDto
-            {
-                PageNumber = paging.PageNumber,
-                PageSize = paging.PageSize,
-                SearchTerm = query
-            };
-
-            return await GetPagedAsync(request,null);
-        }
-
-        // ====================== Admin CRUD ======================
-
         public async Task<Result<HadithResponseDto>> CreateAsync(HadithCreateDto dto)
         {
-            var categoryExists = await _categoryRepository.ExistsAsync(c => c.Id == dto.CategoryId);
-            if (!categoryExists)
-                return Result<HadithResponseDto>.BadRequest("Invalid CategoryId");
+            if (dto.CategoryId.HasValue)
+            {
+                var categoryExists = await _categoryRepository.ExistsAsync(c => c.Id == dto.CategoryId.Value);
+                if (!categoryExists)
+                    return Result<HadithResponseDto>.BadRequest("The specified category does not exist");
+            }
 
-            var hadith = dto.ToEntity();
+            Guid? bookId = dto.BookId;
+            Guid? sectionId = dto.SectionId;
 
-            var addResult = await _hadithRepository.AddAsync(hadith);
-            if (!addResult.IsSuccess)
-                return Result<HadithResponseDto>.Failure(addResult.Message);
+            if (sectionId.HasValue && !bookId.HasValue)
+            {
+                return Result<HadithResponseDto>.BadRequest("BookId is required when SectionId is specified");
+            }
 
-            await _unitOfWork.CompleteAsync();
+            if (bookId.HasValue)
+            {
+                var bookExists = await _unitOfWork.IslamicBook.ExistsAsync(b => b.Id == bookId.Value);
+                if (!bookExists)
+                    return Result<HadithResponseDto>.BadRequest("The specified book does not exist");
+            }
 
-            var created = await _hadithRepository.GetByIdWithDetailsAsync(hadith.Id);
-            return Result<HadithResponseDto>.Success(created!.ToResponseDto());
+            if (sectionId.HasValue)
+            {
+                var sectionExists = await _unitOfWork.IslamicBookSection
+                    .ExistsAsync(s => s.Id == sectionId.Value && s.BookId == bookId.Value);
+
+                if (!sectionExists)
+                    return Result<HadithResponseDto>.BadRequest("The specified section does not belong to the selected book");
+            }
+
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+
+                var hadith = dto.ToEntity();
+
+                var addResult = await _hadithRepository.AddAsync(hadith);
+                if (!addResult.IsSuccess)
+                {
+                    await _unitOfWork.RollbackTransactionAsync();
+                    return Result<HadithResponseDto>.Failure(addResult.Message);
+                }
+
+                await _unitOfWork.CommitTransactionAsync();
+
+                var created = await _hadithRepository.GetByIdWithDetailsAsync(hadith.Id);
+                if (created == null)
+                    return Result<HadithResponseDto>.BadRequest("Failed to retrieve the created hadith");
+
+                return Result<HadithResponseDto>.Success(created.ToResponseDto());
+            }
+            catch (Exception)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
+                return Result<HadithResponseDto>.BadRequest("An error occurred while creating the hadith");
+            }
         }
-
         public async Task<Result<HadithResponseDto>> UpdateAsync(Guid id, HadithUpdateDto dto)
         {
             var hadith = await _hadithRepository.GetByIdWithDetailsAsync(id);
             if (hadith == null)
                 return Result<HadithResponseDto>.NotFound("Hadith not found");
-
-            if (dto.CategoryId != Guid.Empty && dto.CategoryId != hadith.CategoryId)
+            try
             {
-                var categoryExists = await _categoryRepository.ExistsAsync(c => c.Id == dto.CategoryId);
-                if (!categoryExists)
-                    return Result<HadithResponseDto>.BadRequest("Invalid CategoryId");
-                hadith.CategoryId = dto.CategoryId;
-            }
-
-            if (!string.IsNullOrEmpty(dto.Reference)) hadith.Reference = dto.Reference;
-            if (!string.IsNullOrEmpty(dto.Text)) hadith.Text = dto.Text;
-            if (dto.Grade != 0) hadith.Grade = dto.Grade;
-            if (!string.IsNullOrEmpty(dto.HadithNumber)) hadith.HadithNumber = dto.HadithNumber;
-
-            // تحديث الشروح (بسيط: حذف القديمة وإضافة الجديدة)
-            if (dto.Explanations != null)
-            {
-                hadith.Explanations.Clear();
-                foreach (var expDto in dto.Explanations)
+                await _unitOfWork.BeginTransactionAsync();
+                Guid? newBookId = hadith.BookId;
+                Guid? newSectionId = hadith.SectionId;
+                if (dto.CategoryId.HasValue && dto.CategoryId != hadith.CategoryId)
                 {
-                    hadith.Explanations.Add(new HadithExplanation
-                    {
-                        Id = Guid.NewGuid(),
-                        Scholar = expDto.Scholar,
-                        Explanation = expDto.Explanation,
-                        HadithId = hadith.Id
-                    });
+                    var categoryExists = await _categoryRepository.ExistsAsync(c => c.Id == dto.CategoryId.Value);
+                    if (!categoryExists)
+                        return Result<HadithResponseDto>.BadRequest("The specified category does not exist");
+
+                    hadith.CategoryId = dto.CategoryId.Value;
                 }
+                else if (dto.CategoryId == null && hadith.CategoryId.HasValue)
+                {
+                    hadith.CategoryId = null;
+                }
+               
+                if (dto.BookId.HasValue )
+                {
+                    var bookExists = await _unitOfWork.IslamicBook.ExistsAsync(b => b.Id == dto.BookId.Value);
+                    if (!bookExists)
+                        return Result<HadithResponseDto>.BadRequest("The book does not exist");
+
+                    newBookId = dto.BookId.Value;
+                }
+                else if (dto.BookId == null && hadith.BookId.HasValue)
+                {
+                    newBookId = null;
+                }
+
+                if (dto.SectionId.HasValue)
+                {
+                    var targetBookId = newBookId ?? hadith.BookId;
+
+                    if (!targetBookId.HasValue)
+                        return Result<HadithResponseDto>.BadRequest("Cannot specify a section without a book");
+
+                    var sectionExists = await _unitOfWork.IslamicBookSection
+                        .ExistsAsync(s => s.Id == dto.SectionId.Value && s.BookId == targetBookId.Value);
+
+                    if (!sectionExists)
+                        return Result<HadithResponseDto>.BadRequest("The specified section does not belong to the selected book");
+
+                    newSectionId = dto.SectionId.Value;
+                }
+                else if (dto.SectionId == null && hadith.SectionId.HasValue)
+                {
+                    newSectionId = null;
+                }
+               
+                hadith.BookId = newBookId;
+                hadith.SectionId = newSectionId;
+
+                if (!string.IsNullOrEmpty(dto.Reference)) hadith.Reference = dto.Reference;
+                if (!string.IsNullOrEmpty(dto.Text)) hadith.Text = dto.Text;
+                if (dto.Grade != 0) hadith.Grade = dto.Grade;
+                if (!string.IsNullOrEmpty(dto.HadithNumber)) hadith.HadithNumber = dto.HadithNumber;
+
+                if (dto.Explanations != null)
+                {
+                    if (hadith.Explanations?.Any() == true)
+                    {
+                        foreach (var oldExp in hadith.Explanations.ToList())
+                        {
+                            await _hadithExplanationRepository.DeleteAsync(oldExp);
+                        }
+                        hadith.Explanations.Clear();
+                    }
+
+                    foreach (var expDto in dto.Explanations)
+                    {
+                        hadith.Explanations.Add(new HadithExplanation
+                        {
+                            Scholar = expDto.Scholar,
+                            Explanation = expDto.Explanation,
+                            HadithId = hadith.Id,
+                            CreateAt = DateTime.UtcNow,
+                        });
+                    }
+                }
+
+                hadith.UpdatedAt = DateTime.UtcNow;
+
+                await _unitOfWork.CommitTransactionAsync();
+
+                var updated = await _hadithRepository.GetByIdWithDetailsAsync(id);
+                return Result<HadithResponseDto>.Success(updated!.ToResponseDto());
+
             }
+            catch (Exception)
+            {
+                await _unitOfWork.RollbackTransactionAsync();
 
-            hadith.UpdatedAt = DateTime.UtcNow;
+                return Result<HadithResponseDto>.BadRequest("internal Error");
 
-            await _unitOfWork.CompleteAsync();
-
-            var updated = await _hadithRepository.GetByIdWithDetailsAsync(id);
-            return Result<HadithResponseDto>.Success(updated!.ToResponseDto());
+            }
         }
 
         public async Task<Result> SoftDeleteAsync(Guid id)

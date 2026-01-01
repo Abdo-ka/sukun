@@ -1,5 +1,5 @@
-﻿using Sukun.Application.Dtos.Narrative.Request;
-using Sukun.Application.Dtos.Narrative.Response;
+﻿using Sukun.Application.Dtos.NarrativeSection.Request;
+using Sukun.Application.Dtos.NarrativeSection.Response;
 using Sukun.Domin.Entities;
 
 namespace Sukun.Application.Mapper
@@ -14,7 +14,6 @@ namespace Sukun.Application.Mapper
                 Title = entity.Title,
                 Content = entity.Content,
                 DisplayOrder = entity.DisplayOrder,
-                MediaUrl = entity.MediaUrl
             };
         }
 
@@ -26,7 +25,6 @@ namespace Sukun.Application.Mapper
                 Title = dto.Title,
                 Content = dto.Content,
                 DisplayOrder = dto.DisplayOrder,
-                MediaUrl = dto.MediaUrl
             };
         }
 
@@ -35,7 +33,6 @@ namespace Sukun.Application.Mapper
             entity.Title = dto.Title;
             entity.Content = dto.Content;
             entity.DisplayOrder = dto.DisplayOrder.Value;
-            entity.MediaUrl = dto.MediaUrl;
             entity.UpdatedAt = DateTime.UtcNow;
         }
     }

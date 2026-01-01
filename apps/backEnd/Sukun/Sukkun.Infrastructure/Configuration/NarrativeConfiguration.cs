@@ -22,26 +22,17 @@ namespace Sukun.Infrastructure.Configuration
             builder.Property(n => n.ShortDescription)
                 .HasMaxLength(500);
 
-            builder.Property(n => n.CoverImageUrl)
-                .HasMaxLength(500);
-
             builder.Property(n => n.Type)
                 .HasConversion<int>()
                 .IsRequired();
 
-            builder.HasOne(n => n.Parent)
-                .WithMany(n => n.Children)
-                .HasForeignKey(n => n.ParentId)
-                .OnDelete(DeleteBehavior.Restrict);
+            builder.Property(n => n.IsFeatured)
+            .IsRequired()
+            .HasDefaultValue(false);
 
-            builder.HasMany(n => n.Sections)
-                .WithOne(s => s.Narrative)
-                .HasForeignKey(s => s.NarrativeId)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-      
-            builder.HasMany(n => n.Tags)
-                   .WithMany(t => t.Narratives)
-                   .UsingEntity(j => j.ToTable("NarrativeTags"));
+            builder.Property(n => n.ViewCount)
+            .IsRequired()
+            .HasDefaultValue(0);
 
             builder.HasIndex(n => n.Type);
             builder.HasIndex(n => n.IsFeatured);

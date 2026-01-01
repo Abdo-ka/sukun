@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
-using Sukun.Application.Dtos.Narrative.Request;
+using Sukun.Application.Dtos.NarrativeSection.Request;
 
-namespace Sukun.Application.Dtos.Narrative.Validation
+namespace Sukun.Application.Dtos.NarrativeSection.Validation
 {
 
     public class NarrativeSectionCreateDtoValidator : AbstractValidator<NarrativeSectionCreateDto>
@@ -9,9 +9,8 @@ namespace Sukun.Application.Dtos.Narrative.Validation
         public NarrativeSectionCreateDtoValidator()
         {
             RuleFor(x => x.Title).NotEmpty().MaximumLength(200);
-            RuleFor(x => x.Content).NotEmpty().MaximumLength(10000); // حسب الحاجة
+            RuleFor(x => x.Content).NotEmpty().MaximumLength(10000);
             RuleFor(x => x.DisplayOrder).GreaterThanOrEqualTo(0);
-            RuleFor(x => x.MediaUrl).MaximumLength(500).When(x => x.MediaUrl != null);
         }
     }
 }

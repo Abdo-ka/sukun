@@ -23,7 +23,8 @@ namespace Sukun.Infrastructure.Configuration
             builder.HasOne(e => e.Hadith)
                 .WithMany(h => h.Explanations)
                 .HasForeignKey(e => e.HadithId)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.Cascade)
+                .IsRequired(false);
         }
     }
 }
