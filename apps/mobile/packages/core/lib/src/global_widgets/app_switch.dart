@@ -6,7 +6,11 @@ class AppSwitch extends StatefulWidget {
   final bool value;
   final ValueChanged<bool>? onChanged;
 
-  const AppSwitch({super.key, required this.value, required this.onChanged});
+  const AppSwitch({
+    super.key,
+    required this.value,
+    required this.onChanged,
+  });
 
   @override
   createState() => _AppSwitchState();
@@ -21,12 +25,23 @@ class _AppSwitchState extends State<AppSwitch>
   void initState() {
     super.initState();
     _animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 70));
-    _circleAnimation = AlignmentTween(
-            begin: !widget.value ? Alignment.centerLeft : Alignment.centerRight,
-            end: !widget.value ? Alignment.centerRight : Alignment.centerLeft)
-        .animate(CurvedAnimation(
-            parent: _animationController!, curve: Curves.linear));
+      vsync: this,
+      duration: const Duration(milliseconds: 70),
+    );
+    _circleAnimation =
+        AlignmentTween(
+          begin: !widget.value
+              ? Alignment.centerLeft
+              : Alignment.centerRight,
+          end: !widget.value
+              ? Alignment.centerRight
+              : Alignment.centerLeft,
+        ).animate(
+          CurvedAnimation(
+            parent: _animationController!,
+            curve: Curves.linear,
+          ),
+        );
   }
 
   @override
@@ -62,7 +77,11 @@ class _AppSwitchState extends State<AppSwitch>
             ),
             child: Padding(
               padding: const EdgeInsets.only(
-                  top: 2.0, bottom: 2.0, right: 2.0, left: 2.0),
+                top: 2.0,
+                bottom: 2.0,
+                right: 2.0,
+                left: 2.0,
+              ),
               child: Align(
                 alignment: _circleAnimation!.value,
                 child: Container(
@@ -73,13 +92,15 @@ class _AppSwitchState extends State<AppSwitch>
                     color: context.colorScheme.surface,
                     boxShadow: const [
                       BoxShadow(
-                          color: Color(0x0F101828),
-                          offset: Offset(0, 1),
-                          blurRadius: 2),
+                        color: Color(0x0F101828),
+                        offset: Offset(0, 1),
+                        blurRadius: 2,
+                      ),
                       BoxShadow(
-                          color: Color(0x1A101828),
-                          offset: Offset(0, 1),
-                          blurRadius: 3),
+                        color: Color(0x1A101828),
+                        offset: Offset(0, 1),
+                        blurRadius: 3,
+                      ),
                     ],
                   ),
                 ),

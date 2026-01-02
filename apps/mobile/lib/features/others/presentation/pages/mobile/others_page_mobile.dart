@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mobile/features/others/presentation/state/bloc/others_cubit.dart';
 import 'package:mobile/features/others/presentation/widgets/others_card_widget.dart';
 
-
 class OthersPageMobile extends StatelessWidget {
   const OthersPageMobile({super.key});
 
@@ -20,8 +19,11 @@ class OthersPageMobile extends StatelessWidget {
         Expanded(
           child: BlocBuilder<OthersCubit, OthersState>(
             builder: (context, state) {
-              if (state.status == const BlocStatus.loading()) {
-                return const Center(child: CircularProgressIndicator());
+              if (state.status ==
+                  const BlocStatus.loading()) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
               }
               if (state.categories.isEmpty) {
                 return const SizedBox();
@@ -40,13 +42,15 @@ class OthersPageMobile extends StatelessWidget {
                 children: [
                   GridView.builder(
                     shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 193 / 146,
-                      crossAxisSpacing: 12.w,
-                      mainAxisSpacing: 12.h,
-                    ),
+                    physics:
+                        const NeverScrollableScrollPhysics(),
+                    gridDelegate:
+                        SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 193 / 140,
+                          crossAxisSpacing: 12.w,
+                          mainAxisSpacing: 12.h,
+                        ),
                     itemCount: gridItems.length,
                     itemBuilder: (context, index) {
                       return OthersCardWidget(
@@ -54,10 +58,9 @@ class OthersPageMobile extends StatelessWidget {
                       );
                     },
                   ),
-                  12.verticalSpace,
-                  // Fixed: Reusing OthersCardWidget instead of separate widget
+
                   SizedBox(
-                    height: 139.h,
+                    height: 133.h,
                     width: double.infinity,
                     child: OthersCardWidget(item: wideItem),
                   ),

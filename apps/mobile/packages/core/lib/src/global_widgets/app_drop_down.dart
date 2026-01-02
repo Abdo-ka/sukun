@@ -1,139 +1,155 @@
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../core.dart';
 
-class AppDropDown<T> extends StatefulWidget {
-  final String? title;
+class AppDropDown<T> extends StatelessWidget {
+  final String label;
   final String? name;
   final bool enabled;
-  final bool isLoading;
-  final bool isFailure;
   final T? initialValue;
-  final String? hintText;
-  final String? Function(Object?)? validator;
+  final String? hint;
+  final double? verticalMargin;
+  final String? Function(T?)? validator;
   final List<DropdownMenuItem<T>>? items;
   final VoidCallback? onRetry;
   final void Function(T?)? onChanged;
-  final EdgeInsetsGeometry? margin;
-  final double elevation;
-  final bool isExpanded;
+  final Widget? icon;
+  final Status? status;
+  final double? width;
   final double? height;
-  final Widget? child;
-  final ButtonStyleData? buttonStyleData;
-  final BoxBorder? border;
+
   const AppDropDown({
     super.key,
-    this.isExpanded = true,
-    this.title,
+    required this.label,
     required this.items,
     this.onRetry,
     this.enabled = true,
-    this.isLoading = false,
-    this.isFailure = false,
-    this.elevation = 2,
     this.validator,
     this.name,
     this.initialValue,
-    this.hintText,
+    this.hint,
+    this.verticalMargin,
     this.onChanged,
-    this.margin,
+    this.icon,
+    this.status,
+    this.width,
     this.height,
-    this.child,
-    this.buttonStyleData,
-    this.border,
   });
 
   @override
-  State<AppDropDown<T>> createState() =>
-      _AppDropDownState<T>();
-}
-
-class _AppDropDownState<T> extends State<AppDropDown<T>> {
-  T? _selectedValue;
-
-  @override
-  void initState() {
-    super.initState();
-    _selectedValue = widget.initialValue;
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: widget.margin ?? EdgeInsets.zero,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (widget.title != null) AppText(widget.title!),
-          if (widget.title != null) 6.verticalSpace,
-          SizedBox(
-            height: widget.height ?? 48.h,
-            child: Material(
-              elevation: widget.elevation,
-              borderRadius: BorderRadius.circular(8),
-              shadowColor: context.colorScheme.shadow
-                  .withValues(alpha: 0.2),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton2<T>(
-                  isExpanded: widget.isExpanded,
-                  items:
-                      widget.isLoading || widget.isFailure
-                          ? []
-                          : widget.items!,
-                  iconStyleData: IconStyleData(
-                    icon: widget.child ??
-                        Padding(
-                          padding:
-                              REdgeInsetsDirectional.only(
-                                  end: 10),
-                          child: AppImage.asset(
-                              'packages/core/assets/icons/down2.svg'),
-                        ),
+    final bool isLoading = status == Status.loading;
+    final bool isFailure = status == Status.failure;
+
+    return SizedBox(
+      width: width,
+      height: height,
+      child: Padding(
+        padding: verticalMargin != null
+            ? EdgeInsets.symmetric(
+                vertical: verticalMargin!,
+              )
+            : EdgeInsets.zero,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (label.isNotEmpty) ...[
+              Padding(
+                padding: REdgeInsetsDirectional.only(
+                  start: 10,
+                ),
+                child: AppText(label),
+              ),
+              12.verticalSpace,
+            ],
+            FormBuilderDropdown<T>(
+              name: name ?? label,
+              items: isLoading || isFailure || items == null
+                  ? []
+                  : items!,
+              enabled: isLoading ? false : enabled,
+              validator: validator,
+              onChanged: onChanged,
+              initialValue: initialValue,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: context.colorScheme.outline,
                   ),
-                  onChanged: widget.enabled
-                      ? (value) {
-                          setState(
-                              () => _selectedValue = value);
-                          widget.onChanged?.call(value);
-                        }
-                      : null,
-                  value: _selectedValue,
-                  buttonStyleData: widget.buttonStyleData ??
-                      ButtonStyleData(
-                        padding: REdgeInsets.symmetric(
-                            horizontal: 12),
-                        decoration: BoxDecoration(
-                          borderRadius:
-                              BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                disabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: context.colorScheme.outline,
+                  ),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: context.colorScheme.error,
+                  ),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: context.colorScheme.outline,
+                  ),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: context.colorScheme.primary,
+                  ),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                prefixIcon: icon,
+                prefixIconConstraints: BoxConstraints(
+                  maxHeight: 40.h,
+                  minHeight: 10.h,
+                  minWidth: 40.w,
+                ),
+                labelText: hint,
+                hintStyle: context.textTheme.titleSmall
+                    ?.copyWith(color: Colors.grey),
+                suffixIconConstraints: BoxConstraints(
+                  maxWidth: 80.w,
+                  maxHeight: 30.h,
+                ),
+                suffixIcon: isLoading
+                    ? Container(
+                        margin: REdgeInsetsDirectional.only(
+                          end: 10,
+                        ),
+                        width: 20.w,
+                        height: 20.h,
+                        child:
+                            const CircularProgressIndicator(
+                              strokeWidth: 2,
+                            ),
+                      )
+                    : isFailure && onRetry != null
+                    ? IconButton(
+                        onPressed: onRetry,
+                        icon: Icon(
+                          Icons.repeat,
                           color:
-                              context.colorScheme.surface,
-                          border: widget.border ??
-                              Border.all(
-                                  color: context
-                                      .colorScheme.outline,
-                                  width: 1),
+                              context.colorScheme.primary,
                         ),
-                      ),
-                  style: context.textTheme.bodyMedium
-                      ?.copyWith(
-                          fontWeight: FontWeight.w100),
-                  dropdownStyleData: DropdownStyleData(
-                    // width: context.fullWidth - 40.w,
-                    offset: const Offset(0, 0),
-                    elevation: 1,
-                    maxHeight: 300.h,
-                    padding: REdgeInsets.only(top: 10),
-                    decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.circular(8)),
-                  ),
+                      )
+                    : SizedBox.shrink(),
+                contentPadding: REdgeInsetsDirectional.only(
+                  start: 5,
+                  top: 10,
+                  bottom: 10,
+                  end: 20,
                 ),
               ),
             ),
-          )
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -70,6 +70,8 @@ dependencies:
 
   in_app_update: ^4.2.5
   upgrader: ^12.3.0
+  geolocator: ^14.0.1
+  geocoding: ^4.0.0
   
 dev_dependencies:
   # Testing

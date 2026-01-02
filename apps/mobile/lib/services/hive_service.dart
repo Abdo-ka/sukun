@@ -32,10 +32,16 @@ class HiveService {
   }
 
   static Future<bool> get hasSeenOnboarding async {
-    return (await HiveService.hive.get(HiveKey.hasSeenOnboarding)) ?? false;
+    return (await HiveService.hive.get(
+          HiveKey.hasSeenOnboarding,
+        )) ??
+        false;
   }
 
   static Future<void> setHasSeenOnboarding(bool val) async {
-    (await HiveService.hive.put(HiveKey.hasSeenOnboarding, val));
+    (await HiveService.hive.put(
+      HiveKey.hasSeenOnboarding,
+      val,
+    ));
   }
 }

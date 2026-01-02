@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,6 +7,7 @@ import 'package:mobile/features/prayer/presentation/widgets/date_hijri_widget.da
 import 'package:mobile/features/prayer/presentation/widgets/days_of_week_widget.dart';
 import 'package:mobile/features/prayer/presentation/widgets/prayer_time_date_widget.dart';
 import 'package:mobile/gen/assets.gen.dart';
+import 'package:mobile/services/router/router.gr.dart';
 
 class PrayerPageMobile extends StatelessWidget {
   const PrayerPageMobile({super.key});
@@ -18,7 +20,8 @@ class PrayerPageMobile extends StatelessWidget {
         title: AppText.titleMedium('مواقيت الصلاة'),
         actions: [
           ButtonWidget(
-            onPressed: () {},
+            onPressed: () =>
+                context.pushRoute(SettingPrayRoute()),
             width: 38.w,
             height: 38.h,
             prefixIcon: AppImage.asset(

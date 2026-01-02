@@ -28,11 +28,13 @@ class DaysOfWeekWidget extends StatelessWidget {
                     ? Color(
                         0xFF34937D,
                       ).withValues(alpha: .1)
-                    : null,
+                    : context
+                          .colorScheme
+                          .surfaceContainerLow,
                 isOutlined: true,
                 borderColor: index == 3
                     ? Color(0xFF34937D)
-                    : null,
+                    : Colors.transparent,
                 prefixIcon: Column(
                   mainAxisSize: .min,
                   mainAxisAlignment: .center,

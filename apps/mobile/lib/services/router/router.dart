@@ -14,10 +14,11 @@ class AppRouter extends RootStackRouter {
       transitionsBuilder:
           TransitionsBuilders.slideRightWithFade,
     ),
-    // CustomRoute(
-    //   page: HomeRoute.page,
-    //   transitionsBuilder: TransitionsBuilders.slideRightWithFade,
-    // ),
+    CustomRoute(
+      page: SettingPrayRoute.page,
+      transitionsBuilder:
+          TransitionsBuilders.slideRightWithFade,
+    ),
     // CustomRoute(
     //   page: IntroRoute.page,
     //   transitionsBuilder: TransitionsBuilders.slideRightWithFade,
@@ -68,11 +69,13 @@ class AppRouter extends RootStackRouter {
     // ),
     CustomRoute(
       page: OthersRoute.page,
-      transitionsBuilder: TransitionsBuilders.slideRightWithFade,
+      transitionsBuilder:
+          TransitionsBuilders.slideRightWithFade,
     ),
     CustomRoute(
       page: OthersDetailsRoute.page,
-      transitionsBuilder: TransitionsBuilders.slideRightWithFade,
+      transitionsBuilder:
+          TransitionsBuilders.slideRightWithFade,
     ),
   ];
 }

@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mobile/core/config/constant.dart';
 import 'package:mobile/features/home/presentation/widgets/aya_and_ebra_widget.dart';
-import 'package:mobile/services/router/router.gr.dart';
 import 'package:mobile/features/home/presentation/widgets/next_prayer_widget.dart';
 import 'package:mobile/gen/assets.gen.dart';
+import 'package:mobile/services/router/router.gr.dart';
 
 @RoutePage()
 class HomePageMobile extends StatefulWidget {
@@ -64,8 +64,11 @@ class _HomePageMobileState extends State<HomePageMobile> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      if (homeItemsGridView[index]['label'] == 'متفرقات') {
-                        context.pushRoute(const OthersRoute());
+                      if (homeItemsGridView[index]['label'] ==
+                          'متفرقات') {
+                        context.pushRoute(
+                          const OthersRoute(),
+                        );
                       }
                     },
                     child: Container(
