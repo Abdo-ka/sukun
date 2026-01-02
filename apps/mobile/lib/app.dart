@@ -4,7 +4,7 @@ import 'package:mobile/features/app/dismiss_keyboard_gesture_detector_wrapper.da
 import 'package:mobile/features/app/env_banner.dart';
 import 'package:mobile/features/app/hive_builder.dart';
 import 'package:mobile/features/app/loading_overlay.dart';
-import 'package:mobile/features/app/shadows_material_app.dart';
+import 'package:mobile/features/app/material_app.dart';
 
 import 'services/localization/localization_services.dart';
 

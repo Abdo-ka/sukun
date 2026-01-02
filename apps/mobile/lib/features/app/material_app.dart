@@ -15,7 +15,7 @@ class MobileMaterialApp extends StatelessWidget {
     final router = getIt<AppRouter>();
 
     return MaterialApp.router(
-      title: "shadow",
+      title: "Alrwda",
       debugShowCheckedModeBanner: false,
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
