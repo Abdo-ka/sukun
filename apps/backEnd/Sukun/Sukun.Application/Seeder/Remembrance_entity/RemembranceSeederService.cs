@@ -72,14 +72,14 @@ namespace Sukun.Application.Seeder.Remembrance_entity
 
             foreach (var name in categoryNames)
             {
-                var existing = await categoryRepo.FirstOrDefaultAsync(c => c.NameAr == name);
+                var existing = await categoryRepo.FirstOrDefaultAsync(c => c.Name == name);
                 if (existing == null)
                 {
                     existing = new RemembranceCategory
                     {
                         Id = Guid.NewGuid(),
                         Name = name,
-                        NameAr = name,
+                        //NameAr = name,
                         CreateAt = DateTime.UtcNow
                     };
                     await categoryRepo.AddAsync(existing);
@@ -158,7 +158,7 @@ namespace Sukun.Application.Seeder.Remembrance_entity
                 Id = Guid.NewGuid(),
                 Title = "ذكر من السنة",
                 RecommendedCount = count,
-                IsDaily = true,
+                //IsDaily = true,
                 CreateAt = DateTime.UtcNow
             };
 
@@ -240,7 +240,7 @@ namespace Sukun.Application.Seeder.Remembrance_entity
                     Title = "ذكر من السنة",
                     RecommendedCount = count,
                     Benefits = null,
-                    IsDaily = true,
+                    //IsDaily = true,
                     CreateAt = DateTime.UtcNow
                 };
 

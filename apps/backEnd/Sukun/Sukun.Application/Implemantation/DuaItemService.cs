@@ -84,11 +84,9 @@ namespace Sukun.Application.Implemantation
                 return Result<DuaItemResponseDto>.NotFound("Dua not found");
 
             if (!string.IsNullOrEmpty(dto.Title)) dua.Title = dto.Title;
-            if (!string.IsNullOrEmpty(dto.ArabicText)) dua.ArabicText = dto.ArabicText;
-            if (dto.Transliteration != null) dua.Transliteration = dto.Transliteration;
-            if (dto.Translation != null) dua.Translation = dto.Translation;
+            if (!string.IsNullOrEmpty(dto.Text)) dua.Text = dto.Text;
+            if (!string.IsNullOrEmpty(dto.Text)) dua.TextEn = dto.TextEn;
             if (dto.Reference != null) dua.Reference = dto.Reference;
-            if (dto.RepeatCount.HasValue) dua.RepeatCount = dto.RepeatCount;
             if (dto.Virtue != null) dua.Virtue = dto.Virtue;
             dua.DisplayOrder = dto.DisplayOrder;
 

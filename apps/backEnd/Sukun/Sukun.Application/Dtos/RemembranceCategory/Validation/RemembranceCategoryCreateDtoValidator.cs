@@ -15,10 +15,6 @@ namespace Sukun.Application.Dtos.RemembranceCategory.Validation
             RuleFor(x => x.Name)
                 .NotEmpty().WithMessage("Name is required")
                 .MaximumLength(200).WithMessage("Name cannot exceed 200 characters");
-
-            RuleFor(x => x.NameAr)
-                .NotEmpty().WithMessage("NameAr is required")
-                .MaximumLength(200).WithMessage("NameAr cannot exceed 200 characters");
-        }
+    }
     }
 }

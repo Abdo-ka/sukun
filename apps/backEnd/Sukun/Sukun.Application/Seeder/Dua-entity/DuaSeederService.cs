@@ -92,7 +92,7 @@ namespace Sukun.Application.Seeder.Dua_entity
                         foreach (var apiItem in apiCategory.Array)
                         {
                             // تجنب التكرار بناءً على النص
-                            var existingDua = await duaRepo.FirstOrDefaultAsync(d => d.ArabicText == apiItem.Text.Trim());
+                            var existingDua = await duaRepo.FirstOrDefaultAsync(d => d.Text == apiItem.Text.Trim());
                             if (existingDua != null) continue;
 
                             var dua = new DuaItem
@@ -100,11 +100,9 @@ namespace Sukun.Application.Seeder.Dua_entity
                                 Id = Guid.NewGuid(),
                                 CategoryId = category.Id,
                                 Title = $"دعاء رقم {apiItem.Id}", // يمكن تحسين العنوان لاحقًا
-                                ArabicText = apiItem.Text.Trim(),
-                                Transliteration = null, // المصدر لا يحتوي على نطق، يمكن إضافته يدويًا لاحقًا
-                                Translation = null, // لا يوجد ترجمة في هذا المصدر
+                                Text = apiItem.Text.Trim(),
+                                TextEn = null, // المصدر لا يحتوي على نطق، يمكن إضافته يدويًا لاحقًا
                                 Reference = "حصن المسلم",
-                                RepeatCount = apiItem.Count,
                                 Virtue = null,
                                 DisplayOrder = apiItem.Id,
                                 CreateAt = DateTime.UtcNow
@@ -162,9 +160,8 @@ namespace Sukun.Application.Seeder.Dua_entity
                     Id = Guid.NewGuid(),
                     CategoryId = famousCategory.Id,
                     Title = "دعاء الاستخارة",
-                    ArabicText = "اللَّهُمَّ إِنِّي أَسْتَخِيرُكَ بِعِلْمِكَ وَأَسْتَقْدِرُكَ بِقُدْرَتِكَ وَأَسْأَلُكَ مِنْ فَضْلِكَ الْعَظِيمِ فَإِنَّكَ تَقْدِرُ وَلاَ أَقْدِرُ وَتَعْلَمُ وَلاَ أَعْلَمُ وَأَنْتَ عَلاَّمُ الْغُيُوبِ اللَّهُمَّ إِنْ كُنْتَ تَعْلَمُ أَنَّ هَذَا الأَمْرَ خَيْرٌ لِي فِي دِينِي وَمَعَاشِي وَعَاقِبَةِ أَمْرِي فَاقْدُرْهُ لِي وَيَسِّرْهُ لِي ثُمَّ بَارِكْ لِي فِيهِ وَإِنْ كُنْتَ تَعْلَمُ أَنَّ هَذَا الأَمْرَ شَرٌّ لِي فِي دِينِي وَمَعَاشِي وَعَاقِبَةِ أَمْرِي فَاصْرِفْهُ عَنِّي وَاصْرِفْنِي عَنْهُ وَاقْدُرْ لِي الْخَيْرَ حَيْثُ كَانَ ثُمَّ أَرْضِنِي",
+                    Text = "اللَّهُمَّ إِنِّي أَسْتَخِيرُكَ بِعِلْمِكَ وَأَسْتَقْدِرُكَ بِقُدْرَتِكَ وَأَسْأَلُكَ مِنْ فَضْلِكَ الْعَظِيمِ فَإِنَّكَ تَقْدِرُ وَلاَ أَقْدِرُ وَتَعْلَمُ وَلاَ أَعْلَمُ وَأَنْتَ عَلاَّمُ الْغُيُوبِ اللَّهُمَّ إِنْ كُنْتَ تَعْلَمُ أَنَّ هَذَا الأَمْرَ خَيْرٌ لِي فِي دِينِي وَمَعَاشِي وَعَاقِبَةِ أَمْرِي فَاقْدُرْهُ لِي وَيَسِّرْهُ لِي ثُمَّ بَارِكْ لِي فِيهِ وَإِنْ كُنْتَ تَعْلَمُ أَنَّ هَذَا الأَمْرَ شَرٌّ لِي فِي دِينِي وَمَعَاشِي وَعَاقِبَةِ أَمْرِي فَاصْرِفْهُ عَنِّي وَاصْرِفْنِي عَنْهُ وَاقْدُرْ لِي الْخَيْرَ حَيْثُ كَانَ ثُمَّ أَرْضِنِي",
                     Reference = "رواه البخاري",
-                    RepeatCount = 1,
                     DisplayOrder = 1,
                     CreateAt = DateTime.UtcNow
                 },
@@ -173,9 +170,8 @@ namespace Sukun.Application.Seeder.Dua_entity
                     Id = Guid.NewGuid(),
                     CategoryId = famousCategory.Id,
                     Title = "دعاء سيد الاستغفار",
-                    ArabicText = "اللَّهُمَّ أَنْتَ رَبِّي لاَ إِلَهَ إِلاَّ أَنْتَ خَلَقْتَنِي وَأَنَا عَبْدُكَ وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ وَأَبُوءُ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لاَ يَغْفِرُ الذُّنُوبَ إِلاَّ أَنْتَ",
+                    Text = "اللَّهُمَّ أَنْتَ رَبِّي لاَ إِلَهَ إِلاَّ أَنْتَ خَلَقْتَنِي وَأَنَا عَبْدُكَ وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ وَأَبُوءُ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لاَ يَغْفِرُ الذُّنُوبَ إِلاَّ أَنْتَ",
                     Reference = "رواه البخاري",
-                    RepeatCount = 1,
                     DisplayOrder = 2,
                     CreateAt = DateTime.UtcNow
                 },
@@ -184,7 +180,7 @@ namespace Sukun.Application.Seeder.Dua_entity
 
             foreach (var dua in famousDuas)
             {
-                var exists = await duaRepo.ExistsAsync(d => d.ArabicText == dua.ArabicText);
+                var exists = await duaRepo.ExistsAsync(d => d.Text == dua.Text);
                 if (!exists)
                 {
                     await duaRepo.AddAsync(dua);

@@ -16,8 +16,8 @@ namespace Sukun.Application.Dtos.Dua.Validation
             RuleFor(x => x.Title)
                 .MaximumLength(300).When(x => !string.IsNullOrEmpty(x.Title));
 
-            RuleFor(x => x.ArabicText)
-                .NotEmpty().When(x => !string.IsNullOrEmpty(x.ArabicText));
+            RuleFor(x => x.Text)
+                .NotEmpty().When(x => !string.IsNullOrEmpty(x.Text));
         }
     }
 }

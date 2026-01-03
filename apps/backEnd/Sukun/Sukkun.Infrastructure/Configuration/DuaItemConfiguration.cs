@@ -16,14 +16,14 @@ namespace Sukun.Infrastructure.Configuration
                 .IsRequired()
                 .HasMaxLength(300);
 
-            builder.Property(d => d.ArabicText)
+            builder.Property(d => d.Text)
+                .HasMaxLength(1000)
                 .IsRequired();
 
-            builder.Property(d => d.Transliteration)
-                .HasMaxLength(1000);
+            builder.Property(d => d.TextEn)
+                .HasMaxLength(1000)
+                .IsRequired(false);
 
-            builder.Property(d => d.Translation)
-                .HasMaxLength(1000);
 
             builder.Property(d => d.Reference)
                 .HasMaxLength(300);

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Sukun.Application.Dtos.RemembranceCategory.Request;
 using Sukun.Application.Dtos.RemembranceCategory.Response;
+using Sukun.Application.Dtos.RemembranceContent.Response;
 using Sukun.Application.Interfaces;
 using Sukun.Application.Mapper;
 using Sukun.Domin.Common;
@@ -13,21 +14,24 @@ namespace Sukun.Application.Implemantation
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRemembranceCategoryRepository _categoryRepository;
+        private readonly ISourceResolverService _sourceResolver;
         private readonly ILogger<RemembranceCategoryService> _logger;
 
         public RemembranceCategoryService(
             IUnitOfWork unitOfWork,
             IRemembranceCategoryRepository categoryRepository,
+            ISourceResolverService sourceResolver,
             ILogger<RemembranceCategoryService> logger)
         {
             _unitOfWork = unitOfWork;
             _categoryRepository = categoryRepository;
             _logger = logger;
+            _sourceResolver = sourceResolver;
         }
 
         public async Task<Result<IEnumerable<RemembranceCategoryResponseDto>>> GetAllAsync()
         {
-            var categories = await _categoryRepository.GetAllWithRemembrancesCountAsync();
+            var categories = await _categoryRepository.GetAllWithRemembrancesAsync();
             var dtos = categories.Select(c => c.ToResponseDto());
             return Result<IEnumerable<RemembranceCategoryResponseDto>>.Success(dtos);
         }
@@ -38,16 +42,21 @@ namespace Sukun.Application.Implemantation
             if (category == null || category.IsDeleted)
                 return Result<RemembranceCategoryWithRemembrancesDto>.NotFound("Category not found");
 
-            // جلب الأذكار المرتبطة
-            var remembrances = await _unitOfWork.Remembrances.GetByCategoryAsync(id);
+            var remembrances = await _unitOfWork.Remembrances.GetByCategoryWithFullDetailsAsync(id);
 
-            var dto = category.ToCategoryWithRemembrancesDto();
-            dto.Remembrances = remembrances.Select(r => r.ToResponseDto()).ToList();
+            var allContents = remembrances
+              .SelectMany(r => r.Contents)
+              .Where(c => !c.IsDeleted)
+              .ToList();
 
+            var sourcePreviews = allContents.Any()
+                ? await _sourceResolver.ResolveAsync(allContents)
+                : new Dictionary<Guid, SourcePreviewDto>();
+
+            var dto = category.ToCategoryWithRemembrancesDto(remembrances, sourcePreviews);
             return Result<RemembranceCategoryWithRemembrancesDto>.Success(dto);
         }
 
-        // ====================== Admin ======================
 
         public async Task<Result<RemembranceCategoryResponseDto>> CreateAsync(RemembranceCategoryCreateDto dto)
         {
@@ -69,10 +78,7 @@ namespace Sukun.Application.Implemantation
                 return Result<RemembranceCategoryResponseDto>.NotFound("Category not found");
 
             if (!string.IsNullOrEmpty(dto.Name)) category.Name = dto.Name;
-            if (!string.IsNullOrEmpty(dto.NameAr)) category.NameAr = dto.NameAr;
             if (dto.NameEn != null) category.NameEn = dto.NameEn;
-            category.IsDaily = dto.IsDaily;
-
             category.UpdatedAt = DateTime.UtcNow;
 
             await _unitOfWork.CompleteAsync();

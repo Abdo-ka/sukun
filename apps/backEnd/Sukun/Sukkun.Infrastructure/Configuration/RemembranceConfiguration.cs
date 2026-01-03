@@ -16,9 +16,7 @@ namespace Sukun.Infrastructure.Configuration
                 .IsRequired()
                 .HasMaxLength(300);
 
-            builder.Property(r => r.Text)
-                .IsRequired();
-
+          
             builder.Property(r => r.Benefits)
                 .HasMaxLength(2000);
 

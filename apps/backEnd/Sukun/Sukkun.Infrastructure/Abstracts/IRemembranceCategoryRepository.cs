@@ -5,6 +5,6 @@ namespace Sukun.Infrastructure.Abstracts
 {
     public interface IRemembranceCategoryRepository : IRepository<RemembranceCategory>
     {
-        Task<IEnumerable<RemembranceCategory>> GetAllWithRemembrancesCountAsync();
+        Task<IEnumerable<RemembranceCategory>> GetAllWithRemembrancesAsync();
     }
 }

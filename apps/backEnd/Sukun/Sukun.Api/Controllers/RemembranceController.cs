@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Sukun.Api.Bases;
 using Sukun.Api.Extention;
 using Sukun.Application.Dtos.Remembrance.Request;
 using Sukun.Application.Dtos.Remembrance.Response;
+using Sukun.Application.Dtos.User_Entity.Request;
 using Sukun.Application.Interfaces;
 using Sukun.Application.Seeder.Remembrance_entity;
 
@@ -19,19 +21,26 @@ namespace Sukun.Api.Controllers
             _remembranceService = remembranceService;
             _remembranceSeederService = remembranceSeederService;
         }
+        [HttpGet("paged")]
+        public async Task<ApiResult<PagedResponseDto<RemembranceResponseDto>>> GetPaged([FromQuery] PagedRequestDto request, [FromQuery] Guid? categoryId = null)
+        => this.ToApiResult(await _remembranceService.GetPagedWithFullContentAsync(request, categoryId));
+
+        [HttpGet]
+        public async Task<ApiResult<List<RemembranceResponseDto>>> GetAllWithFullContentAsync()
+        => this.ToApiResult(await _remembranceService.GetAllWithFullContentAsync());
+
+
+        [HttpGet("{id:guid}")]
+        public async Task<ApiResult<RemembranceResponseDto>> GetByIdAsync(Guid id)
+            => this.ToApiResult(await _remembranceService.GetByIdWithFullContentAsync(id));
 
         [HttpGet("category/{categoryId:guid}")]
         public async Task<ApiResult<IEnumerable<RemembranceResponseDto>>> GetByCategory(Guid categoryId)
             => this.ToApiResult(await _remembranceService.GetByCategoryAsync(categoryId));
 
-        [HttpGet("{id:guid}")]
-        public async Task<ApiResult<RemembranceResponseDto>> GetById(Guid id)
-            => this.ToApiResult(await _remembranceService.GetByIdAsync(id));
-        
         [HttpGet("random")]
         public async Task<ApiResult<RemembranceResponseDto>> GetRandom()
             => this.ToApiResult(await _remembranceService.GetRandomAsync());
-
 
         [HttpPost]
         public async Task<ApiResult<RemembranceResponseDto>> Create([FromBody] RemembranceCreateDto dto)
@@ -44,7 +53,6 @@ namespace Sukun.Api.Controllers
         [HttpDelete("{id:guid}")]
         public async Task<ApiResult> SoftDelete(Guid id)
             => this.ToApiResult(await _remembranceService.SoftDeleteAsync(id));
-        
         [HttpPost("seed")]
         // [Authorize(Roles = "Admin")] 
         public async Task<ApiResult<string>> SeedRemembrances()

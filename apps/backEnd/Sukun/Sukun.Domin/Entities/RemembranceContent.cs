@@ -8,9 +8,10 @@ namespace Sukun.Domin.Entities
 
         public SourceType SourceType { get; set; }
 
-        public Guid? SourceId { get; set; } // Id المرتبط (آية، حديث، اسم الله، دعاء مخصص...)
+        public Guid? SourceId { get; set; } 
 
-        public string? CustomContent { get; set; } // فقط إذا كان SourceType = Custom
+        public string? CustomContent { get; set; }  
+        public int DisplayOrder { get; set; } = 0;
 
         public virtual Remembrance Remembrance { get; set; } = null!;
     }

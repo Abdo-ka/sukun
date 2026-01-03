@@ -43,11 +43,9 @@ namespace Sukun.Application.Mapper
             {
                 Id = dua.Id,
                 Title = dua.Title,
-                ArabicText = dua.ArabicText,
-                Transliteration = dua.Transliteration,
-                Translation = dua.Translation,
+                Text = dua.Text,
+                TextEn = dua.TextEn ?? "",
                 Reference = dua.Reference,
-                RepeatCount = dua.RepeatCount,
                 Virtue = dua.Virtue,
                 DisplayOrder = dua.DisplayOrder,
                 CategoryId = dua.CategoryId,
@@ -61,13 +59,12 @@ namespace Sukun.Application.Mapper
             {
                 Id = dua.Id,
                 Title = dua.Title,
-                ArabicText = dua.ArabicText,
-                RepeatCount = dua.RepeatCount,
+                Text= dua.Text,
+                TextEn= dua.TextEn ?? "",
                 DisplayOrder = dua.DisplayOrder
             };
         }
 
-        // للـ Create
         public static DuaCategory ToEntity(this DuaCategoryCreateDto dto)
         {
             return new DuaCategory
@@ -87,11 +84,9 @@ namespace Sukun.Application.Mapper
                 Id = Guid.NewGuid(),
                 CategoryId = dto.CategoryId,
                 Title = dto.Title,
-                ArabicText = dto.ArabicText,
-                Transliteration = dto.Transliteration,
-                Translation = dto.Translation,
+                Text = dto.Text,
+                TextEn = dto.TextEn,
                 Reference = dto.Reference,
-                RepeatCount = dto.RepeatCount,
                 Virtue = dto.Virtue,
                 DisplayOrder = dto.DisplayOrder,
                 CreateAt = DateTime.UtcNow

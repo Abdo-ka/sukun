@@ -14,7 +14,7 @@ namespace Sukun.Application.Dtos.Dua.Validation
                 .NotEmpty().WithMessage("Title is required")
                 .MaximumLength(300);
 
-            RuleFor(x => x.ArabicText)
+            RuleFor(x => x.Text)
                 .NotEmpty().WithMessage("ArabicText is required");
         }
     }

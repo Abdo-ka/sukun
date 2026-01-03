@@ -1,12 +1,12 @@
 ﻿using Sukun.Domin.Enums;
-using System.ComponentModel.DataAnnotations;
 
 namespace Sukun.Application.Dtos.RemembranceContent.Request
 {
-    public class RemembranceContentCreateDto
+    public class RemembranceContentUpdateDto
     {
+        public Guid? Id { get; set; }
         public SourceType SourceType { get; set; }
         public Guid? SourceId { get; set; }
         public string? CustomContent { get; set; }
-    } 
+    }
 }

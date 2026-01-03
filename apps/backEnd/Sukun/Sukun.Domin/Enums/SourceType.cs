@@ -7,6 +7,8 @@
         Hadith = 2,
         AllahName = 3,
         Dua = 4,
-        Tasbih = 5
+        Tasbih = 5,
+        QuranSurah = 6
+
     }
 }

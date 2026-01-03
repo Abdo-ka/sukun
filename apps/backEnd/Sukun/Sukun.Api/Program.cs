@@ -80,24 +80,24 @@ namespace Sukun.Api
                 var dbContext = services.GetRequiredService<ApplicationDbContext>();
                 await dbContext.Database.MigrateAsync();
                 logger.LogInformation("Database migration completed successfully.");
-                await DataSeeder.SeedAsync(dbContext);
-                var quranSeeder = services.GetRequiredService<IQuranSeederService>();
-                await quranSeeder.SeedQuranAsync();
+                //await DataSeeder.SeedAsync(dbContext);
+                //var quranSeeder = services.GetRequiredService<IQuranSeederService>();
+                //await quranSeeder.SeedQuranAsync();
 
-                var tafsirqSeeder = services.GetRequiredService<IQuranTafsirSeederService>();
-                await tafsirqSeeder.SeedTafsirIbnKathirAsync();
+                //var tafsirqSeeder = services.GetRequiredService<IQuranTafsirSeederService>();
+                //await tafsirqSeeder.SeedTafsirIbnKathirAsync();
 
-                var tafsirSeeder = services.GetRequiredService<ITafsirSeederService>();
-                await tafsirSeeder.SeedTafsirAsync(TafsirSource.Jalalayn); 
+                //var tafsirSeeder = services.GetRequiredService<ITafsirSeederService>();
+                //await tafsirSeeder.SeedTafsirAsync(TafsirSource.Jalalayn); 
 
-                var asmaulHusnaSeeder = services.GetRequiredService<IAsmaulHusnaSeederService>();
-                await asmaulHusnaSeeder.SeedAsync();
+                //var asmaulHusnaSeeder = services.GetRequiredService<IAsmaulHusnaSeederService>();
+                //await asmaulHusnaSeeder.SeedAsync();
 
-                var hadithSeeder = services.GetRequiredService<IHadithSeederService>();
-                await hadithSeeder.SeedHadithsAsync();
+                //var hadithSeeder = services.GetRequiredService<IHadithSeederService>();
+                //await hadithSeeder.SeedHadithsAsync();
 
-                var duaSeeder = services.GetRequiredService<IDuaSeederService>();
-                await duaSeeder.SeedDuasAsync();
+                //var duaSeeder = services.GetRequiredService<IDuaSeederService>();
+                //await duaSeeder.SeedDuasAsync();
             }
             catch (Exception ex)
             {

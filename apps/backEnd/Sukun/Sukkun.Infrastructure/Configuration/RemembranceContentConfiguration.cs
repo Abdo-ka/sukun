@@ -17,8 +17,11 @@ namespace Sukun.Infrastructure.Configuration
                 .IsRequired();
 
             builder.Property(c => c.CustomContent)
-                .HasMaxLength(int.MaxValue);
+                .HasMaxLength(int.MaxValue)
+                .IsRequired(false);
 
+            builder.Property(c => c.SourceId)
+             .IsRequired(false);
 
         }
     }

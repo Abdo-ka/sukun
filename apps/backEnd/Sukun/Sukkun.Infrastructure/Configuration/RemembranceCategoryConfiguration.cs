@@ -16,31 +16,8 @@ namespace Sukun.Infrastructure.Configuration
                 .IsRequired()
                 .HasMaxLength(200);
 
-            builder.Property(c => c.NameAr)
-                .IsRequired()
-                .HasMaxLength(200);
-
             builder.Property(c => c.NameEn)
                 .HasMaxLength(200);
-        }
-    }
-    public class RemembranceCategoryLinksConfiguration : BaseEntityConfiguration<RemembranceCategoryLinks>
-    {
-        public override void Configure(EntityTypeBuilder<RemembranceCategoryLinks> builder)
-        {
-            base.Configure(builder);
-
-            builder.ToTable("RemembranceCategoryLinks");
-
-            builder.HasOne(x => x.Remembrance)
-                .WithMany(x => x.RemembranceCategoryLinks)
-                .HasForeignKey(x => x.RemembranceId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder.HasOne(x => x.RemembranceCategory)
-               .WithMany(x => x.RemembranceCategoryLinks)
-               .HasForeignKey(x => x.RemembranceCategoryId)
-               .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

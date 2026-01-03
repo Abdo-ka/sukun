@@ -4,8 +4,8 @@
     {
         public Guid Id { get; set; }
         public string Title { get; set; } = string.Empty;
-        public string ArabicText { get; set; } = string.Empty;
-        public int? RepeatCount { get; set; }
+        public string Text { get; set; } = string.Empty;
+        public string TextEn { get; set; } = string.Empty;
         public int DisplayOrder { get; set; }
     }
 }

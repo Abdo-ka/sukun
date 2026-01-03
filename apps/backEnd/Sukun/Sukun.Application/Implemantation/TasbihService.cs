@@ -71,7 +71,7 @@ namespace Sukun.Application.Implemantation
                 return Result<TasbihResponseDto>.NotFound("Tasbih not found");
 
             if (!string.IsNullOrEmpty(dto.Title)) tasbih.Title = dto.Title;
-            if (!string.IsNullOrEmpty(dto.TitleAr)) tasbih.TitleAr = dto.TitleAr;
+            if (!string.IsNullOrEmpty(dto.TitleAr)) tasbih.TitleEn = dto.TitleAr;
             if (dto.Benefits != null) tasbih.Benefits = dto.Benefits;
             tasbih.RecommendedCount = dto.RecommendedCount;
             tasbih.Order = dto.Order;

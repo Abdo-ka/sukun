@@ -14,7 +14,7 @@ namespace Sukun.Infrastructure.Repositories
         {
         }
 
-        public async Task<IEnumerable<RemembranceCategory>> GetAllWithRemembrancesCountAsync()
+        public async Task<IEnumerable<RemembranceCategory>> GetAllWithRemembrancesAsync()
         {
             return await _dbSet
                 .Where(c => !c.IsDeleted)

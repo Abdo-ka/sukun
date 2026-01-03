@@ -38,6 +38,7 @@ namespace Sukun.Application
             services.AddScoped<IDataVersionService, DataVersionService>();
             services.AddScoped<ITagService, TagService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ISourceResolverService, SourceResolverService>();
 
             // Supporting services
             services.AddScoped<IPasswordHasher, BCryptPasswordHasher>();

@@ -12,7 +12,7 @@ namespace Sukun.Application.Mapper
             {
                 Id = tasbih.Id,
                 Title = tasbih.Title,
-                TitleAr = tasbih.TitleAr,
+                TitleAr = tasbih.TitleEn,
                 Benefits = tasbih.Benefits,
                 RecommendedCount = tasbih.RecommendedCount,
                 Order = tasbih.Order
@@ -25,7 +25,7 @@ namespace Sukun.Application.Mapper
             {
                 Id = Guid.NewGuid(),
                 Title = dto.Title,
-                TitleAr = dto.TitleAr,
+                TitleEn = dto.TitleAr,
                 Benefits = dto.Benefits,
                 RecommendedCount = dto.RecommendedCount,
                 Order = dto.Order,

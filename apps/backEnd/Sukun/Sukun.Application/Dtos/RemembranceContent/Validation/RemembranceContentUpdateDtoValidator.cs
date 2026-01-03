@@ -4,9 +4,9 @@ using Sukun.Domin.Enums;
 
 namespace Sukun.Application.Dtos.RemembranceContent.Validation
 {
-    public class RemembranceContentCreateDtoValidator : AbstractValidator<RemembranceContentCreateDto>
+    public class RemembranceContentUpdateDtoValidator : AbstractValidator<RemembranceContentUpdateDto>
     {
-        public RemembranceContentCreateDtoValidator()
+        public RemembranceContentUpdateDtoValidator()
         {
             RuleFor(x => x.SourceType)
                 .IsInEnum().WithMessage("Invalid SourceType");
@@ -14,18 +14,18 @@ namespace Sukun.Application.Dtos.RemembranceContent.Validation
             When(x => x.SourceType == SourceType.Custom, () =>
             {
                 RuleFor(x => x.CustomContent)
-                    .NotEmpty().WithMessage("CustomContent is required when SourceType is Custom")
-                    .MaximumLength(1000).WithMessage("Custom content cannot exceed 1000 characters.");
-
+                    .NotEmpty().WithMessage("CustomContent is required when SourceType is Custom");
+             
                 RuleFor(x => x.SourceId)
-                .Null().WithMessage("SourceId must be null when using Custom content.");
+                   .Null().WithMessage("SourceId must be null when using Custom content.");
+
             });
 
             When(x => x.SourceType != SourceType.Custom, () =>
             {
                 RuleFor(x => x.SourceId)
                     .NotEmpty().WithMessage("SourceId is required when SourceType is not Custom");
-               
+
                 RuleFor(x => x.CustomContent)
                 .Null().WithMessage("CustomContent must be null when using an external source.");
             });
