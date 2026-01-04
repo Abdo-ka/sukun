@@ -1,8 +1,10 @@
 ﻿namespace Sukun.Application.Dtos.Hadith.Request
 {
-    public class HadithExplanationUpdateDto : HadithExplanationCreateDto
+    public class HadithExplanationUpdateDto
     {
-        // نفس الحقول لكن optional
+        public Guid? Id { get; set; }
+        public string Scholar { get; set; } = string.Empty;
+        public string Explanation { get; set; } = string.Empty;
     }
 
 }

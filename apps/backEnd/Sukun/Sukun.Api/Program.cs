@@ -25,7 +25,10 @@ namespace Sukun.Api
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
+            builder.Configuration
+                   .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                   .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
+                   .AddEnvironmentVariables();
             builder.Services.AddControllers().AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
@@ -65,10 +68,10 @@ namespace Sukun.Api
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
+                
             }
-
+            app.UseSwagger();
+            app.UseSwaggerUI();
             #region Update-Database
 
             using var Scope = app.Services.CreateScope();

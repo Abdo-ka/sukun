@@ -34,7 +34,7 @@ namespace Sukun.Infrastructure.Repositories
             {
                 var countExist = await _dbSet.CountAsync();
                 if (countExist == 0)
-                    return null;
+                    return [];
 
                 var random = new Random();
                 var skip = random.Next(0, count);

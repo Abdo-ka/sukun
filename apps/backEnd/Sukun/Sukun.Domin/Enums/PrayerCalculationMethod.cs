@@ -2,17 +2,19 @@
 {
     public enum PrayerCalculationMethod
     {
-        MuslimWorldLeague = 1,  // افتراضي
-        Egyptian = 2,
-        Karachi = 3,
-        UmmAlQura = 4,          // السعودية
-        Dubai = 5,
-        Qatar = 6,
-        Kuwait = 7,
-        Singapore = 8,
-        Turkey = 9,
-        Tehran = 10,
-        ISNA = 11,
-        MoonsightingCommittee = 12
+        Shia_Ithna_Ashari = 0,
+        UniversityOfIslamicSciences_Karachi = 1,
+        IslamicSocietyOfNorthAmerica = 2,
+        MuslimWorldLeague = 3,
+        UmmAlQuraUniversity_Makkah = 4,
+        EgyptianGeneralAuthorityOfSurvey = 5,
+        InstituteOfGeophysics_UniversityOfTehran = 7,
+        GulfRegion = 8,
+        Kuwait = 9,
+        Qatar = 10,
+        MajlisUgamaIslamSingapura_Singapore = 11,
+        UnionOrganizationIslamicDeFrance = 12,
+        DiyanetIsleriBaskanligi_Turkey = 13,
+        SpiritualAdministrationOfMuslimsOfRussia = 14
     }
 }

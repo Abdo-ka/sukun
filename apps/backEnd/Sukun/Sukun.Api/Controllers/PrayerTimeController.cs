@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Mvc;
 using Sukun.Api.Bases;
 using Sukun.Api.Extention;
+using Sukun.Application.Dtos.PrayerTime.Request;
 using Sukun.Application.Dtos.PrayerTime.Response;
 using Sukun.Application.Interfaces;
 using Sukun.Domin.Enums;
@@ -18,40 +20,26 @@ namespace Sukun.Api.Controllers
             _prayerTimeService = prayerTimeService;
         }
 
-        // 1. يوم واحد عن طريق cityId
         [HttpGet("daily/city/{cityId:guid}")]
         public async Task<ApiResult<PrayerTimeResponseDto>> GetDailyByCity(
             Guid cityId,
-            [FromQuery] DateTime? date = null,
-            [FromQuery] PrayerCalculationMethod method = PrayerCalculationMethod.MuslimWorldLeague)
-            => this.ToApiResult(await _prayerTimeService.GetDailyByCityAsync(cityId, date, method));
+            [FromQuery] DailyPrayerByCityRequest request)
+            => this.ToApiResult(await _prayerTimeService.GetDailyByCityAsync(cityId, request.Date, request.Method));
 
-        // 2. يوم واحد عن طريق الإحداثيات
         [HttpGet("daily/location")]
         public async Task<ApiResult<PrayerTimeResponseDto>> GetDailyByLocation(
-            [FromQuery] double latitude,
-            [FromQuery] double longitude,
-            [FromQuery] DateTime? date = null,
-            [FromQuery] PrayerCalculationMethod method = PrayerCalculationMethod.MuslimWorldLeague,
-            [FromQuery] string? cityName = null)
-            => this.ToApiResult(await _prayerTimeService.GetDailyByLocationAsync(latitude, longitude, date, method, cityName));
+           [FromQuery] DailyPrayerByLocationRequest request)
+            => this.ToApiResult(await _prayerTimeService.GetDailyByLocationAsync(request.Latitude, request.Longitude, request.Date, request.Method));
 
-        // 3. سنة كاملة عن طريق cityId
         [HttpGet("yearly/city/{cityId:guid}")]
         public async Task<ApiResult<PrayerTimeResponseDto>> GetYearlyByCity(
             Guid cityId,
-            [FromQuery] int year,
-            [FromQuery] PrayerCalculationMethod method = PrayerCalculationMethod.MuslimWorldLeague)
-            => this.ToApiResult(await _prayerTimeService.GetYearlyByCityAsync(cityId, year, method));
+            [FromQuery] YearlyPrayerByCityRequest request)
+            => this.ToApiResult(await _prayerTimeService.GetYearlyByCityAsync(cityId, request.Year, request.Method));
 
-        // 4. سنة كاملة عن طريق الإحداثيات
         [HttpGet("yearly/location")]
-        public async Task<ApiResult<PrayerTimeResponseDto>> GetYearlyByLocation(
-            [FromQuery] double latitude,
-            [FromQuery] double longitude,
-            [FromQuery] int year,
-            [FromQuery] PrayerCalculationMethod method = PrayerCalculationMethod.MuslimWorldLeague,
-            [FromQuery] string? cityName = null)
-            => this.ToApiResult(await _prayerTimeService.GetYearlyByLocationAsync(latitude, longitude, year, method, cityName));
+        public async Task<ApiResult<PrayerTimeResponseDto>> GetYearlyByLocation([FromQuery] YearlyPrayerByLocationRequest request)
+            => this.ToApiResult(await _prayerTimeService.GetYearlyByLocationAsync(request.Latitude, request.Longitude, request.Year, request.Method));
     }
+
 }

@@ -27,9 +27,9 @@ namespace Sukun.Application.Implemantation
         {
             var city = await _unitOfWork.Repository<City>().GetByIdAsync(cityId);
             if (city == null)
-                return Result<PrayerTimeResponseDto>.NotFound("المدينة غير موجودة");
+                return Result<PrayerTimeResponseDto>.NotFound("City Not Found");
 
-            return await GetPrayerTimesAsync(city.Latitude, city.Longitude, date, method, city.NameAr);
+            return await GetPrayerTimesAsync(city.Latitude, city.Longitude, date, method, city.Name);
         }
 
         // 2. يوم واحد عن طريق الإحداثيات
@@ -43,9 +43,9 @@ namespace Sukun.Application.Implemantation
         {
             var city = await _unitOfWork.Repository<City>().GetByIdAsync(cityId);
             if (city == null)
-                return Result<PrayerTimeResponseDto>.NotFound("المدينة غير موجودة");
+                return Result<PrayerTimeResponseDto>.NotFound("City Not Found");
 
-            return await GetYearlyPrayerTimesAsync(city.Latitude, city.Longitude, year, method, city.NameAr);
+            return await GetYearlyPrayerTimesAsync(city.Latitude, city.Longitude, year, method, city.Name);
         }
 
         // 4. سنة كاملة عن طريق الإحداثيات
@@ -68,7 +68,7 @@ namespace Sukun.Application.Implemantation
                 var response = await client.GetFromJsonAsync<AladhanApiResponse>(url);
 
                 if (response == null || response.Code != 200 || response.Data == null)
-                    return Result<PrayerTimeResponseDto>.Failure("فشل جلب أوقات الصلاة");
+                    return Result<PrayerTimeResponseDto>.Failure("Faild fetching daily prayer times");
 
                 var timings = response.Data.Timings;
                 var hijriDate = $"{response.Data.Date.Hijri.Day} {response.Data.Date.Hijri.Month.Ar} {response.Data.Date.Hijri.Year}";
@@ -98,7 +98,7 @@ namespace Sukun.Application.Implemantation
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error fetching daily prayer times");
-                return Result<PrayerTimeResponseDto>.Failure("حدث خطأ");
+                return Result<PrayerTimeResponseDto>.Failure("internal error");
             }
         }
 
@@ -142,7 +142,7 @@ namespace Sukun.Application.Implemantation
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error fetching yearly prayer times");
-                return Result<PrayerTimeResponseDto>.Failure("حدث خطأ");
+                return Result<PrayerTimeResponseDto>.Failure("internal error");
             }
         }
 

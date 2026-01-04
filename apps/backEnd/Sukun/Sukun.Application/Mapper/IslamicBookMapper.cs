@@ -82,7 +82,6 @@ namespace Sukun.Application.Mapper
                 Title = content.Title,
                 Content = content.Content,
                 DisplayOrder = content.DisplayOrder,
-                MediaUrl = content.MediaUrl
             };
         }
     }

@@ -322,7 +322,7 @@ namespace Sukun.Application.Implemantation
                 if (sectionsToDelete.Any())
                 {
                     await _unitOfWork.NarrativeSection.DeleteRangeAsync(sectionsToDelete);
-                    foreach (var section in newSections)
+                    foreach (var section in sectionsToDelete)
                     {
                         if (sectionsToDelete.Contains(section))
                             narrative.Sections.Remove(section);

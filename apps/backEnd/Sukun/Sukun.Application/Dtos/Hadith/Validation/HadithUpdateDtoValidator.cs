@@ -9,7 +9,7 @@ namespace Sukun.Application.Dtos.Hadith.Validation
         {
             RuleFor(x => x.Reference).NotEmpty().MaximumLength(200);
             RuleFor(x => x.Text).NotEmpty().MaximumLength(5000);
-            RuleForEach(x => x.Explanations).SetValidator(new HadithExplanationCreateDtoValidator())
+            RuleForEach(x => x.Explanations).SetValidator(new HadithExplanationUpdateDtoValidator())
                 .When(x => x.Explanations != null);
             RuleFor(x => x.BookId)
                 .NotNull().WithMessage("BookId is required when SectionId is specified")

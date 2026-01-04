@@ -35,6 +35,8 @@ namespace Sukun.Application.Mapper
                 ShortDescription = entity.ShortDescription,
                 IsFeatured = entity.IsFeatured,
                 ViewCount = entity.ViewCount,
+                CreatedAt = entity.CreateAt,
+                UpdatedAt = entity.UpdatedAt,
                 Sections = entity.Sections
                     .OrderBy(s => s.DisplayOrder)
                     .Select(s => s.ToSectionDto())

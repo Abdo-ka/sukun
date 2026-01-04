@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Sukun.Application.Dtos.Hadith.Request;
 using Sukun.Application.Dtos.Hadith.Response;
+using Sukun.Application.Dtos.Narrative.Response;
 using Sukun.Application.Dtos.User_Entity.Request;
 using Sukun.Application.Interfaces;
 using Sukun.Application.Mapper;
@@ -261,30 +262,82 @@ namespace Sukun.Application.Implemantation
                 if (!string.IsNullOrEmpty(dto.Text)) hadith.Text = dto.Text;
                 if (dto.Grade != 0) hadith.Grade = dto.Grade;
                 if (!string.IsNullOrEmpty(dto.HadithNumber)) hadith.HadithNumber = dto.HadithNumber;
-
-                if (dto.Explanations != null)
+                
+                #region
+                var sentExplanationIds = dto.Explanations.Where(s => s.Id.HasValue).Select(s => s.Id.Value).ToList();
+                if (sentExplanationIds.Distinct().Count() != sentExplanationIds.Count)
                 {
-                    if (hadith.Explanations?.Any() == true)
-                    {
-                        foreach (var oldExp in hadith.Explanations.ToList())
-                        {
-                            await _hadithExplanationRepository.DeleteAsync(oldExp);
-                        }
-                        hadith.Explanations.Clear();
-                    }
+                    await _unitOfWork.RollbackTransactionAsync();
+                    return Result<HadithResponseDto>.BadRequest("Duplicate Explanation IDs are not allowed");
+                }
 
-                    foreach (var expDto in dto.Explanations)
+                // 2. فحص أن كل Id مرسل موجود فعليًا في DB وينتمي للـ Narrative
+                var currentExplanationIds = hadith.Explanations.Select(s => s.Id).ToHashSet();
+                var invalidIds = sentExplanationIds.Where(sentId => !currentExplanationIds.Contains(sentId)).ToList();
+
+                if (invalidIds.Any())
+                {
+                    await _unitOfWork.RollbackTransactionAsync();
+                    return Result<HadithResponseDto>.BadRequest(
+                        $"The following Explanation IDs do not exist or do not belong to this hadith: {string.Join(", ", invalidIds)}");
+                }
+
+                // 3. إضافة الأقسام الجديدة (بدون Id)
+                var newExplanations = dto.Explanations
+                    .Where(s => !s.Id.HasValue)
+                    .Select(s => new HadithExplanation
                     {
-                        hadith.Explanations.Add(new HadithExplanation
-                        {
-                            Scholar = expDto.Scholar,
-                            Explanation = expDto.Explanation,
-                            HadithId = hadith.Id,
-                            CreateAt = DateTime.UtcNow,
-                        });
+                        Id = Guid.NewGuid(),
+                        HadithId = id,
+                        Scholar = s.Scholar,
+                        Explanation = s.Explanation,
+                        CreateAt = DateTime.UtcNow,
+                        UpdatedAt = DateTime.UtcNow
+                    })
+                    .ToList();
+
+                if (newExplanations.Any())
+                {
+                    foreach (var newExplanation in newExplanations)
+                    {
+                        await _unitOfWork.HadithExplanations.AddAsync(newExplanation);
                     }
                 }
 
+                // 4. تعديل الأقسام الموجودة (مع Id)
+                foreach (var explanationDto in dto.Explanations.Where(s => s.Id.HasValue))
+                {
+                    var explanationId = explanationDto.Id!.Value;
+
+                    var existingExplanation = await _unitOfWork.HadithExplanations.AsQueryableNoTracking()
+                        .FirstOrDefaultAsync(s => s.Id == explanationId && s.HadithId == id);
+
+                    if (existingExplanation != null)
+                    {
+                        if (!string.IsNullOrEmpty(explanationDto.Scholar)) existingExplanation.Scholar = explanationDto.Scholar;
+                        if (!string.IsNullOrEmpty(explanationDto.Explanation)) existingExplanation.Explanation = explanationDto.Explanation;
+
+                        existingExplanation.UpdatedAt = DateTime.UtcNow;
+
+                        await _unitOfWork.HadithExplanations.UpdateAsync(existingExplanation);
+                    }
+                }
+
+                var sentIdsHash = sentExplanationIds.ToHashSet();
+                var explanationsToDelete = hadith.Explanations
+                    .Where(s => currentExplanationIds.Contains(s.Id) && !sentIdsHash.Contains(s.Id))
+                    .ToList();
+
+                if (explanationsToDelete.Any())
+                {
+                    await _unitOfWork.HadithExplanations.DeleteRangeAsync(explanationsToDelete);
+                    foreach (var explanation in explanationsToDelete)
+                    {
+                        if (explanationsToDelete.Contains(explanation))
+                            hadith.Explanations.Remove(explanation);
+                    }
+                }
+                #endregion
                 hadith.UpdatedAt = DateTime.UtcNow;
 
                 await _unitOfWork.CommitTransactionAsync();

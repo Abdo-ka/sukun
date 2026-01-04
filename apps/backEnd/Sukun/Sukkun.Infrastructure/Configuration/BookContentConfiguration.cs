@@ -20,8 +20,6 @@ namespace Sukun.Infrastructure.Configuration
                 .IsRequired()
                 .HasMaxLength(int.MaxValue); // نص طويل
 
-            builder.Property(c => c.MediaUrl)
-                .HasMaxLength(500);
 
             builder.HasOne(c => c.Section)
                 .WithMany(s => s.Contents)

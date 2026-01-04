@@ -33,22 +33,6 @@ public class NarrativeController : ControllerBase
     [HttpGet("paged")]
     public async Task<ApiResult<PagedResponseDto<NarrativeResponseDto>>> GetPaged([FromQuery] PagedRequestDto request, ContentType? type = null, Guid? tagId = null, Guid? categoryId = null)
         => this.ToApiResult(await _narrativeService.GetPagedAsync(request, type, tagId, categoryId));
- 
-    [HttpGet]
-    public async Task<ApiResult<IEnumerable<NarrativeListResponseDto>>> GetAll()
-        => this.ToApiResult(await _narrativeService.GetAllAsync());
-
-    [HttpGet("{id:guid}")]
-    public async Task<ApiResult<NarrativeListResponseDto>> GetById(Guid id)
-  => this.ToApiResult(await _narrativeService.GetByIdAsync(id));
-
-    [HttpGet("featured")]
-    public async Task<ApiResult<IEnumerable<NarrativeListResponseDto>>> GetFeatured([FromQuery] int count = 10)
-     => this.ToApiResult(await _narrativeService.GetFeaturedAsync(count));
-
-    [HttpGet("type")]
-    public async Task<ApiResult<IEnumerable<NarrativeListResponseDto>>> GetByType(ContentType type)
-        => this.ToApiResult(await _narrativeService.GetByTypeAsync(type));
 
     [HttpPost]
     //[Authorize(Roles = "Admin")] 

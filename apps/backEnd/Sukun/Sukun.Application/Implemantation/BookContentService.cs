@@ -66,7 +66,6 @@ namespace Sukun.Infrastructure.Abstracts
                 Title = dto.Title,
                 Content = dto.Content,
                 DisplayOrder = dto.DisplayOrder,
-                MediaUrl = dto.MediaUrl,
                 CreateAt = DateTime.UtcNow
             };
 
@@ -88,7 +87,6 @@ namespace Sukun.Infrastructure.Abstracts
             if (!string.IsNullOrEmpty(dto.Title)) content.Title = dto.Title;
             if (!string.IsNullOrEmpty(dto.Content)) content.Content = dto.Content;
             content.DisplayOrder = dto.DisplayOrder;
-            if (dto.MediaUrl != null) content.MediaUrl = dto.MediaUrl;
 
             content.UpdatedAt = DateTime.UtcNow;
 

@@ -9,12 +9,12 @@ using Sukun.Infrastructure.Abstracts;
 namespace Sukun.Api.Controllers
 {
     [ApiController]
-    [Route("api/book-contents")]
-    public class BookContentController : ControllerBase
+    [Route("api/[controller]s")]
+    public class IslamicBookContentController : ControllerBase
     {
         private readonly IBookContentService _contentService;
 
-        public BookContentController(IBookContentService contentService)
+        public IslamicBookContentController(IBookContentService contentService)
         {
             _contentService = contentService;
         }
