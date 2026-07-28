@@ -12,15 +12,13 @@ class MobileMaterialApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final router = getIt<AppRouter>();
-
     return MaterialApp.router(
       title: "Alrwda",
       debugShowCheckedModeBanner: false,
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
-      routerConfig: router.config(
+      routerConfig: getIt<AppRouter>().config(
         navigatorObservers: () => [
           SentryNavigatorObserver(),
         ],

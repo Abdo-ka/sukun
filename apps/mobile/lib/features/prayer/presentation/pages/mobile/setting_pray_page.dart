@@ -76,7 +76,7 @@ class PrayerTimeAlarmWidget extends StatelessWidget {
         color: context.colorScheme.surface,
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
+            color: Colors.grey.withValues(alpha: 0.2),
             blurRadius: 1,
             offset: const Offset(0, 1),
           ),
@@ -135,7 +135,7 @@ class AlarmBeforeTenMinutesWidget extends StatelessWidget {
         color: context.colorScheme.surface,
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
+            color: Colors.grey.withValues(alpha: 0.2),
             blurRadius: 1,
             offset: const Offset(0, 1),
           ),
@@ -170,7 +170,7 @@ class SilentModeAfterPrayer extends StatelessWidget {
         color: context.colorScheme.surface,
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
+            color: Colors.grey.withValues(alpha: 0.2),
             blurRadius: 1,
             offset: const Offset(0, 1),
           ),
@@ -205,7 +205,7 @@ class SelectCalculateMethodWidget extends StatelessWidget {
         color: context.colorScheme.surface,
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
+            color: Colors.grey.withValues(alpha: 0.2),
             blurRadius: 1,
             offset: const Offset(0, 1),
           ),
@@ -235,43 +235,149 @@ class SelectCalculateMethodWidget extends StatelessWidget {
   }
 }
 
-class SelectLocationWidget extends StatelessWidget {
+class SelectLocationWidget extends StatefulWidget {
   const SelectLocationWidget({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 68.h,
+  State<SelectLocationWidget> createState() =>
+      _SelectLocationWidgetState();
+}
 
-      decoration: BoxDecoration(
-        color: context.colorScheme.surface,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            blurRadius: 1,
-            offset: const Offset(0, 1),
-          ),
-        ],
+class _SelectLocationWidgetState
+    extends State<SelectLocationWidget> {
+  Country? _selected;
+
+  Future<void> _pick() async {
+    final country = await showModalBottomSheet<Country>(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) => const _CountrySearchSheet(),
+    );
+    if (country == null) return;
+    setState(() => _selected = country);
+    // The bug was here: fetching used an index into the ORIGINAL list while
+    // the user tapped a row in the FILTERED list, so it fetched another
+    // country. `country` is the exact item the user tapped — fetch with it.
+    // TODO(prayer): context.read<PrayerBloc>().add(FetchPrayerTimes(country));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: _pick,
+      child: Container(
+        height: 68.h,
+
+        decoration: BoxDecoration(
+          color: context.colorScheme.surface,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withValues(alpha: 0.2),
+              blurRadius: 1,
+              offset: const Offset(0, 1),
+            ),
+          ],
+        ),
+        padding: EdgeInsets.symmetric(horizontal: 16),
+        child: Row(
+          mainAxisAlignment: .spaceBetween,
+          children: [
+            AppText.bodyLarge(
+              'تحديد الموقع الجغرافي بدقة',
+              color: context
+                  .colorScheme
+                  .surfaceContainerHighest,
+            ),
+            Row(
+              children: [
+                AppText(
+                  _selected?.name ?? 'مدينة حلب، سوريا',
+                  color: context.colorScheme.outline,
+                ),
+                AppImage.asset(
+                  Assets.icons.arrowLeftSquare,
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
-      padding: EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
-        mainAxisAlignment: .spaceBetween,
-        children: [
-          AppText.bodyLarge(
-            'تحديد الموقع الجغرافي بدقة',
-            color:
-                context.colorScheme.surfaceContainerHighest,
-          ),
-          Row(
-            children: [
-              AppText(
-                'مدينة حلب، سوريا',
-                color: context.colorScheme.outline,
+    );
+  }
+}
+
+class _CountrySearchSheet extends StatefulWidget {
+  const _CountrySearchSheet();
+
+  @override
+  State<_CountrySearchSheet> createState() =>
+      _CountrySearchSheetState();
+}
+
+class _CountrySearchSheetState
+    extends State<_CountrySearchSheet> {
+  String _query = '';
+
+  @override
+  Widget build(BuildContext context) {
+    // Filter the ORIGINAL source each build. We render `filtered` and select
+    // `filtered[index]` — never `countries[index]` — so selection stays
+    // correct after searching.
+    final filtered = _query.isEmpty
+        ? countries
+        : countries
+              .where(
+                (c) => c.name.toLowerCase().contains(
+                  _query.toLowerCase(),
+                ),
+              )
+              .toList();
+
+    return Padding(
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
+      child: SizedBox(
+        height: 500.h,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: TextField(
+                autofocus: true,
+                textDirection: TextDirection.rtl,
+                decoration: InputDecoration(
+                  hintText: 'ابحث عن دولة',
+                  prefixIcon: const Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ),
+                onChanged: (v) =>
+                    setState(() => _query = v),
               ),
-              AppImage.asset(Assets.icons.arrowLeftSquare),
-            ],
-          ),
-        ],
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: filtered.length,
+                itemBuilder: (context, index) {
+                  final country = filtered[index];
+                  return ListTile(
+                    leading: AppImage.asset(
+                      'packages/core/assets/flags/${country.name}.svg',
+                      size: 20,
+                    ),
+                    title: AppText.bodyMedium(
+                      '${country.name} (${country.dialCode})',
+                    ),
+                    onTap: () =>
+                        Navigator.pop(context, country),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
